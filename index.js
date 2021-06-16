@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const PORT = process.env.PORT || '8080'
 const app = express()
 const user = require('./Logica/usuarios.js')
 
+app.set("port", PORT);
 
 app.use(express.json())
 app.use('/api/usuario/', user)
@@ -12,10 +14,6 @@ app.use('/api/usuario/', user)
 //app.use('/api/auth/', auth)
 //const port = process.env.PORT || 3003
 //app.listen(port, ()=> console.log('Escuchando Puerto: ' + port))
-app.listen(process.env.PORT || 3000, function(){
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-  });
-
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/BD_ADOPTME', {useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true})
