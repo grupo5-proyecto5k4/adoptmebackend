@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
 const user = require('./Logica/usuarios.js')
-const port = process.env.PORT || 8000; //borrar - heroku
+
 
 app.use(express.json())
 app.use('/api/usuario/', user)
@@ -12,9 +12,9 @@ app.use('/api/usuario/', user)
 //app.use('/api/auth/', auth)
 //const port = process.env.PORT || 3003
 //app.listen(port, ()=> console.log('Escuchando Puerto: ' + port))
-server.listen(port, () => { //borrar heroku
-    console.log("App is running on port " + port);
-});
+app.listen(process.env.PORT || 3000, function(){
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+  });
 
 
 mongoose.Promise = global.Promise;
