@@ -12,6 +12,9 @@ app.use('/api/usuario/', user)
 //app.use('/api/auth/', auth)
 //const port = process.env.PORT || 3003
 //app.listen(port, ()=> console.log('Escuchando Puerto: ' + port))
+server.listen(port, () => { //borrar heroku
+    console.log("App is running on port " + port);
+});
 
 
 mongoose.Promise = global.Promise;
@@ -19,9 +22,6 @@ mongoose.connect('mongodb://localhost:27017/BD_ADOPTME', {useCreateIndex: true, 
     .then(()=> console.log('Conectado correctamente a MongoDB'))
     .catch(()=> console.log('Error al conectarse a MongoDB'));
 
-server.listen(port, () => { //borrar heroku
-    console.log("App is running on port " + port);
-});
  //.connect (process.env.MONGO_URI, {useUnifiedTopology: true, useNewUrlParser: true,}).
 //then (() => console.log ('DB Connected!'))
 //.catch (err => {
