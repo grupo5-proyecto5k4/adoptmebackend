@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "npm": "npm install express", 
     "start": "node index.js", 
     "test": "echo \"Error: no test specified\" && exit 1"
   },
