@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
-const express = require('express')
+const mongoose = require('mongoose');
+const express = require('express');
 //const PORT = process.env.PORT || '8080'
-const app = express()
+const app = express();
 const user = require('./Logica/usuarios.js')
 
 //app.set("port", PORT);

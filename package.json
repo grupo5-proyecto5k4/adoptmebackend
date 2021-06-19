@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "npm": "npm install", 
-    "start": "node index.js", 
+    "npm": "npm install",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/grupo5-proyecto5k4/adoptmebackend#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
     "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.14"
