@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const user = require('./Logica/usuarios.js')
 
+console.log('Llego hasta aca')
 //app.set("port", PORT);
 
 app.use(express.json())
