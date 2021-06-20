@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-     "start": "node index.js"
-   },
+    "start": "node index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/grupo5-proyecto5k4/adoptmebackend.git"
@@ -24,6 +24,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.9",
     "mongoose": "^5.12.14"
   }
 }
