@@ -34,6 +34,11 @@ const userSchema  = new mongosee.Schema({
 
 });
   
+/* tipoUsuario puede ser: 
+0 - Admin
+1 - Particular
+2 - Rescatista */
+ 
 userSchema.methods.generateJWT = function(){
   return jwt.sign({
       _id: this._id,
@@ -50,6 +55,6 @@ userSchema.methods.generateJWT = function(){
   }, process.env.SECRET_KEY_JWT_CAR_API)
 }
 
-const Usuario = mongosee.model('am_usuarios', userSchema);
+const Usuario = mongosee.model('am-usuarios', userSchema);
 
 module.exports = Usuario
