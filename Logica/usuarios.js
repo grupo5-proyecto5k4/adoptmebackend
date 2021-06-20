@@ -5,7 +5,7 @@ const User = require('../modelos/usuarios.js')
 const router = express.Router()
 const { check, validationResult } = require('express-validator');
 
-router.get('/', async(req, res)=> {
+router.get('/api', async(req, res)=> {
     const users = await User.find()
     res.send(users)
 })
@@ -16,9 +16,8 @@ router.get('/:id', async(req, res)=>{
     res.send(user)
 })
 
-router.post('/', [
+router.post('/user', [
     check('nombres').isLength({min: 3}),
-    check('apellidos').isLength({min: 3}),
     check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
     check('contrasenia').isLength({min: 8, max:15})
@@ -43,7 +42,10 @@ router.post('/', [
         facebook:req.body.facebook,
         correoElectronico: req.body.correoElectronico,
         password: hashPassword,
-        tipoUsuario: req.body.tipoUsuario 
+        tipoUsuario: req.body.tipoUsuario, 
+        numeroContacto: req.body.numeroContacto,
+        idEstado: req.body.idEstado,
+        fechaCreacion: req.body.fechaCreacion
     })
 
     const result = await user.save()
@@ -60,7 +62,10 @@ router.post('/', [
         facebook:user.facebook,
         correoElectronico: user.correoElectronico,
         password: hashPassword,
-        tipoUsuario: user.tipoUsuario 
+        tipoUsuario: user.tipoUsuario, 
+        numeroContacto: user.numeroContacto,
+        idEstado: user.idEstado,
+        fechaCreacion: user.fechaCreacion
     })
 })
 
@@ -85,7 +90,10 @@ router.put('/:id', [
         facebook:req.body.facebook,
         correoElectronico: req.body.correoElectronico,
         password: hashPassword,
-        tipoUsuario: req.body.tipoUsuario
+        tipoUsuario: req.body.tipoUsuario,
+        numeroContacto: req.body.numeroContacto,
+        idEstado: req.body.idEstado,
+        fechaCreacion: req.body.fechaCreacion
     },
     {
         new: true
