@@ -40,7 +40,7 @@ const userSchema  = new mongosee.Schema({
       required: true
     },
     idEstado:{
-      type: number, 
+      type: Number, 
       required: true 
     },
     fechaCreacion: {type: Date, default: Date.now},
