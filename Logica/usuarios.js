@@ -43,8 +43,7 @@ router.post('/', [
         facebook:req.body.facebook,
         correoElectronico: req.body.correoElectronico,
         password: hashPassword,
-        esParticular: req.body.esParticular,
-        esRescatista: req.body.esRescatista 
+        tipoUsuario: req.body.tipoUsuario 
     })
 
     const result = await user.save()
@@ -61,8 +60,7 @@ router.post('/', [
         facebook:user.facebook,
         correoElectronico: user.correoElectronico,
         password: hashPassword,
-        esParticular: user.esParticular,
-        esRescatista: user.esRescatista 
+        tipoUsuario: user.tipoUsuario 
     })
 })
 
@@ -87,8 +85,7 @@ router.put('/:id', [
         facebook:req.body.facebook,
         correoElectronico: req.body.correoElectronico,
         password: hashPassword,
-        esParticular: req.body.esParticular,
-        esRescatista: req.body.esRescatista
+        tipoUsuario: req.body.tipoUsuario
     },
     {
         new: true

@@ -18,7 +18,7 @@ const port = process.env.PORT || 3003
 app.listen(port, ()=> console.log('Escuchando Puerto: ' + port))
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://epereyra:pass1234@cluster0.hhsnz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://epereyra:pass1234@cluster0.hhsnz.mongodb.net/BD-ADOPTME?retryWrites=true&w=majority',
  {useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true})
    .then(()=> console.log('Conectado correctamente a MongoDB'))
    .catch(()=> console.log('Error al conectarse a MongoDB'));

@@ -7,12 +7,9 @@ const userSchema  = new mongosee.Schema({
     required: true
    },
   apellidos: {
-    type: String,
-    required: true
-  },
+    type: String},
   dni:{
     type: Number,
-    required: true,
     unique: true
   },
   fechaNacimiento: {type: Date, default: Date.now },
@@ -30,8 +27,10 @@ const userSchema  = new mongosee.Schema({
     type: String,
     required: true 
    },
-  esParticular: {type: Boolean}, 
-  esRescatista: {type: Boolean}
+   tipoUsusario: {
+     type: Number,
+     required: true
+    }
 
 });
   
@@ -47,8 +46,7 @@ userSchema.methods.generateJWT = function(){
       instagram: this.instagram,
       correoElectronico: this.correoElectronico,
       contrasenia: this.contrasenia,
-      esParticular: this.esParticular,
-      esRescatista: this.esRescatista
+      tipoUsuario: this.tipoUsuario
   }, process.env.SECRET_KEY_JWT_CAR_API)
 }
 
