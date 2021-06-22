@@ -9,8 +9,8 @@ const userSchema  = new mongosee.Schema({
   apellidos: {
     type: String},
   dni:{
-    type: Number,
-    unique: true
+    type: Number
+    
   },
   fechaNacimiento: {type: Date, default: Date.now },
   Direccion: {
@@ -32,16 +32,13 @@ const userSchema  = new mongosee.Schema({
     required: true 
    },
    tipoUsuario: {
-     type: Number,
-     required: true
-    },
+     type: Number
+     },
     numeroContacto: {
-      type: Number,
-      required: true
-    },
+      type: Number
+      },
     idEstado:{
-      type: Number, 
-      required: true 
+      type: Number 
     },
     fechaCreacion: {type: Date, default: Date.now},
     fechaModificacion:{type: Date, default: Date.now}
