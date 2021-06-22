@@ -13,7 +13,7 @@ const userSchema  = new mongosee.Schema({
     unique: true
   },
   fechaNacimiento: {type: Date, default: Date.now },
-  direccion: {
+  Direccion: {
       calle: {type: String},
       numero: {type: Number}, 
       referencia: {type: String},
@@ -31,7 +31,7 @@ const userSchema  = new mongosee.Schema({
     type: String,
     required: true 
    },
-   tipoUsusario: {
+   tipoUsuario: {
      type: Number,
      required: true
     },
@@ -59,7 +59,7 @@ userSchema.methods.generateJWT = function(){
       nombres: this.nombres,
       apellidos: this.apellidos,
       dni: this.dni,
-      direccion: this.direccion,
+      Direccion:this.Direccion,
       fechaNacimiento: this.fechaNacimiento,
       facebook: this.facebook, 
       instagram: this.instagram,
@@ -68,10 +68,12 @@ userSchema.methods.generateJWT = function(){
       tipoUsuario: this.tipoUsuario,
       numeroContacto: this.numeroContacto,
       idEstado: this.idEstado,
-      fechaCreacion: this.fechaCreacion
+      fechaCreacion: this.fechaCreacion,
+      fechaModificacion:this.fechaModificacion
   }, process.env.SECRET_KEY_JWT_CAR_API)
 }
 
-const Usuario = mongosee.model('am-usuarios', userSchema);
 
+const Usuario = mongosee.model('am-usuarios', userSchema);
 module.exports = Usuario
+

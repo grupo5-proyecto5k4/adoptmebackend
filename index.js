@@ -8,7 +8,8 @@ console.log('Llego hasta aca')
 //app.set("port", PORT);
 
 app.use(express.json())
-app.use('/api/usuario/', user)
+//app.use('/user', user)
+app.use('/', user)
 //app.use('/api/user/', user)
 //app.use('/api/company/', company)
 //app.use('/api/sale/', sale)
@@ -24,6 +25,7 @@ if( process.env.NODE_ENV !=  'production'){
     dotenv.config();
 }
 
+console.log ('mongo :', process.env.MONGO_URL)
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL,
  {useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true})

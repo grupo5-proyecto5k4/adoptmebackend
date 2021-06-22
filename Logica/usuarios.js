@@ -5,47 +5,56 @@ const User = require('../modelos/usuarios.js')
 const router = express.Router()
 const { check, validationResult } = require('express-validator');
 
-router.get('/api', async(req, res)=> {
-    const users = await User.find()
+router.get('/user', async function(req, res) {
+    let users =  await User.find();
     res.send(users)
 })
 
-router.get('/:id', async(req, res)=>{
-    const user = await User.findById(req.params.id)
+
+
+router.get('/:correoElectronico', async(req, res)=>{
+    let user = await User.findById(req.params.correoElectronico)
     if(!user) return res.status(404).send('No hemos encontrado un usuario con ese ID')
     res.send(user)
 })
 
-router.post('/user', [
+router.post('/registro', [
     check('nombres').isLength({min: 3}),
-    check('dni').isLength({min:6, max: 8}),
+    //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
     check('contrasenia').isLength({min: 8, max:15})
 ],async(req, res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
+        res.send(user)
     }
 
-    let user = await User.findOne({email: req.body.correoElectronico})
+    let user = await User.findOne({correoElectronico: req.body.correoElectronico})
+    console.log("nombre de mi user ", req.body.nombres)
     if(user) return res.status(400).send('Ese usuario ya existe')
 
+    console.log('password:', req.body.contrasenia); 
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(req.body.contrasenia, salt)
+    
+    console.log('password:', req.body.contrasenia); 
 
     user = new User({
         nombres: req.body.nombres,
         apellidos:req.body.apellidos,
         dni:req.body.dni,
         fechaNacimiento:req.body.fechaNacimiento,
+        Direccion:req.body.Direccion, 
         instagram:req.body.instagram,
         facebook:req.body.facebook,
         correoElectronico: req.body.correoElectronico,
-        password: hashPassword,
+        contrasenia: hashPassword,
         tipoUsuario: req.body.tipoUsuario, 
         numeroContacto: req.body.numeroContacto,
         idEstado: req.body.idEstado,
-        fechaCreacion: req.body.fechaCreacion
+        fechaCreacion: req.body.fechaCreacion,
+        fechaModificacion:req.body.fechaModificacion
     })
 
     const result = await user.save()
@@ -58,6 +67,7 @@ router.post('/user', [
         apellidos:user.apellidos,
         dni:user.dni,
         fechaNacimiento:user.fechaNacimiento,
+        Direccion: user.Direccion, 
         instagram:user.instagram,
         facebook:user.facebook,
         correoElectronico: user.correoElectronico,
@@ -66,6 +76,7 @@ router.post('/user', [
         numeroContacto: user.numeroContacto,
         idEstado: user.idEstado,
         fechaCreacion: user.fechaCreacion
+
     })
 })
 
@@ -86,6 +97,7 @@ router.put('/:id', [
         apellidos:req.body.apellidos,
         dni:req.body.dni,
         fechaNacimiento:req.body.fechaNacimiento,
+        Direccion:req.body.Direccion, 
         instagram:req.body.instagram,
         facebook:req.body.facebook,
         correoElectronico: req.body.correoElectronico,
@@ -116,6 +128,6 @@ router.delete('/:id', async(req, res)=>{
 
     res.status(200).send('usuario borrado')
 
-})
+});
 
-module.exports = router
+module.exports = router;
