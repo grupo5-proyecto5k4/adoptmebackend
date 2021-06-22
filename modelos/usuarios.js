@@ -31,15 +31,9 @@ const userSchema  = new mongosee.Schema({
     type: String,
     required: true 
    },
-   tipoUsuario: {
-     type: Number
-     },
-    numeroContacto: {
-      type: Number
-      },
-    idEstado:{
-      type: Number 
-    },
+   tipoUsuario: {type: Number},
+    numeroContacto: { type: Number },
+    idEstado:{type: Number },
     fechaCreacion: {type: Date, default: Date.now},
     fechaModificacion:{type: Date, default: Date.now}
 
