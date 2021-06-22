@@ -18,7 +18,7 @@ router.get('/:correoElectronico', async(req, res)=>{
     res.send(user)
 })
 
-router.post('/user', [
+router.post('/registro', [
     check('nombres').isLength({min: 3}),
     //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
