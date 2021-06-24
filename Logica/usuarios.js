@@ -10,7 +10,67 @@ router.get('/user', async function(req, res) {
     res.send(users)
 })
 
+router.options('/registro', [
+    check('nombres').isLength({min: 3}),
+    //check('dni').isLength({min:6, max: 8}),
+    check('correoElectronico').isLength({min: 3}),
+    check('contrasenia').isLength({min: 8, max:15})
+],async(req, res)=>{
+    console.log(req.body.nombres)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+        res.send(user)
+    }
 
+    let user = await User.findOne({correoElectronico: req.body.correoElectronico})
+    
+    if(user) return res.status(400).send('Ese usuario ya existe')
+    
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(req.body.contrasenia, salt)
+    
+    user = new User({
+        nombres: req.body.nombres,
+        apellidos:req.body.apellidos,
+        dni:req.body.dni,
+        fechaNacimiento:req.body.fechaNacimiento,
+        Direccion:req.body.Direccion, 
+        instagram:req.body.instagram,
+        facebook:req.body.facebook,
+        correoElectronico: req.body.correoElectronico,
+        contrasenia: hashPassword,
+        tipoUsuario: req.body.tipoUsuario, 
+        numeroContacto: req.body.numeroContacto,
+        idEstado: req.body.idEstado,
+        fechaCreacion: req.body.fechaCreacion,
+        fechaModificacion:req.body.fechaModificacion
+    })
+
+    const result = await user.save()
+
+    const jwtToken = user.generateJWT();
+
+    res.status(201).header('Authorization', jwtToken).send({
+        _id: user._id,
+        nombres: user.nombres,
+        apellidos:user.apellidos,
+        dni:user.dni,
+        fechaNacimiento:user.fechaNacimiento,
+        Direccion: user.Direccion, 
+        instagram:user.instagram,
+        facebook:user.facebook,
+        correoElectronico: user.correoElectronico,
+        password: hashPassword,
+        tipoUsuario: user.tipoUsuario, 
+        numeroContacto: user.numeroContacto,
+        idEstado: user.idEstado,
+        fechaCreacion: user.fechaCreacion
+
+    })
+    
+    
+})
 
 router.get('/:correoElectronico', async(req, res)=>{
     let user = await User.findById(req.params.correoElectronico)

@@ -67,4 +67,3 @@ userSchema.methods.generateJWT = function(){
 
 const Usuario = mongosee.model('am-usuarios', userSchema);
 module.exports = Usuario
-
