@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const user = require('./Logica/usuarios.js')
 
-console.log('Llego hasta aca')
 //app.set("port", PORT);
 
 app.use(express.json())
@@ -25,7 +24,7 @@ if( process.env.NODE_ENV !=  'production'){
     dotenv.config();
 }
 
-console.log ('mongo :', process.env.MONGO_URL)
+
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL,
  {useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true})

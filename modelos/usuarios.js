@@ -61,7 +61,7 @@ userSchema.methods.generateJWT = function(){
       idEstado: this.idEstado,
       fechaCreacion: this.fechaCreacion,
       fechaModificacion:this.fechaModificacion
-  }, process.env.SECRET_KEY_JWT_CAR_API)
+  }, process.env.SECRET_KEY_JWT)
 }
 
 

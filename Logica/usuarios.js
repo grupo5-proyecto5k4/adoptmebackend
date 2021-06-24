@@ -31,15 +31,12 @@ router.post('/registro', [
     }
 
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
-    console.log("nombre de mi user ", req.body.nombres)
+    
     if(user) return res.status(400).send('Ese usuario ya existe')
-
-    console.log('password:', req.body.contrasenia); 
+    
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(req.body.contrasenia, salt)
     
-    console.log('password:', req.body.contrasenia); 
-
     user = new User({
         nombres: req.body.nombres,
         apellidos:req.body.apellidos,
