@@ -1,14 +1,15 @@
 const bcrypt = require('bcrypt')
 const mongosee = require('mongoose')
 const express = require('express')
+const app = express();
 const User = require('../modelos/usuarios.js')
 const router = express.Router()
 const { check, validationResult } = require('express-validator');
 const cors = require('cors');
 
-router.use(cors)
+app.use(cors)
 
-router.get('/user', async function(req, res) {
+app.get('/user', async function(req, res) {
     let users =  await User.find();
     res.send(users)
 })
