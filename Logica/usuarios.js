@@ -4,13 +4,16 @@ const express = require('express')
 const User = require('../modelos/usuarios.js')
 const router = express.Router()
 const { check, validationResult } = require('express-validator');
+const cors = require('cors');
 
-app.get('/user', async function(req, res) {
+router.use(cors)
+
+router.get('/user', async function(req, res) {
     let users =  await User.find();
     res.send(users)
 })
 
-app.options('/registro', [
+router.options('/registro', [
     check('nombres').isLength({min: 3}),
     //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),

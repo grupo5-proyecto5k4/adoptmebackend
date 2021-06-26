@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 //const PORT = process.env.PORT || '8080'
-var cors = require('cors');
+
 const app = express();
 const user = require('./Logica/usuarios.js')
 
@@ -10,7 +10,7 @@ const user = require('./Logica/usuarios.js')
 app.use(express.json())
 //app.use('/user', user)
 app.use('/', user)
-app.use(cors)
+//app.use(cors)
 //app.use('/api/user/', user)
 //app.use('/api/company/', company)
 //app.use('/api/sale/', sale)
