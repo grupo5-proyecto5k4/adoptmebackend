@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 //const PORT = process.env.PORT || '8080'
+var cors = require('cors');
 const app = express();
 const user = require('./Logica/usuarios.js')
 
@@ -9,18 +10,19 @@ const user = require('./Logica/usuarios.js')
 app.use(express.json())
 //app.use('/user', user)
 app.use('/', user)
+app.use(cors)
 //app.use('/api/user/', user)
 //app.use('/api/company/', company)
 //app.use('/api/sale/', sale)
 //app.use('/api/auth/', auth)
 // Configurar cabeceras y cors
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+//   res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+//   next();
+// });
 
 const port = process.env.PORT || 3003
 

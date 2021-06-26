@@ -5,12 +5,12 @@ const User = require('../modelos/usuarios.js')
 const router = express.Router()
 const { check, validationResult } = require('express-validator');
 
-router.get('/user', async function(req, res) {
+app.get('/user', async function(req, res) {
     let users =  await User.find();
     res.send(users)
 })
 
-router.options('/registro', [
+app.options('/registro', [
     check('nombres').isLength({min: 3}),
     //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
