@@ -14,6 +14,7 @@ router.options('/registro', [
     check('nombres').isLength({min: 3}),
     //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
+    check('correoElectronico').isEmpty, 
     check('contrasenia').isLength({min: 8, max:15})
 ],async(req, res)=>{
     console.log(req.body.nombres)
