@@ -7,14 +7,27 @@ const router = express.Router()
 const { check, validationResult } = require('express-validator');
 const cors = require('cors');
 
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+  });
+
+
+
+
+//router.use(cors)
 app.use(cors)
 
-app.get('/user', async function(req, res) {
+app.get('/user', async function(res) {
     let users =  await User.find();
     res.send(users)
 })
 
-router.options('/registro', [
+app.options('/registro', [
     check('nombres').isLength({min: 3}),
     //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
@@ -77,13 +90,13 @@ router.options('/registro', [
     
 })
 
-router.get('/:correoElectronico', async(req, res)=>{
+app.get('/:correoElectronico', async(req, res)=>{
     let user = await User.findById(req.params.correoElectronico)
     if(!user) return res.status(404).send('No hemos encontrado un usuario con ese ID')
     res.send(user)
 })
 
-router.post('/registro', [
+app.post('/registro', [
     check('nombres').isLength({min: 3}),
     //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
@@ -142,7 +155,7 @@ router.post('/registro', [
     })
 })
 
-router.put('/:id', [
+app.put('/:id', [
     check('nombres').isLength({min: 3}),
     check('apellidos').isLength({min: 3}),
     check('dni').isLength({min:6, max: 8}),
@@ -180,7 +193,7 @@ router.put('/:id', [
     res.status(204).send()
 })
 
-router.delete('/:id', async(req, res)=>{
+app.delete('/:id', async(req, res)=>{
 
     const user = await User.findByIdAndDelete(req.params.id)
 
@@ -192,4 +205,6 @@ router.delete('/:id', async(req, res)=>{
 
 });
 
-module.exports = router;
+//module.exports = router;
+
+module.exports = app;
