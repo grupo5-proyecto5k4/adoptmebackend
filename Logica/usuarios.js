@@ -3,9 +3,9 @@ const mongosee = require('mongoose')
 const express = require('express')
 const User = require('../modelos/usuarios.js')
 const router = express.Router()
-const { check, validationResult } = require('express-validator');
+const {check, validationResult } = require('express-validator');
 
-router.get('/user', async function(res) {
+router.get('/user', async function(req, res) {
     let users =  await User.find();
     res.send(users)
 })
@@ -76,7 +76,7 @@ router.options('/registro', [
 router.get('/:correoElectronico', async(req, res)=>{
     let user = await User.findById(req.params.correoElectronico)
     if(!user) return res.status(404).send('No hemos encontrado un usuario con ese ID')
-    res.send(user)
+    res(user)
 })
 
 router.put('/:id', [
