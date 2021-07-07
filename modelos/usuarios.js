@@ -6,12 +6,8 @@ const userSchema  = new mongosee.Schema({
     type: String,
     required: true
    },
-  apellidos: {
-    type: String},
-  dni:{
-    type: Number
-    
-  },
+  apellidos: {type: String},
+  dni:{type: Number},
   fechaNacimiento: {type: Date, default: Date.now },
   Direccion: {
       calle: {type: String},
@@ -32,10 +28,10 @@ const userSchema  = new mongosee.Schema({
     required: true 
    },
    tipoUsuario: {type: Number},
-    numeroContacto: { type: Number },
-    idEstado:{type: Number },
-    fechaCreacion: {type: Date, default: Date.now},
-    fechaModificacion:{type: Date, default: Date.now}
+   numeroContacto: { type: Number },
+   idEstado:{type: Number },
+   fechaCreacion: {type: Date, default: Date.now},
+   fechaModificacion:{type: Date, default: Date.now}
 
 });
   
@@ -63,7 +59,7 @@ userSchema.methods.generateJWT = function(){
       fechaModificacion:this.fechaModificacion
   }, process.env.SECRET_KEY_JWT)
 }
-
+console.log("secreto:", process.env.SECRET_KEY_JWT)
 
 const Usuario = mongosee.model('am-usuarios', userSchema);
 module.exports = Usuario
