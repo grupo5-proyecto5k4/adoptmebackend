@@ -5,24 +5,36 @@ const User = require('../modelos/usuarios.js')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
 
+router.use(function timelog(req, res, next){
+    console.log('Time:', Date.now());
+    next()
+}); 
+
 router.get('/user', async function(req, res) {
     let users =  await User.find();
+    console.log("get llega")
     res.send(users)
+});
+
+router.options('/registro', async function(req, res)  {
+    console.log("hola  vos : ", req.body.nombres)
+    if (req.isEmpty()) {
+        return res.status(422).json({errors: "error"});
+        res.send(req)
+    }
+   
 })
 
-router.options('/registro', [
+router.post('/registro', [
     check('nombres').isLength({min: 3}),
-    //check('dni').isLength({min:6, max: 8}),
     check('correoElectronico').isLength({min: 3}),
-    check('correoElectronico').isEmpty, 
     check('contrasenia').isLength({min: 8, max:15})
-],async(req, res)=>{
-    console.log(req.body.nombres)
+],async function(req, res) {
+    console.log("hola", req.body.nombres)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
-        res.send(user)
-    }
+  }
 
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
     
@@ -71,13 +83,13 @@ router.options('/registro', [
     })
     
     
-})
+});
 
 router.get('/:correoElectronico', async(req, res)=>{
     let user = await User.findById(req.params.correoElectronico)
     if(!user) return res.status(404).send('No hemos encontrado un usuario con ese ID')
     res(user)
-})
+});
 
 router.put('/:id', [
     check('nombres').isLength({min: 3}),
@@ -131,4 +143,3 @@ router.delete('/:id', async(req, res)=>{
 
 module.exports = router;
 
-//module.exports = app;
