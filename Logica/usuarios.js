@@ -10,6 +10,15 @@ router.use(function timelog(req, res, next){
     next()
 }); 
 
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
+
+
 router.get('/user', async function(req, res) {
     let users =  await User.find();
     console.log("get llega")
@@ -17,12 +26,9 @@ router.get('/user', async function(req, res) {
 });
 
 router.options('/registro', async function(req, res)  {
-    console.log("hola  vos : ", req.body.nombres)
-    // if (req.isEmpty()) {
-    //     return res.status(422).json({errors: "error"});
-    //     res.send(req)
-    // }
-    res.sendStatus(200).send("OK")
+    console.log("hola  vos : ", res)
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end();
    
 })
 
