@@ -18,10 +18,11 @@ router.get('/user', async function(req, res) {
 
 router.options('/registro', async function(req, res)  {
     console.log("hola  vos : ", req.body.nombres)
-    if (req.isEmpty()) {
-        return res.status(422).json({errors: "error"});
-        res.send(req)
-    }
+    // if (req.isEmpty()) {
+    //     return res.status(422).json({errors: "error"});
+    //     res.send(req)
+    // }
+    res.sendStatus(200).send("OK")
    
 })
 
