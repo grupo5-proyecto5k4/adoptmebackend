@@ -26,9 +26,8 @@ router.get('/user', async function(req, res) {
 });
 
 router.options('/registro', async function(req, res)  {
-    console.log("hola  vos : ", res)
-    res.writeHead(200, {"Content-Type": "application/json"});
-    res.end();
+    console.log("hola  vos : ", req.body.nombres)
+    
     user = new User({
         nombres: req.body.nombres,
         apellidos:req.body.apellidos,
@@ -67,7 +66,9 @@ router.options('/registro', async function(req, res)  {
         fechaCreacion: user.fechaCreacion
 
     })
-
+    // res.writeHead(200, {"Content-Type": "application/json"});
+    // res.end();
+    res.status(200).send('Fijate si se grabo')
    
 })
 
