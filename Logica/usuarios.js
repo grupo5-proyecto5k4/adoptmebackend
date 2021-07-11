@@ -29,6 +29,45 @@ router.options('/registro', async function(req, res)  {
     console.log("hola  vos : ", res)
     res.writeHead(200, {"Content-Type": "application/json"});
     res.end();
+    user = new User({
+        nombres: req.body.nombres,
+        apellidos:req.body.apellidos,
+        dni:req.body.dni,
+        fechaNacimiento:req.body.fechaNacimiento,
+        Direccion:req.body.Direccion, 
+        instagram:req.body.instagram,
+        facebook:req.body.facebook,
+        correoElectronico: req.body.correoElectronico,
+        contrasenia: hashPassword,
+        tipoUsuario: req.body.tipoUsuario, 
+        numeroContacto: req.body.numeroContacto,
+        idEstado: req.body.idEstado,
+        fechaCreacion: req.body.fechaCreacion,
+        fechaModificacion:req.body.fechaModificacion
+    })
+
+    const result = await user.save()
+
+    const jwtToken = user.generateJWT();
+
+    res.status(201).header('Authorization', jwtToken).send({
+        _id: user._id,
+        nombres: user.nombres,
+        apellidos:user.apellidos,
+        dni:user.dni,
+        fechaNacimiento:user.fechaNacimiento,
+        Direccion: user.Direccion, 
+        instagram:user.instagram,
+        facebook:user.facebook,
+        correoElectronico: user.correoElectronico,
+        password: hashPassword,
+        tipoUsuario: user.tipoUsuario, 
+        numeroContacto: user.numeroContacto,
+        idEstado: user.idEstado,
+        fechaCreacion: user.fechaCreacion
+
+    })
+
    
 })
 
