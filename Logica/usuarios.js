@@ -27,7 +27,9 @@ router.get('/user', async function(req, res) {
 
 router.options('/registro', async function(req, res)  {
     console.log("hola  vos : ", req.body.nombres)
-    
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(req.body.contrasenia, salt)
+
     user = new User({
         nombres: req.body.nombres,
         apellidos:req.body.apellidos,
