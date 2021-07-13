@@ -33,6 +33,11 @@ router.options('/registro', async function(req, res)  {
    
 })
 
+router.options('/login', async function(req, res)  {
+    res.status(200).send('Ok - Options')
+   
+})
+
 // login del usuario 
 
  
