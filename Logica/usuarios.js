@@ -48,12 +48,13 @@ router.options('/registro', async function(req, res)  {
     }
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
     
-    if(!user) return res.status(400).send('Usuario o contraseña Invalida')
+    if(!user) return res.status(400).json({error: 'Usuario o contraseña inválida'})
     
     let validaContrasenia = await bcrypt.compare(req.body.contrasenia, user.contrasenia);
 
-    if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña Invalida'})
+    if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña inválida'})
     
+
     // res.json({
     //     error: null,
     //     data :'Bienvenido'
@@ -69,7 +70,8 @@ router.options('/registro', async function(req, res)  {
 
    res.header('auth-token', jwtToken ).json({
        error:null, 
-       data: {jwtToken}
+       data: {jwtToken},
+       user
    })
 
  })
@@ -88,12 +90,12 @@ router.post('/registro', [
 
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
     
-    if(user) return res.status(400).send('Email ya registrado')
+    if(user) return res.status(400).json({error:'el email se encuentra registrado'})
       
     
     user = await User.findOne({dni: req.body.dni})
     
-    if(user && req.body.dni != undefined ) return res.status(400).send('DNI existente')
+    if(user && req.body.dni != undefined ) return res.status(400).json({error:'el DNI se encuentra registrado'})
     
 
     const salt = await bcrypt.genSalt(10)
@@ -146,6 +148,7 @@ router.post('/registro', [
     
 });
 
+// no se usa por ahora 
 router.get('/:correoElectronico', async(req, res)=>{
     let user = await User.findById(req.params.correoElectronico)
     if(!user) return res.status(404).send('No hemos encontrado un usuario con ese ID')
