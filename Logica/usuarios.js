@@ -2,8 +2,10 @@ const bcrypt = require('bcrypt')
 const mongosee = require('mongoose')
 const express = require('express')
 const User = require('../modelos/usuarios.js')
+const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
+const { schema } = require('../modelos/usuarios.js')
 
 router.use(function timelog(req, res, next){
     console.log('Time:', Date.now());
@@ -21,25 +23,64 @@ router.use(function(req, res, next) {
 
 router.get('/user', async function(req, res) {
     let users =  await User.find();
-    console.log("get llega")
     res.send(users)
 });
 
+
+
 router.options('/registro', async function(req, res)  {
-    console.log("hola  vos : ", req.body.nombres)
-   
-    // res.writeHead(200, {"Content-Type": "application/json"});
-    // res.end();
-    res.status(200).send('Fijate si se grabo')
+    res.status(200).send('Ok - Options')
    
 })
 
+// login del usuario 
+
+ 
+ router.post('/login', [
+    check('correoElectronico').isLength({min: 3}),
+    check('contrasenia').isLength({min: 8, max:15})
+], async(req, res) => {
+    const error = validationResult(req)
+    if (!error.isEmpty){
+        return res.status(400).json(
+            {error: error.details[0].message}
+        )
+    }
+    let user = await User.findOne({correoElectronico: req.body.correoElectronico})
+    
+    if(!user) return res.status(400).send('Usuario o contraseña Invalida')
+    
+    let validaContrasenia = await bcrypt.compare(req.body.contrasenia, user.contrasenia);
+
+    if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña Invalida'})
+    
+    // res.json({
+    //     error: null,
+    //     data :'Bienvenido'
+    // })
+   
+    //create token 
+
+   const jwtToken = jwt.sign({
+       correoElectronico: req.correoElectronico, 
+       contrasenia:req.contrasenia
+
+   }, process.env.SECRET_KEY_JWT);
+
+   res.header('auth-token', jwtToken ).json({
+       error:null, 
+       data: {jwtToken}
+   })
+
+ })
+
+
+// Registro del Usuario 
 router.post('/registro', [
     check('nombres').isLength({min: 3}),
     check('correoElectronico').isLength({min: 3}),
     check('contrasenia').isLength({min: 8, max:15})
 ],async function(req, res) {
-    console.log("hola", req.body.nombres)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
@@ -47,11 +88,22 @@ router.post('/registro', [
 
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
     
-    if(user) return res.status(400).send('Ese usuario ya existe')
+    if(user) return res.status(400).send('Email ya registrado')
+      
     
+    user = await User.findOne({dni: req.body.dni})
+    
+    if(user && req.body.dni != undefined ) return res.status(400).send('DNI existente')
+    
+
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(req.body.contrasenia, salt)
-    
+    // tipo de usuario
+     var tipoUsuarios = 1
+      if (req.body.dni == undefined)  tipoUsuarios = 2
+     
+         
+      
     user = new User({
         nombres: req.body.nombres,
         apellidos:req.body.apellidos,
@@ -62,7 +114,7 @@ router.post('/registro', [
         facebook:req.body.facebook,
         correoElectronico: req.body.correoElectronico,
         contrasenia: hashPassword,
-        tipoUsuario: req.body.tipoUsuario, 
+        tipoUsuario: tipoUsuarios, 
         numeroContacto: req.body.numeroContacto,
         idEstado: req.body.idEstado,
         fechaCreacion: req.body.fechaCreacion,
@@ -138,14 +190,14 @@ router.put('/:id', [
     res.status(204).send()
 })
 
-router.delete('/:id', async(req, res)=>{
-
-    const user = await User.findByIdAndDelete(req.params.id)
+router.delete('/:correoElectronico', async(req, res)=>{
+    
+    const user = await User.findOneAndDelete({correoElectronico: req.params.correoElectronico})
 
     if(!user){
         return res.status(404).send('El user con ese ID no esta, no se puede borrar')
     }
-
+    
     res.status(200).send('usuario borrado')
 
 });
