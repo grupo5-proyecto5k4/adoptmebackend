@@ -1,0 +1,21 @@
+{
+    "nombres": "Juan",
+    "apellidos": "Para",
+    "dni": "342822332",
+    "fecha nacimiento": "09/05/1986",
+    "direccion": {
+       "calle": "Catamarca",
+       "numero": 1942,
+       "referencia": null,
+       "barrio": "General Paz",
+       "localidad": "Cordoba"
+    },
+    "instagram": null,
+    "facebook": null,
+    "correo electronico": "juanpara86@gmail.com",
+    "contrasenia": "xxxx",
+    "tipoUsuario": 1,
+    "numeroContacto": 33333,
+    "idEstado": 1,
+    "fechaCreacion": null
+ }
