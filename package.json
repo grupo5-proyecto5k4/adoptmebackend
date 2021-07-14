@@ -1,21 +1,34 @@
 {
-  "name": "proyecto_nuevo_am",
+  "name": "adoptmebackend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "test": "mocha"
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grupo5-proyecto5k4/adoptmebackend.git"
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grupo5-proyecto5k4/adoptmebackend/issues"
+  },
+  "homepage": "https://github.com/grupo5-proyecto5k4/adoptmebackend#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "express-validator": "^6.11.1",
+    "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.12"
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.12.14"
   },
   "devDependencies": {
-    "mocha": "^8.4.0"
+    "dotenv": "^10.0.0"
   }
 }

@@ -6,17 +6,10 @@ const userSchema  = new mongosee.Schema({
     type: String,
     required: true
    },
-  apellidos: {
-    type: String,
-    required: true
-  },
-  dni:{
-    type: Number,
-    required: true,
-    unique: true
-  },
+  apellidos: {type: String},
+  dni:{type: Number},
   fechaNacimiento: {type: Date, default: Date.now },
-  direccion: {
+  Direccion: {
       calle: {type: String},
       numero: {type: Number}, 
       referencia: {type: String},
@@ -25,33 +18,48 @@ const userSchema  = new mongosee.Schema({
   },
   instagram: {type: String},
   facebook: {type: String}, 
-  correoElectronico: {type: String},
+  correoElectronico: {
+    type: String,
+    required: true,
+    unique: true
+  },
   contrasenia: {
     type: String,
     required: true 
    },
-  esParticular: {type: Boolean}, 
-  esRescatista: {type: Boolean}
+   tipoUsuario: {type: Number},
+   numeroContacto: { type: Number },
+   idEstado:{type: Number },
+   fechaCreacion: {type: Date, default: Date.now},
+   fechaModificacion:{type: Date, default: Date.now}
 
 });
   
+/* tipoUsuario puede ser: 
+0 - Admin
+1 - Particular
+2 - Rescatista */
+ 
 userSchema.methods.generateJWT = function(){
   return jwt.sign({
       _id: this._id,
       nombres: this.nombres,
       apellidos: this.apellidos,
       dni: this.dni,
-      direccion: this.direccion,
+      Direccion:this.Direccion,
       fechaNacimiento: this.fechaNacimiento,
       facebook: this.facebook, 
       instagram: this.instagram,
       correoElectronico: this.correoElectronico,
       contrasenia: this.contrasenia,
-      esParticular: this.esParticular,
-      esRescatista: this.esRescatista
-  }, process.env.SECRET_KEY_JWT_CAR_API)
+      tipoUsuario: this.tipoUsuario,
+      numeroContacto: this.numeroContacto,
+      idEstado: this.idEstado,
+      fechaCreacion: this.fechaCreacion,
+      fechaModificacion:this.fechaModificacion
+  }, process.env.SECRET_KEY_JWT)
 }
+console.log("secreto:", process.env.SECRET_KEY_JWT)
 
-const Usuario = mongosee.model('am_usuarios', userSchema);
-
+const Usuario = mongosee.model('am-usuarios', userSchema);
 module.exports = Usuario
