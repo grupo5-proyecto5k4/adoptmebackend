@@ -4,6 +4,8 @@ const express = require('express');
 
 const app = express();
 const user = require('./Logica/usuarios.js')
+const estados = require('./Logica/estados.js')
+
 
 
 //app.set("port", PORT);
@@ -11,6 +13,7 @@ const user = require('./Logica/usuarios.js')
 app.use(express.json())
 //app.use('/user', user)
 app.use('/', user)
+app.use('/estados', estados)
 //app.use(cors)
 //app.use('/api/user/', user)
 //app.use('/api/company/', company)
