@@ -67,17 +67,12 @@ router.options('/login', async function(req, res)  {
    
     //create token 
 
-   const jwtToken = jwt.sign({
-       correoElectronico: req.correoElectronico, 
-       contrasenia:req.contrasenia
-
-   }, process.env.SECRET_KEY_JWT);
+   const jwtToken = jwt.sign({user}, process.env.SECRET_KEY_JWT);
 
    res.header('auth-token', jwtToken ).json({
        error:null, 
-       data: {jwtToken},
-       user
-   })
+       data: jwtToken,
+       })
 
  })
 
