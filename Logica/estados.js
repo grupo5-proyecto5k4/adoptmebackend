@@ -15,7 +15,7 @@ const { schema } = require('../modelos/estados.js')
 //   });
 
   router.get('/:id_estado', async function(req, res) {
-    let estados =  await Estados.findOne({id_estado:req.body.id_estado});
+    let estados =  await Estados.findOne(req.params.id_estado);
     res.send(estados)
 });
 
