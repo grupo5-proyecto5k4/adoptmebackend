@@ -28,7 +28,7 @@ router.post('/estado', async function(req, res) {
 const result = await estados.save()
 const jwtToken = estados.generateJWT()
 
-res.status(201).header('estado creado', jwtToken).send()
+res.status(201).header('estado_creado', jwtToken).send()
 });
 
 module.exports = router;
