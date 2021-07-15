@@ -20,6 +20,7 @@ const estadoSchema  = new mongosee.Schema({
 
 estadoSchema.methods.generateJWT = function(){
     return jwt.sign({
+        _id: this._id,
         id_estado: this.id_estado,
         nombre: this.nombre,
         fechaCreacion: this.fechaCreacion,
