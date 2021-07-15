@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 
-const userSchema  = new mongosee.Schema({
+const estadoSchema  = new mongosee.Schema({
   id_estado: {type: Number},
   nombre: {type: String},
   fechaCreacion: {type: Date, default: Date.now},
@@ -18,7 +18,7 @@ const userSchema  = new mongosee.Schema({
 10 - Adoptado (mascota)
 11 - En provisorio (mascota)*/
 
-userSchema.methods.generateJWT = function(){
+estadoSchema.methods.generateJWT = function(){
     return jwt.sign({
         id_estado: this.id_estado,
         nombre: this.nombre,
@@ -26,7 +26,7 @@ userSchema.methods.generateJWT = function(){
         fechaModificacion: this.fechaModificacion
     }, process.env.SECRET_KEY_JWT)
 }
-const Estado = mongosee.model('am-estados', userSchema);
+const Estado = mongosee.model('am-estados', estadoSchema);
 module.exports = Estado
 
 
