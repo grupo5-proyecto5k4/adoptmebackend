@@ -14,6 +14,7 @@ app.use(express.json())
 //app.use('/user', user)
 app.use('/', user)
 app.use('/estados/', estados)
+
 //app.use(cors)
 //app.use('/api/user/', user)
 //app.use('/api/company/', company)

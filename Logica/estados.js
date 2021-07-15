@@ -7,7 +7,12 @@ const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/estados.js')
 
-
+// router.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT');
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+//   });
 
   router.get('/idestado', async function(req, res) {
     let estados =  await Estados.find();
@@ -16,14 +21,15 @@ const { schema } = require('../modelos/estados.js')
 
 router.post('/estado', async function(req, res) {
     let estados = new Estados({
-        idestado: req.body.idestado,
+        id_estado: req.body.id_estado,
         nombre : req.body.nombre
     })
 
 const result = await estados.save()
 const jwtToken = estados.generateJWT()
 
-res.status(201).header('Authorization', jwtToken).send("conecto")
+
+res.status(201).header('estado_creado', jwtToken).send()
 });
 
 module.exports = router;
