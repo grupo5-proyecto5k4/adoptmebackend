@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt')
 const mongosee = require('mongoose')
 const express = require('express')
 const User = require('../modelos/usuarios.js')
+const Estado = require('../modelos/estados.js')
+//const { schema2 } = require('../modelos/usuarios.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
@@ -60,10 +62,7 @@ router.options('/login', async function(req, res)  {
     if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña inválida'})
     
 
-    // res.json({
-    //     error: null,
-    //     data :'Bienvenido'
-    // })
+    
    
     //create token 
 
@@ -100,10 +99,17 @@ router.post('/registro', [
 
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(req.body.contrasenia, salt)
-    // tipo de usuario
+    // tipo de usuario y estado 
      var tipoUsuarios = 1
-      if (req.body.dni == undefined)  tipoUsuarios = 2
-     
+     var estado = await Estado.findOne({nombre: "Activo"})
+     if (req.body.dni == undefined)  {
+         tipoUsuarios = 2
+         estado = await Estado.findOne({nombre: "Pendiente"})
+     }
+  
+    
+    
+   
          
       
     user = new User({
@@ -118,7 +124,7 @@ router.post('/registro', [
         contrasenia: hashPassword,
         tipoUsuario: tipoUsuarios, 
         numeroContacto: req.body.numeroContacto,
-        idEstado: req.body.idEstado,
+        idEstado: estado.id_estado,
         fechaCreacion: req.body.fechaCreacion,
         fechaModificacion:req.body.fechaModificacion
     })

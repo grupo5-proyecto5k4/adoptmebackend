@@ -12,7 +12,7 @@ const estados = require('./Logica/estados.js')
 
 app.use(express.json())
 //app.use('/user', user)
-app.use('/', user)
+app.use('/', user, estados)
 app.use('/estados/', estados)
 
 //app.use(cors)
