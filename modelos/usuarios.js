@@ -59,7 +59,7 @@ userSchema.methods.generateJWT = function(){
       fechaModificacion:this.fechaModificacion
   }, process.env.SECRET_KEY_JWT)
 }
-console.log("secreto:", process.env.SECRET_KEY_JWT)
+
 
 const Usuario = mongosee.model('am-usuarios', userSchema);
 module.exports = Usuario
