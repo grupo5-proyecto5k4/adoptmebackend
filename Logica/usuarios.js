@@ -60,10 +60,11 @@ router.options('/login', async function(req, res)  {
     let validaContrasenia = await bcrypt.compare(req.body.contrasenia, user.contrasenia);
     let estado = await Estado.findOne ({nombre: 'Activo'})
 
-    if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña inválida'}) 
-    if (req.body.id_estado != estado ) return res.status(400).json({error: 'Usuario inactivo'})
+    if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña inválida'})
+    console.log ( user.idEstado)
+    if (user.idEstado != estado.id_estado ) return res.status(400).json({error: 'Usuario inactivo'})
     
-    
+
     
 
     
