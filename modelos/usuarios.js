@@ -8,7 +8,7 @@ const userSchema  = new mongosee.Schema({
    },
   apellidos: {type: String},
   dni:{type: Number},
-  fechaNacimiento: {type: Date, default: Date.now },
+  fechaNacimiento: {type: Date},
   Direccion: {
       calle: {type: String},
       numero: {type: Number}, 

@@ -61,12 +61,8 @@ router.options('/login', async function(req, res)  {
     let estado = await Estado.findOne ({nombre: 'Activo'})
 
     if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña inválida'})
-    console.log ( user.idEstado)
+    
     if (user.idEstado != estado.id_estado ) return res.status(400).json({error: 'Usuario inactivo'})
-    
-
-    
-
     
    
     //create token 
@@ -94,14 +90,13 @@ router.post('/registro', [
 
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
     
-    if(user) return res.status(400).json({error:'el email se encuentra registrado'})
+    if(user) return res.status(400).json({error:'El email se encuentra registrado.'})
       
     
     user = await User.findOne({dni: req.body.dni})
     
-    if(user && req.body.dni != undefined ) return res.status(400).json({error:'el DNI se encuentra registrado'})
-    
-
+    if(user && req.body.dni != undefined ) return res.status(400).json({error:'El DNI se encuentra registrado.'})
+  
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(req.body.contrasenia, salt)
     // tipo de usuario y estado 
@@ -112,8 +107,7 @@ router.post('/registro', [
          estado = await Estado.findOne({nombre: "Pendiente"})
      }
   
-    
-    
+      
    
          
       
