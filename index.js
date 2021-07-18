@@ -10,7 +10,7 @@ const animal = require('./Logica/animal.js')
 app.use(express.json())
 app.use('/', user, estados)
 app.use('/estados/', estados)
-app.use('/animal/', animal)
+app.use('/animales/', animal)
 
 const port = process.env.PORT || 3003
 
