@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 
-const estadoSchema  = new mongosee.Schema({
+const animalSchema  = new mongosee.Schema({
   idAnimal: {type: Number},
   tipoMascota: {
     type: Number,
@@ -37,7 +37,7 @@ const estadoSchema  = new mongosee.Schema({
   Conducta: Mala, regular, buena, excelente
   Castrado: 0 (si), 1 (no)
   */
-  estadoSchema.methods.generateJWT = function(){
+  animalSchema.methods.generateJWT = function(){
     return jwt.sign({
         _id: this._id,
         idAnimal: this.idAnimal,
@@ -61,6 +61,6 @@ const estadoSchema  = new mongosee.Schema({
         descripcion: this.descripcion
     }, process.env.SECRET_KEY_JWT)
 }
-const Animal = mongosee.model('am-animal', estadoSchema);
+const Animal = mongosee.model('am-animal', animalSchema);
 module.exports = Animal
   
