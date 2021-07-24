@@ -10,6 +10,7 @@ app.use(express.json())
 app.use('/', user, estados)
 app.use('/estados/', estados)
 app.use('/animales/', animal)
+app.use('/fotos/', foto)
 
 const port = process.env.PORT || 3003
 
