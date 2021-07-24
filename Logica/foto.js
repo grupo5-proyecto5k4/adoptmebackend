@@ -17,7 +17,7 @@ router.get('/', (req,res) => {
     res.render('imagen');
 });
 
-router.get('/imagen/add', (req,res) => {
+router.get('/imagen', (req,res) => {
     res.render('imagen_form');
 });
 
