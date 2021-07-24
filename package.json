@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "npm run freshtall": "npm cache clean --force && rm -rf node_modules && rm -f package-lock.json && npm install"
   },
   "repository": {
     "type": "git",
