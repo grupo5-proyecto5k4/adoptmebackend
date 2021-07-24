@@ -12,13 +12,14 @@ cloudname: 'dsfz7jmoi',
 apikey: '281974651216952',
 apisecret: 'RKGzfGl_WhyjnoOevR6MZTLl-mc'
 });
-const fs = requiere('fs-extra');
-router.get('/', (req,res) => {
-    res.render('imagen');
-});
+// const fs = requiere('fs-extra');
+// router.get('/', (req,res) => {
+//     res.render('imagen');
+// });
 
 router.get('/imagen', (req,res) => {
-    res.render('imagen_form');
+    let foto =  await Foto.find();
+    res.send(foto);
 });
 
 router.post('/imagen/add', async (req,res) => {
