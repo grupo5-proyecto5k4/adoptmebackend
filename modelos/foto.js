@@ -18,4 +18,3 @@ fotoSchema.methods.generateJWT = function(){
 }
 const Foto = mongosee.model('am-foto', fotoSchema);
 module.exports = Foto
-module.exports = model('Foto', foto);
