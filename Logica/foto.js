@@ -45,11 +45,11 @@ router.get('/imagen', (req,res) => {
 //     const jwtToken = foto.generateJWT()
 //     {res.send('recibido ok');
 // });
-// const multer = require('multer')({
-//     dest: 'public/files'
-// })
-// const fs = require('fs')
-// const path = require('path')
+const multer = require('multer')({
+    dest: 'public/files'
+})
+const fs = require('fs')
+const path = require('path')
 
 
 router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
