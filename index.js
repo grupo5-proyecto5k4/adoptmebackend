@@ -4,7 +4,7 @@ const app = express();
 const user = require('./Logica/usuarios.js')
 const estados = require('./Logica/estados.js')
 const animal = require('./Logica/animal.js')
-const foto = requiere('./modelos/foto') //la constante que trabaja en la base de datos para consultas, etcs
+//const foto = requiere('./modelos/foto') //la constante que trabaja en la base de datos para consultas, etcs
 
 app.use(express.json())
 app.use('/', user, estados)

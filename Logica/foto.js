@@ -5,13 +5,13 @@ const Foto = require('../modelos/foto.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
-const { schema } = require('../modelos/foto.js')
-const cloudinary = requiere ('cloudinary');
-cloudinary.config({
-cloudname: 'dsfz7jmoi',
-apikey: '281974651216952',
-apisecret: 'RKGzfGl_WhyjnoOevR6MZTLl-mc'
-});
+// const { schema } = require('../modelos/foto.js')
+// const cloudinary = requiere ('cloudinary');
+// cloudinary.config({
+// cloudname: 'dsfz7jmoi',
+// apikey: '281974651216952',
+// apisecret: 'RKGzfGl_WhyjnoOevR6MZTLl-mc'
+// });
 // const fs = requiere('fs-extra');
 // router.get('/', (req,res) => {
 //     res.render('imagen');
@@ -45,11 +45,11 @@ router.get('/imagen', (req,res) => {
 //     const jwtToken = foto.generateJWT()
 //     {res.send('recibido ok');
 // });
-const multer = require('multer')({
-    dest: 'public/files'
-})
-const fs = require('fs')
-const path = require('path')
+// const multer = require('multer')({
+//     dest: 'public/files'
+// })
+// const fs = require('fs')
+// const path = require('path')
 
 
 router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
