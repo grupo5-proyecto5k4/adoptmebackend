@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "npm": "npm install --save multer",
     "start": "node index.js",
     "npm run freshtall": "npm cache clean --force && rm -rf node_modules && rm -f package-lock.json && npm install"
   },
