@@ -6,6 +6,9 @@ const estados = require('./Logica/estados.js')
 const animal = require('./Logica/animal.js')
 //const foto = requiere('./modelos/foto') //la constante que trabaja en la base de datos para consultas, etcs
 
+
+app.use(multer({storage}.single('imagen'))); //tiene que tener el nombre imagen en el form del front
+app.use(express.urlencoded({extended:false}));
 app.use(express.json())
 app.use('/', user, estados)
 app.use('/estados/', estados)
@@ -22,7 +25,7 @@ if( process.env.NODE_ENV !=  'production'){
     dotenv.config();
 }
 
-app.use(multer({storage}.single('imagen'))); //tiene que tener el nombre imagen en el form del front
+
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL,
