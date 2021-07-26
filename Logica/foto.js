@@ -5,7 +5,7 @@ const Foto = require('../modelos/foto.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
-// const { schema } = require('../modelos/foto.js')
+const { schema } = require('../modelos/foto.js')
 // const cloudinary = requiere ('cloudinary');
 // cloudinary.config({
 // cloudname: 'dsfz7jmoi',
@@ -46,3 +46,4 @@ router.post('/imagen/add', async (req,res) => {
     {res.send('recibido ok');
 }
 });
+module.exports = router;
