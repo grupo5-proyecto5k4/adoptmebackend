@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const multer = require('multer');
 const app = express();
 const user = require('./Logica/usuarios.js')
 const estados = require('./Logica/estados.js')
