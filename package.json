@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "npm": "npm install --save multer",
+    "npm": "npm i multer",
     "start": "node index.js",
     "npm run freshtall": "npm cache clean --force && rm -rf node_modules && rm -f package-lock.json && npm install"
   },
@@ -30,7 +30,8 @@
     "fs-extra": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.9",
-    "mongoose": "^5.12.14"
+    "mongoose": "^5.12.14",
+    "multer": "1.4.2"
   },
   "devDependencies": {
     "dotenv": "^10.0.0"
