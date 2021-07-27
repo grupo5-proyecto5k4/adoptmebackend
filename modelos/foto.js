@@ -4,7 +4,7 @@ const mongosee = require('mongoose');
 const fotoSchema = new mongosee.Schema({
     titulo: {type: String},
     descripcion: {type: String},
-    public_id: {type: String}
+    imagenURL: {type: String}
 });
 
 fotoSchema.methods.generateJWT = function(){
