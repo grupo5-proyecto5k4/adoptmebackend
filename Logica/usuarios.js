@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/usuarios.js')
+const auth = require('../middleware/auth.js')
 
 router.use(function timelog(req, res, next){
     console.log('Time:', Date.now());
@@ -69,10 +70,17 @@ router.options('/login', async function(req, res)  {
 
    const jwtToken = jwt.sign({user}, process.env.SECRET_KEY_JWT);
 
-   res.header('auth-token', jwtToken ).json({
-       error:null, 
-       data: jwtToken,
-       })
+   res.header('auth-token', jwtToken ).json({mensaje: 'Funciona'})
+
+ })
+
+ router.get('/login', auth, async function(req, res){
+    
+    let userAux = req.user.user
+    let user = await User.findOne({correoElectronico: userAux.correoElectronico})
+   
+    if (!user)return res.status(400).json({error: 'Datos del Usuario Logueado incorrectos'})
+    res.send(user)
 
  })
 
