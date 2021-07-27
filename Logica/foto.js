@@ -47,7 +47,7 @@ router.get('/imagen', async (req,res) => {
 // }
 // });
 const multer = require('multer')({
-    dest: '/home/tamara/Documentos/Personal/Tesis/Heroku/adoptmebackend/public/files'
+    dest: '/home/tamara/Documentos/Personal/Tesis/Heroku/adoptmebackend/public/files'//ruta
 })
 
 const fs = require('fs')
