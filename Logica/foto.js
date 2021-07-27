@@ -17,7 +17,7 @@ const { schema } = require('../modelos/foto.js')
 //     res.render('imagen');
 // });
 
-router.get('/imagen', (req,res) => {
+router.get('/imagen', async (req,res) => {
     let foto =  await Foto.find();
     res.send(foto);
 });
