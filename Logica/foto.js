@@ -22,19 +22,21 @@ router.get('/imagen', async (req,res) => {
     res.send(foto);
 });
 
-// router.post('/imagen/add', async (req,res) => {
-//    const {title, description} = req.body;
-//    console.log(req.file); //informacion de la imagen
-//    console.log(req.body); // datos cargados sobre la imagen titulo, etcs.
-//    const result = await cloudinary.v2.uploader.upload(req.file.path); // toma el path de la foto que nos cargan desde el frontend
-//    console.log(result)
-//    const newFoto = new Foto ({
-//        titulo,
-//        descripcion,
-//        imagenURL: result.url, // la url que guardo cuando cloudinary me sube la imagen
-//        public_id: result.públic_id
-//    })
-//    await newFoto.save();
+router.post('/imagen/add', async (req,res) => {
+   const {title, description} = req.body;
+   console.log(req.file); //informacion de la imagen
+   console.log(req.body); // datos cargados sobre la imagen titulo, etcs.
+   //const result = await cloudinary.v2.uploader.upload(req.file.path); // toma el path de la foto que nos cargan desde el frontend
+   console.log(result)
+   const newFoto = new Foto ({
+       titulo,
+       descripcion,
+       imagenURL: result.url, // la url que guardo cuando cloudinary me sube la imagen
+       //public_id: result.públic_id
+   })
+   await newFoto.save();
+});
+module.exports = router;
 //    await fs.unlik(req.file.path);
 //       let foto = new Foto({
 //         titulo: req.body.titulo,
@@ -49,38 +51,37 @@ router.get('/imagen', async (req,res) => {
 
 //const fs = require('fs')
 //const path = require('path')
-const multer = require('multer')({
-    dest: 'Escritorio/files'//ruta
-})
-router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
+// const multer = require('multer')({
+//     dest: 'Escritorio/files'//ruta
+// })
+// router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
     
-    console.log(req.file)
-    let foto = new Foto({
-        id_foto: req.body.id_foto,
-        titulo : req.body.titulo
-    })
-    if (req.file.length == 0) {
-        responseb.error = true;
-        responseb.mensaje = 'Ingrese una imagen';
-        responseb.codigo = 400;
-        res.status(400).send(responseb);
+//     console.log(req.file)
+//     let foto = new Foto({
+//         id_foto: req.body.id_foto,
+//         titulo : req.body.titulo
+//     })
+//     if (req.file.length == 0) {
+//         responseb.error = true;
+//         responseb.mensaje = 'Ingrese una imagen';
+//         responseb.codigo = 400;
+//         res.status(400).send(responseb);
 
-    } else {
-        if (req.file.mimetype.indexOf('image') >= 0) {
-            let { fileName } = storeWithOriginalName(req.file)
-            responseb.error = true;
-            responseb.mensaje = fileName;
-            responseb.codigo = 200;
-            res.status(200).send(responseb);
+//     } else {
+//         if (req.file.mimetype.indexOf('image') >= 0) {
+//             let { fileName } = storeWithOriginalName(req.file)
+//             responseb.error = true;
+//             responseb.mensaje = fileName;
+//             responseb.codigo = 200;
+//             res.status(200).send(responseb);
 
-        } else {
-            responseb.error = true;
-            responseb.mensaje = 'Ingrese una imagen';
-            responseb.codigo = 400;
-            res.status(400).send(responseb);
-        }
+//         } else {
+//             responseb.error = true;
+//             responseb.mensaje = 'Ingrese una imagen';
+//             responseb.codigo = 400;
+//             res.status(400).send(responseb);
+//         }
 
 
-    }
-});
-module.exports = router;
+//     }
+// });
