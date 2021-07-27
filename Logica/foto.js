@@ -47,7 +47,7 @@ router.get('/imagen', async (req,res) => {
 // }
 // });
 const multer = require('multer')({
-    dest: 'publico/files'//ruta
+    dest: 'Carpeta personal/publico/files'//ruta
 })
 
 const fs = require('fs')
