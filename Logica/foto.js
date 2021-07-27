@@ -49,10 +49,11 @@ router.get('/imagen', async (req,res) => {
 
 //const fs = require('fs')
 //const path = require('path')
+const multer = require('multer')({
+    dest: 'Escritorio/files'//ruta
+})
 router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
-    const multer = require('multer')({
-        dest: 'Escritorio/files'//ruta
-    })
+    
     console.log(req.file)
     let foto = new Foto({
         id_foto: req.body.id_foto,
