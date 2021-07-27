@@ -47,11 +47,11 @@ router.get('/imagen', async (req,res) => {
 // }
 // });
 const multer = require('multer')({
-    dest: 'Carpeta personal/publico/files'//ruta
+    dest: 'Escritorio/files'//ruta
 })
 
 //const fs = require('fs')
-const path = require('path')
+//const path = require('path')
 router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
     console.log(req.file)
     let foto = new Foto({
