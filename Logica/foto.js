@@ -50,7 +50,7 @@ const multer = require('multer')({
     dest: 'Carpeta personal/publico/files'//ruta
 })
 
-const fs = require('fs')
+//const fs = require('fs')
 const path = require('path')
 router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
     console.log(req.file)
