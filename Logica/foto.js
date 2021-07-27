@@ -41,7 +41,7 @@ router.post('/imagen/add', async (req,res) => {
         descripcion: req.body.descripcion,
         public_id: req.body.public_id
     })
-    const result = await foto.save()
+    result = await foto.save()
     const jwtToken = foto.generateJWT()
     {res.send('recibido ok');
 }
