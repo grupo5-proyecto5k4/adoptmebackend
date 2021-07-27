@@ -23,15 +23,15 @@ router.get('/imagen', async (req,res) => {
 });
 
 router.post('/imagen/add', async (req,res) => {
-   const {title, description} = req.body;
-   console.log(req.file); //informacion de la imagen
-   console.log(req.body); // datos cargados sobre la imagen titulo, etcs.
+   //const {title, description} = req.body;
+   //console.log(req.file); //informacion de la imagen
+   //console.log(req.body); // datos cargados sobre la imagen titulo, etcs.
    //const result = await cloudinary.v2.uploader.upload(req.file.path); // toma el path de la foto que nos cargan desde el frontend
-   console.log(result)
-   const newFoto = new Foto ({
-       titulo,
-       descripcion,
-       imagenURL: result.url, // la url que guardo cuando cloudinary me sube la imagen
+   //console.log(result)
+   let newFoto = new Foto ({
+       titulo: req.body.titulo,
+       descripcion: req.body.descripcion,
+       imagenURL: req.body.imagenURL // la url que guardo cuando cloudinary me sube la imagen
        //public_id: result.públic_id
    })
    await newFoto.save();
