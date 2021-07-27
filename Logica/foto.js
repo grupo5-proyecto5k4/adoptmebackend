@@ -54,10 +54,10 @@ const multer = require('multer')({
 const path = require('path')
 router.post('/uploadimg', [multer.single('attachment')], (req, res, next) => {
     console.log(req.file)
-    let fot = new Foto({
+    let foto = new Foto({
         id_foto: req.body.id_foto,
         titulo : req.body.titulo
-    }),
+    })
     if (req.file.length == 0) {
         responseb.error = true;
         responseb.mensaje = 'Ingrese una imagen';
