@@ -177,7 +177,7 @@ router.post('/registro', [
     
 });
 
-router.get('/:estados', auth, async(req, res)=>{
+router.get('/centros/:estados', auth, async(req, res)=>{
         let userAux = req.user.user 
         
         if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
@@ -185,8 +185,10 @@ router.get('/:estados', auth, async(req, res)=>{
        
         if (!estados) return res.status(404).json({error: 'El estado es invalido'})
          
-        let users = await User.find({idEstado : estados.id_estado })
-        if(!users) return res.status(404).json({error: 'No hemos encontrado un usuario en ese estado'})
+        let users = await User.find({idEstado : estados.id_estado, tipoUsuario: 2 })
+ 
+        if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+        
         res.send(users)
 });
 
