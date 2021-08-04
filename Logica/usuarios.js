@@ -80,7 +80,23 @@ router.options('/login', async function(req, res)  {
     let user = await User.findOne({correoElectronico: userAux.correoElectronico})
    
     if (!user)return res.status(400).json({error: 'Datos del Usuario Logueado incorrectos'})
-    res.send(user)
+     res.send({
+        _id: user._id,
+        nombres: user.nombres,
+        apellidos: user.apellidos,
+        dni: user.dni,
+        Direccion:user.Direccion,
+        fechaNacimiento: user.fechaNacimiento,
+        facebook: user.facebook, 
+        instagram: user.instagram,
+        correoElectronico: user.correoElectronico,
+        tipoUsuario: user.tipoUsuario,
+        numeroContacto: user.numeroContacto,
+        idEstado: user.idEstado,
+        fechaCreacion: user.fechaCreacion,
+        fechaModificacion:user.fechaModificacion
+    })
+
 
  })
 
@@ -160,6 +176,23 @@ router.post('/registro', [
     
     
 });
+
+router.get('/:estados', auth, async(req, res)=>{
+        let userAux = req.user.user 
+        
+        if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+        let estados = await Estado.findOne({nombre : req.params.estados}) 
+       
+        if (!estados) return res.status(404).json({error: 'El estado es invalido'})
+         
+        let users = await User.find({idEstado : estados.id_estado })
+        if(!users) return res.status(404).json({error: 'No hemos encontrado un usuario en ese estado'})
+        res.send(users)
+});
+
+
+
+
 
 // no se usa por ahora 
 router.get('/:correoElectronico', async(req, res)=>{
