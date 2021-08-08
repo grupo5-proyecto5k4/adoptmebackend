@@ -17,19 +17,15 @@ router.use(function timelog(req, res, next){
 
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods','POST, GET, OPTIONS, DELETE, PUT');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,  auth-token");
     next();
   });
 
-
-
-router.get('/user', async function(req, res) {
-    let users =  await User.find();
-    res.send(users)
-});
-
-
+// router.get('/user', async function(req, res) {
+//     let users =  await User.find();
+//     res.send(users)
+// });
 
 router.options('/registro', async function(req, res)  {
     res.status(200).send('Ok - Options')
@@ -70,7 +66,9 @@ router.options('/login', async function(req, res)  {
 
    const jwtToken = jwt.sign({user}, process.env.SECRET_KEY_JWT);
 
-   res.header('auth-token', jwtToken ).json({mensaje: 'Funciona'})
+   res.header('auth-token', jwtToken ).json({
+       token : jwtToken
+    })
 
  })
 
