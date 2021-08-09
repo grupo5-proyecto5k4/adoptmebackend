@@ -36,7 +36,7 @@ router.post('/animal', async function(req, res) {
     })
 
 const result = await animal.save()
-const jwtToken = estados.generateJWT()
+const jwtToken = result.generateJWT()
 
 
 res.status(201).header('animal_creado', jwtToken).send()
