@@ -3,11 +3,7 @@ const mongosee = require('mongoose')
 
 const animalSchema  = new mongosee.Schema({
   tipoMascota: {type: Number},
-  nombreMascota: {
-    type: String,
-    required: true,
-    unique: true
-  },
+  nombreMascota: {type: String},
   fechaAlta: {type: Date, default: Date.now},
   fechaModificacion:{type: Date, default: Date.now},
   tamañoFinal: {type: String},
