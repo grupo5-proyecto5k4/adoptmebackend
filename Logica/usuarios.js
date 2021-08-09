@@ -17,19 +17,15 @@ router.use(function timelog(req, res, next){
 
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods','POST, GET, OPTIONS, DELETE, PUT');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,  auth-token");
     next();
   });
 
-
-
-router.get('/user', async function(req, res) {
-    let users =  await User.find();
-    res.send(users)
-});
-
-
+// router.get('/user', async function(req, res) {
+//     let users =  await User.find();
+//     res.send(users)
+// });
 
 router.options('/registro', async function(req, res)  {
     res.status(200).send('Ok - Options')
@@ -70,7 +66,9 @@ router.options('/login', async function(req, res)  {
 
    const jwtToken = jwt.sign({user}, process.env.SECRET_KEY_JWT);
 
-   res.header('auth-token', jwtToken ).json({mensaje: 'Funciona'})
+   res.header('auth-token', jwtToken ).json({
+       token : jwtToken
+    })
 
  })
 
@@ -80,7 +78,23 @@ router.options('/login', async function(req, res)  {
     let user = await User.findOne({correoElectronico: userAux.correoElectronico})
    
     if (!user)return res.status(400).json({error: 'Datos del Usuario Logueado incorrectos'})
-    res.send(user)
+     res.send({
+        _id: user._id,
+        nombres: user.nombres,
+        apellidos: user.apellidos,
+        dni: user.dni,
+        Direccion:user.Direccion,
+        fechaNacimiento: user.fechaNacimiento,
+        facebook: user.facebook, 
+        instagram: user.instagram,
+        correoElectronico: user.correoElectronico,
+        tipoUsuario: user.tipoUsuario,
+        numeroContacto: user.numeroContacto,
+        idEstado: user.idEstado,
+        fechaCreacion: user.fechaCreacion,
+        fechaModificacion:user.fechaModificacion
+    })
+
 
  })
 
@@ -160,6 +174,25 @@ router.post('/registro', [
     
     
 });
+
+router.get('/centros/:estados', auth, async(req, res)=>{
+        let userAux = req.user.user 
+        
+        if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+        let estados = await Estado.findOne({nombre : req.params.estados}) 
+       
+        if (!estados) return res.status(404).json({error: 'El estado es invalido'})
+         
+        let users = await User.find({idEstado : estados.id_estado, tipoUsuario: 2 })
+ 
+        if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+        
+        res.send(users)
+});
+
+
+
+
 
 // no se usa por ahora 
 router.get('/:correoElectronico', async(req, res)=>{
