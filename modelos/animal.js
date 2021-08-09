@@ -9,7 +9,7 @@ const animalSchema  = new mongosee.Schema({
   tamañoFinal: {type: String},
   esCachorro: {type: Boolean},
   edad: {type: Number},
-  sexo: {type: Boolean},
+  sexo: {type: String},
   razaPadre: {type: String},
   razaMadre: {type: String},
   estado: {type: String},
@@ -24,7 +24,7 @@ const animalSchema  = new mongosee.Schema({
 /* Tipo mascota: 0- perro, 1- Gato
   Tamaño final: Pequeño, Mediano, Grande, gato = null
   esCachorro: 0 (F)-Cachorro, 1(V)-Adulto
-  Sexo: 0- Macho, 1- Hembra
+  Sexo: Macho, Hembra
   Conducta: Mala, regular, buena, excelente
   Castrado: 0 (si), 1 (no)
   */
