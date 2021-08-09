@@ -14,7 +14,6 @@ router.get('/idAnimal', async function(req, res) {
 
 router.post('/animal', async function(req, res) {
     let animal = new Animal({
-        idAnimal: req.body.idAnimal,
         tipoMascota: req.body.tipoMascota,
         nombreMascota : req.body.nombreMascota,
         fechaAlta: req.body.fechaAlta,

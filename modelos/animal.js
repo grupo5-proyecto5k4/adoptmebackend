@@ -2,12 +2,7 @@ const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 
 const animalSchema  = new mongosee.Schema({
-  idAnimal: {type: Number},
-  tipoMascota: {
-    type: Number,
-    required: true,
-    unique: true
-  },
+  tipoMascota: {type: Number},
   nombreMascota: {
     type: String,
     required: true,
