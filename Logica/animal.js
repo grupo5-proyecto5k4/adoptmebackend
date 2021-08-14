@@ -42,10 +42,10 @@ router.post('/animal', async function(req, res) {
 router.get('/animal/:estados', async(req, res)=>{
     let animalAux = req.animal.animal 
     
-    if (animalAux.estado < 7 || animalAux.estado > 10) return res.status(404).json({error: 'El estado ingresado en la buqueda no se corresponde con los estados de los animales'})
+    if (animalAux.estado != "Disponible adopcion" || animalAux.estado != "Dispobinble provisorio" || animalAux.estado != "Disponible adopcion y provisorio") return res.status(404).json({error: 'El estado ingresado en la buqueda no se corresponde con los estados de los animales'})
     let estados = await Estado.findOne({nombre : req.params.estados}) 
    
-    if (!estados) return res.status(404).json({error: 'El estado es invalido'})
+    if (!estados) return res.status(404).json({error: 'El estado es inválido'})
      
     let animal = await Animal.find({idEstado : estados.id_estado})
 
