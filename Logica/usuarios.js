@@ -185,10 +185,6 @@ router.get('/centros/:estados', auth, async(req, res)=>{
         res.send(users)
 });
 
-
-
-
-
 // no se usa por ahora 
 router.get('/:correoElectronico', async(req, res)=>{
     let user = await User.findById(req.params.correoElectronico)
