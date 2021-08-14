@@ -7,10 +7,13 @@ const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/animal.js')
 
+//Buscar un animal por un determinado id
 router.get('/idAnimal', async function(req, res) {
     let animal =  await Animal.find();
     res.send(animal)
 })
+
+//Cargar un animal
 
 router.post('/animal', async function(req, res) {
     let animal = new Animal({
@@ -34,10 +37,26 @@ router.post('/animal', async function(req, res) {
         descripcion: req.body.descripcion
 
     })
+    
+// filtrar mascotas segun su estado
+router.get('/animal/:estados', async(req, res)=>{
+    let animalAux = req.animal.animal 
+    
+    if (animalAux.estado < 7 || animalAux.estado > 10) return res.status(404).json({error: 'El estado ingresado en la buqueda no se corresponde con los estados de los animales'})
+    let estados = await Estado.findOne({nombre : req.params.estados}) 
+   
+    if (!estados) return res.status(404).json({error: 'El estado es invalido'})
+     
+    let animal = await Animal.find({idEstado : estados.id_estado})
+
+    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
+    
+    res.send(animal)
+});
+
 
 const result = await animal.save()
 const jwtToken = result.generateJWT()
-
 
 res.status(201).header('animal_creado', jwtToken).send()
 });
