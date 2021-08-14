@@ -45,7 +45,7 @@ router.get('/animal/:estados', async(req, res)=>{
 
     //if (!animal) return res.status(404).json({error: 'El estado es inválido'})
     
-    let animal = await Animal.find({estado : req.params.estados}) 
+    let animal = await Animal.find({estado : req.body.estado}) 
 
     console.log(req.params.estados)
    
