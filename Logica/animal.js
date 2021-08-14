@@ -39,15 +39,15 @@ router.post('/animal', async function(req, res) {
     })
     
 // filtrar mascotas segun su estado
-router.get('/animal/:estados', async(req, res)=>{
-    let animalAux = req.animal.animal 
+router.get('/animal/estados', async(req, res)=>{
+    let estadoAnimal =  await Animal.find(); 
     
-    if (animalAux.estado != "Disponible adopcion" || animalAux.estado != "Dispobinble provisorio" || animalAux.estado != "Disponible adopcion y provisorio") return res.status(404).json({error: 'El estado ingresado en la buqueda no se corresponde con los estados de los animales'})
-    let estados = await Estado.findOne({nombre : req.params.estados}) 
+    if (estadoAnimal.estado != "Disponible adopcion" || estadoAnimal.estado != "Dispobinble provisorio" || estadoAnimal.estado != "Disponible adopcion y provisorio") return res.status(404).json({error: 'El estado ingresado en la buqueda no se corresponde con los estados de los animales'})
+    let animal = await Animal.findOne({nombre : req.params.estado}) 
    
-    if (!estados) return res.status(404).json({error: 'El estado es inválido'})
+    if (!animal) return res.status(404).json({error: 'El estado es inválido'})
      
-    let animal = await Animal.find({idEstado : estados.id_estado})
+    let animal2 = await Animal.find({idEstado : animal.estado})
 
     if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     
