@@ -39,7 +39,7 @@ router.post('/animal', async function(req, res) {
     })
     
 // filtrar mascotas segun su estado
-router.get('/animal/estados', async(req, res)=>{
+router.get('/animal', async(req, res)=>{
 
     //let estados = await Estado.findOne({nombre : req.params.estado}) 
 
@@ -47,7 +47,7 @@ router.get('/animal/estados', async(req, res)=>{
     
     let animal = await Animal.find({estado : req.body.estado}) 
 
-    console.log(req.params.estados)
+    console.log(req.body.estado)
    
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     
