@@ -8,7 +8,7 @@ const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/animal.js')
 
 //Buscar un animal por un determinado id
-router.get('/idAnimal', async function(req, res) {
+router.get('/idAnimal', async (req, res) => {
     let animal =  await Animal.find();
     res.send(animal)
 })
