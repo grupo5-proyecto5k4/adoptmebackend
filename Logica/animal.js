@@ -37,9 +37,15 @@ router.post('/animal', async function(req, res) {
         descripcion: req.body.descripcion
 
     })
-    
+   
+const result = await animal.save()
+const jwtToken = result.generateJWT()
+
+res.status(201).header('animal_creado', jwtToken).send()
+});
+
 // filtrar mascotas segun su estado
-router.get('/animal', async(req, res)=>{
+router.get('/animal/estados', async(req, res)=>{
 
     //let estados = await Estado.findOne({nombre : req.params.estado}) 
 
@@ -47,18 +53,11 @@ router.get('/animal', async(req, res)=>{
     
     let animal = await Animal.find({estado : req.body.estado}) 
 
-    console.log(req.body.estado)
+    console.log(req.params.estado)
    
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     
     res.send(animal)
-});
-
-
-const result = await animal.save()
-const jwtToken = result.generateJWT()
-
-res.status(201).header('animal_creado', jwtToken).send()
 });
 
 module.exports = router;
