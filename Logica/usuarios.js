@@ -205,8 +205,8 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
    
      
      let user = await User.findByIdAndUpdate(req.params.id_centro,
-        { idEstado: req.body.idEstado,
-            fechaCreacion
+        { idEstado: req.body.idEstado
+         
         }, {
             new: true
         })
