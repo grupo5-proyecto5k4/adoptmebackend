@@ -98,7 +98,6 @@ router.options('/login', async function(req, res)  {
 
  })
 
-
 // Registro del Usuario 
 router.post('/registro', [
     check('nombres').isLength({min: 3}),
@@ -128,12 +127,8 @@ router.post('/registro', [
          tipoUsuarios = 2
          estado = await Estado.findOne({nombre: "Pendiente"})
      }
-  
-      
-   
-         
-      
-    user = new User({
+    
+     user = new User({
         nombres: req.body.nombres,
         apellidos:req.body.apellidos,
         dni:req.body.dni,
@@ -200,6 +195,7 @@ router.get('/centros/:estados', auth, async(req, res)=>{
         res.send(users)
 });
 
+
 // habilitar centros rescatista por su id 
 
 router.put('/centros/:id_centro', auth, async(req, res)=> {
@@ -225,8 +221,6 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
 
 
 });
-
-
 
 // no se usa por ahora 
 router.get('/:correoElectronico', async(req, res)=>{
