@@ -170,7 +170,7 @@ router.post('/registro', [
     
 });
 
-router.options('/centros/:estados', async function(req, res)  {
+router.options('/centros/Pendiente', async function(req, res)  {
     res.status(200).send('Ok - Options')
    
 })
@@ -205,7 +205,9 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
    
      
      let user = await User.findByIdAndUpdate(req.params.id_centro,
-        { idEstado: req.body.idEstado}, {
+        { idEstado: req.body.idEstado,
+            fechaCreacion
+        }, {
             new: true
         })
        
