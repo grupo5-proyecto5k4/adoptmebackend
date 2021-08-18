@@ -7,8 +7,10 @@ const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/animal.js')
 
-router.get('/idAnimal', async function(req, res) {
-    let animal =  await Animal.find();
+router.get('/idAnimal', async(req, res)=> {
+    console.log('llego aca aca')
+    let animal =  await Animal.find()
+    console.log('animal', animal )
     res.send(animal)
 })
 
@@ -40,6 +42,18 @@ const jwtToken = result.generateJWT()
 
 
 res.status(201).header('animal_creado', jwtToken).send()
+});
+
+router.get('/animal', async(req, res)=>{
+
+    
+    let animal = await Animal.find({estado : req.body.estado}) 
+
+    console.log(req.body.estado)
+   
+    if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
+    
+    res.send(animal)
 });
 
 module.exports = router;

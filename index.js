@@ -30,6 +30,6 @@ if( process.env.NODE_ENV !=  'production'){
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL,
- {useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true})
+ {useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false})
    .then(()=> console.log('Conectado correctamente a MongoDB'))
    .catch(()=> console.log('Error al conectarse a MongoDB'));

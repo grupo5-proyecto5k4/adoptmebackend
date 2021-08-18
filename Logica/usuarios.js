@@ -175,6 +175,16 @@ router.post('/registro', [
     
 });
 
+router.options('/centros/:estados', async function(req, res)  {
+    res.status(200).send('Ok - Options')
+   
+})
+
+router.options('/centros/:id_centro', async function(req, res)  {
+    res.status(200).send('Ok - Options')
+   
+})
+
 router.get('/centros/:estados', auth, async(req, res)=>{
         let userAux = req.user.user 
         
@@ -190,7 +200,31 @@ router.get('/centros/:estados', auth, async(req, res)=>{
         res.send(users)
 });
 
+// habilitar centros rescatista por su id 
 
+router.put('/centros/:id_centro', auth, async(req, res)=> {
+    let userAux = req.user.user 
+     
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+   
+     
+     let user = await User.findByIdAndUpdate(req.params.id_centro,
+        { idEstado: req.body.idEstado}, {
+            new: true
+        })
+       
+        
+     if(!user) return res.status(404).json({error: 'No se ha encontrado el Centro Rescatista indicado'})
+ 
+   
+     
+    if (user.idEstado == 1) return  res.status(404).json({mensaje: 'El Centro Rescatista ha sido habilitado'})
+    if (user.idEstado != 1) return  res.status(404).json({error: 'El Centro Rescatista ha sido rechazado'})
+      
+    
+
+
+});
 
 
 
