@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 
 function auth(req, res, next){
-    console.log ('token uno  ',  req.header('auth-token'))
+   
     const jwtToken = req.header('auth-token')
-    console.log ("token ", jwtToken)
+    
     if(!jwtToken) return res.status(401).send('Acceso Denegado. Necesitamos un token valido')
   
     try{

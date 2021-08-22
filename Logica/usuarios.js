@@ -216,8 +216,8 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
  
    
      
-    if (user.idEstado == 1) return  res.status(404).json({mensaje: 'El Centro Rescatista ha sido habilitado'})
-    if (user.idEstado != 1) return  res.status(404).json({error: 'El Centro Rescatista ha sido rechazado'})
+    if (user.idEstado == 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido habilitado'})
+    if (user.idEstado != 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido rechazado'})
       
     
 
