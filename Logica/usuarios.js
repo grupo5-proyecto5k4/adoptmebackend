@@ -170,7 +170,7 @@ router.post('/registro', [
     
 });
 
-router.options('/centros/Pendiente', async function(req, res)  {
+router.options('/centros/:estados', async function(req, res)  {
     res.status(200).send('Ok - Options')
    
 })
