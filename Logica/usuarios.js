@@ -44,7 +44,7 @@ router.options('/login', async function(req, res)  {
 // login del usuario 
 
  
- router.post('/login', [
+router.post('/login', [
     check('correoElectronico').isLength({min: 3}),
     check('contrasenia').isLength({min: 8, max:15})
 ], async(req, res) => {
@@ -56,15 +56,16 @@ router.options('/login', async function(req, res)  {
     }
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
     
-    if(!user) return res.status(400).json({error: 'Usuario o contraseña inválida'})
+    if(!user) return res.status(400).json({error: 'Email y/o contraseña incorrectos'})
     
     let validaContrasenia = await bcrypt.compare(req.body.contrasenia, user.contrasenia);
     let estado = await Estado.findOne ({nombre: 'Activo'})
 
-    if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña inválida'})
+    if(!validaContrasenia) return res.status(400).json({error: 'Email y/o contraseña incorrectos'})
     
-    if (user.idEstado != estado.id_estado ) return res.status(400).json({error: 'Usuario inactivo'})
+    if (user.idEstado != estado.id_estado ) return res.status(400).json({error: 'Usuario inactivo, comuníquese con el administrador desde la sección contáctanos'})
     
+   
    
     //create token 
 
