@@ -13,6 +13,20 @@ app.use(express.urlencoded({extended:  false}))
 app.use(express.json())
 app.use(multer({dest:'./uploads/'}).single('imagen'));
 
+app.use((req, res, next) => {
+
+  // Dominio que tengan acceso (ej. 'http://example.com')
+     res.setHeader("Access-Control-Allow-Origin", "*");
+  
+  // Metodos de solicitud que deseas permitir
+     res.setHeader('Access-Control-Allow-Methods','POST, GET, OPTIONS, DELETE, PUT');
+  
+  // Encabecedados que permites (ej. 'X-Requested-With,content-type')
+     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,  auth-token");
+  
+  next();
+  })
+
 app.use('/', user, estados)
 app.use('/estados/', estados)
 app.use('/animales/', animal)

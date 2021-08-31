@@ -56,7 +56,7 @@ const result = await animal.save()
 const jwtToken = result.generateJWT()
  
     console.log('llegamos...')
-    
+try{
     if (req.file.path == undefined) res.sendStatus(400).json({error: 'Error, no llegamos'})
     const resulta = await cloudinary.v2.uplouder.upload(req.file.path)
     newFoto = new Foto ({
@@ -70,7 +70,10 @@ const jwtToken = result.generateJWT()
    await fs.unlink(req.file.path)
    if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
    res.sendStatus(200).json({mensaje: 'Se grabo correctamente'})
-
+   next()
+}catch(e){
+    res.status(400).send('Error, no llegamos')
+}
 res.status(201).header('animal_creado', jwtToken).send()
 });
 
