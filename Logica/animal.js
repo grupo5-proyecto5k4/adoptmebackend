@@ -55,25 +55,22 @@ router.post('/animal', async function(req, res) {
 const result = await animal.save()
 const jwtToken = result.generateJWT()
  
-    console.log('llegamos...')
-try{
-    if (req.file.path == undefined) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    const resulta = await cloudinary.v2.uplouder.upload(req.file.path)
-    newFoto = new Foto ({
-       titulo: req.body.titulo,
-       descripcion: req.body.descripcion,
-       imagenURL: resulta.url, // la url que guardo cuando cloudinary me sube la imagen
-       public_id: resulta.public_id, 
-       id_Animal: req.body.id_Animal
-   })
-   let resultado = await newFoto.save()
-   await fs.unlink(req.file.path)
-   if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
-   res.sendStatus(200).json({mensaje: 'Se grabo correctamente'})
-   next()
-}catch(e){
-    res.status(400).send('Error, no llegamos')
-}
+console.log('llegamos...', req.body)
+// if (req.file.path == undefined) res.sendStatus(400).json({error: 'Error, no llegamos'})
+//     const resulta = await cloudinary.v2.uplouder.upload(req.file.path)
+//     newFoto = new Foto ({
+//        titulo: req.body.titulo,
+//        descripcion: req.body.descripcion,
+//        imagenURL: resulta.url, // la url que guardo cuando cloudinary me sube la imagen
+//        public_id: resulta.public_id, 
+//        id_Animal: req.body.id_Animal
+//    })
+//    let resultado = await newFoto.save()
+//    await fs.unlink(req.file.path)
+//    if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
+//    res.sendStatus(200).json({mensaje: 'Se grabo correctamente'})
+   
+
 res.status(201).header('animal_creado', jwtToken).send()
 });
 
