@@ -30,13 +30,15 @@ router.get('/idAnimal', async (req, res) => {
 router.post('/animal', async function(req, res) {
     let castrado = true 
     if (req.body.castrado == 2) castrado = false 
+    let cachorro = true 
+    if (req.body.castrado == 2) cachorro = false 
     let animal = new Animal({
         tipoMascota: req.body.tipoMascota,
         nombreMascota : req.body.nombreMascota,
         fechaAlta: req.body.fechaAlta,
         fechaModificacion: req.body.fechaModificacion,
         tamañoFinal: req.body.tamañoFinal,
-        esCachorro: req.body.esCachorro,
+        esCachorro: this.Cachorro,
         edad: req.body.edad,
         sexo: req.body.sexo,
         razaPadre: req.body.razaPadre,
