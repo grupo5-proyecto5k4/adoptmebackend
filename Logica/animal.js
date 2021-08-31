@@ -62,10 +62,10 @@ console.log('llegamos...', req.body)
 //     const resulta = await cloudinary.v2.uplouder.upload(req.file.path)
 //     newFoto = new Foto ({
 //        titulo: req.body.titulo,
-//        descripcion: req.body.descripcion,
+//        descripcion: animal.descripcion,
 //        imagenURL: resulta.url, // la url que guardo cuando cloudinary me sube la imagen
 //        public_id: resulta.public_id, 
-//        id_Animal: req.body.id_Animal
+//        id_Animal: animal._id
 //    })
 //    let resultado = await newFoto.save()
 //    await fs.unlink(req.file.path)
