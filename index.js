@@ -11,7 +11,7 @@ const foto = require('./Logica/foto.js') //la constante que trabaja en la base d
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
 app.use(express.urlencoded({extended:  false}))
 app.use(express.json())
-
+app.use(multer({dest:'./uploads/'}).single('imagen'));
 
 app.use('/', user, estados)
 app.use('/estados/', estados)
@@ -20,8 +20,8 @@ app.use('/fotos/', foto)
 
 
 
-//app.use(multer({storage}).single('image'))
-app.use(multer({dest:'./uploads/'}).single('image'));
+
+
 
 const port = process.env.PORT || 3003
 

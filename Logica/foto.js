@@ -24,7 +24,7 @@ router.get('/imagen', async (req,res) => {
 
 router.post('/imagen/add', async (req,res) => {
     console.log('llegamos...')
-    console.log( 'que es este path', req.file.path)
+    if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
     const result = await cloudinary.v2.uplouder.upload(req.file.path)
     newFoto = new Foto ({
        titulo: req.body.titulo,

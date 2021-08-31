@@ -56,7 +56,7 @@ const result = await animal.save()
 const jwtToken = result.generateJWT()
  
     console.log('llegamos...')
-    console.log( 'que es este path', req.file.path)
+    
     if (req.file.path == undefined) res.sendStatus(400).json({error: 'Error, no llegamos'})
     const resulta = await cloudinary.v2.uplouder.upload(req.file.path)
     newFoto = new Foto ({
