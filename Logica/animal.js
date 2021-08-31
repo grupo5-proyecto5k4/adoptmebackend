@@ -7,6 +7,17 @@ const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/animal.js')
 
+const Foto = require('../modelos/foto.js')
+const cloudinary = require('cloudinary');
+const fs = require('fs-extra')
+
+
+ cloudinary.config({
+     cloud_name: process.env.cloudname,
+     api_key: process.env.apikey,
+     api_secret: process.env.apisecret
+ })
+
 
 //Buscar un animal por un determinado id
 router.get('/idAnimal', async (req, res) => {
@@ -33,7 +44,7 @@ router.post('/animal', async function(req, res) {
         estado: req.body.estado,
         responsableCategoria: req.body.responsableCategoria,
         responsableId: req.body.responsableId,
-        castrado: castrado,
+        castrado: this.castrado,
         conductaNiños: req.body.conductaNiños,
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
@@ -43,6 +54,22 @@ router.post('/animal', async function(req, res) {
    
 const result = await animal.save()
 const jwtToken = result.generateJWT()
+ 
+    console.log('llegamos...')
+    console.log( 'que es este path', req.file.path)
+    if (req.file.path == undefined) res.sendStatus(400).json({error: 'Error, no llegamos'})
+    const resulta = await cloudinary.v2.uplouder.upload(req.file.path)
+    newFoto = new Foto ({
+       titulo: req.body.titulo,
+       descripcion: req.body.descripcion,
+       imagenURL: resulta.url, // la url que guardo cuando cloudinary me sube la imagen
+       public_id: resulta.public_id, 
+       id_Animal: req.body.id_Animal
+   })
+   let resultado = await newFoto.save()
+   await fs.unlink(req.file.path)
+   if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
+   res.sendStatus(200).json({mensaje: 'Se grabo correctamente'})
 
 res.status(201).header('animal_creado', jwtToken).send()
 });

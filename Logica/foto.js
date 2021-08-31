@@ -21,6 +21,7 @@ router.get('/imagen', async (req,res) => {
     res.send(foto);
 });
 
+
 router.post('/imagen/add', async (req,res) => {
     console.log('llegamos...')
     console.log( 'que es este path', req.file.path)
