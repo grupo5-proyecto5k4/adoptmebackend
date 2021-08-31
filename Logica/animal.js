@@ -38,7 +38,7 @@ router.post('/animal', async function(req, res) {
         fechaAlta: req.body.fechaAlta,
         fechaModificacion: req.body.fechaModificacion,
         tamañoFinal: req.body.tamañoFinal,
-        esCachorro: this.Cachorro,
+        esCachorro: this.cachorro,
         edad: req.body.edad,
         sexo: req.body.sexo,
         razaPadre: req.body.razaPadre,
