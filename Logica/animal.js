@@ -17,6 +17,8 @@ router.get('/idAnimal', async (req, res) => {
 //Cargar un animal
 
 router.post('/animal', async function(req, res) {
+    let castrado = true 
+    if (req.body.castrado == 2) castrado = false 
     let animal = new Animal({
         tipoMascota: req.body.tipoMascota,
         nombreMascota : req.body.nombreMascota,
@@ -31,7 +33,7 @@ router.post('/animal', async function(req, res) {
         estado: req.body.estado,
         responsableCategoria: req.body.responsableCategoria,
         responsableId: req.body.responsableId,
-        castrado: req.body.castrado,
+        castrado: castrado,
         conductaNiños: req.body.conductaNiños,
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
