@@ -4,9 +4,9 @@ const express = require('express')
 const Foto = require('../modelos/foto.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
-const {check, validationResult } = require('express-validator');
-const { schema, eventNames } = require('../modelos/foto.js');
-const cloudinary = require('cloudinary');
+const {check, validationResult } = require('express-validator')
+const { schema, eventNames } = require('../modelos/foto.js')
+var cloudinary = require('cloudinary')
 const fs = require('fs-extra')
 
 
