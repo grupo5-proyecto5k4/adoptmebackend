@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator')
 const { schema, eventNames } = require('../modelos/foto.js')
-var cloudinary = require('cloudinary').v2
+var cloudinary = require('cloudinary')
 const fs = require('fs-extra')
 
 router.use(function(req, res, next) {
@@ -38,7 +38,8 @@ router.post('/imagen/add', async (req,res) => {
     console.log ("trae algo req.file",req.file)
     console.log (`./${req.file.path}`)
     if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    const result = await cloudinary.uploader.upload(`./${req.file.path}`)
+    const result = await cloudinary.v2.uploader.upload(`./${req.file.path}`)
+    console.log(resultado, result.url)
     newFoto = new Foto ({
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
