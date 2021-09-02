@@ -34,19 +34,21 @@ router.options('/imagen/add', async function(req, res)  {
 
 router.post('/imagen/add', async (req,res) => {
     console.log('llegamos...')
-    if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    const result = await cloudinary.v2.uplouder.upload(req.file.path)
-    newFoto = new Foto ({
-        titulo: req.body.titulo,
-        descripcion: req.body.descripcion,
-        imagenURL: result.url, // la url que guardo cuando cloudinary me sube la imagen
-        public_id: result.public_id, 
-        id_Animal: req.body.id_Animal
-    })
-    let resultado = await newFoto.save()
-    await fs.unlink(req.file.path)
-    if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    res.sendStatus(400).json({mensaje: 'Se grabo correctamente'})
+    console.log ("que trae el fron", req.body)
+    console.log ("trae algo req.file", req.file)
+    // if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
+    // const result = await cloudinary.v2.uplouder.upload(req.file.path)
+    // newFoto = new Foto ({
+    //     titulo: req.body.titulo,
+    //     descripcion: req.body.descripcion,
+    //     imagenURL: result.url, // la url que guardo cuando cloudinary me sube la imagen
+    //     public_id: result.public_id, 
+    //     id_Animal: req.body.id_Animal
+    // })
+    // let resultado = await newFoto.save()
+    // await fs.unlink(req.file.path)
+    // if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
+    // res.sendStatus(400).json({mensaje: 'Se grabo correctamente'})
        
     
 });
