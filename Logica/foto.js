@@ -34,11 +34,11 @@ router.options('/imagen/add', async function(req, res)  {
 
 router.post('/imagen/add', async (req,res) => {
     console.log('llegamos...')
-    console.log ("que trae el front", req.body)
-    console.log ("trae algo req.file", req.file)
+    console.log ("que trae el front",req.body)
+    console.log ("trae algo req.file",req.file)
     console.log ('./', req.file.path)
     if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    const result = await cloudinary.v2.uplouder.upload(req.file.data.url)
+    const result = await cloudinary.v2.uplouder.upload(('./', req.file.path).trim())
     newFoto = new Foto ({
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
