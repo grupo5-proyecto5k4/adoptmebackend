@@ -38,7 +38,7 @@ router.post('/imagen/add', async (req,res) => {
     console.log ("trae algo req.file",req.file)
     console.log (`./${req.file.path}`)
     if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    const result = await cloudinary.uplouder.upload(`./${req.file.path}`)
+    const result = await cloudinary.uploader.upload(`./${req.file.path}.jpg`)
     newFoto = new Foto ({
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
@@ -47,7 +47,7 @@ router.post('/imagen/add', async (req,res) => {
         id_Animal: req.body.id_Animal
     })
     let resultado = await newFoto.save()
-    await fs.unlink(req.file.path)
+    await fs.unlink(`./${req.file.path}.jpg`)
     if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
     res.sendStatus(400).json({mensaje: 'Se grabo correctamente'})
        
