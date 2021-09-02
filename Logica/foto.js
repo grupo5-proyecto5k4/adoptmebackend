@@ -9,6 +9,12 @@ const { schema, eventNames } = require('../modelos/foto.js')
 var cloudinary = require('cloudinary')
 const fs = require('fs-extra')
 
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods','POST, GET, OPTIONS, DELETE, PUT');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,  auth-token");
+    next();
+  });
 
  cloudinary.config({
      cloud_name: process.env.cloudname,
@@ -21,6 +27,10 @@ router.get('/imagen', async (req,res) => {
     res.send(foto);
 });
 
+router.options('/imagen/add', async function(req, res)  {
+    res.status(200).send('Ok - Options')
+   
+})
 
 router.post('/imagen/add', async (req,res) => {
     console.log('llegamos...')
