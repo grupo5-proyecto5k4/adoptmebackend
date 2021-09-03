@@ -50,7 +50,7 @@ router.post('/animal', auth,  async function(req, res) {
         razaPadre: req.body.razaPadre,
         razaMadre: req.body.razaMadre,
         estado: req.body.estado,
-        responsableCategoria: req.body.responsableCategoria,
+        responsableCategoria: userAux.body.responsableCategoria,
         responsableId: userAux._id,
         castrado: this.castrado,
         conductaNiños: req.body.conductaNiños,
