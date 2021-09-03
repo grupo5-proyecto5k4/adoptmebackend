@@ -63,7 +63,7 @@ router.post('/imagen/add', async (req,res) => {
      const jwtToken = result.generateJWT()
  
        
-    if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
+    if (!req.file) res.status(400).json({error: 'Error, no llegamos'})
     const result2 = await cloudinary.v2.uploader.upload(req.file.path)
     
     newFoto = new Foto ({
