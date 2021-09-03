@@ -33,21 +33,50 @@ router.options('/imagen/add', async function(req, res)  {
 })
 
 router.post('/imagen/add', async (req,res) => {
+    let castrado = true 
+    if (req.body.castrado == 2) castrado = false 
+    let cachorro = true 
+    if (req.body.castrado == 2) cachorro = false 
+    let animal = new Animal({
+        tipoMascota: req.body.tipoMascota,
+        nombreMascota : req.body.nombreMascota,
+        fechaAlta: req.body.fechaAlta,
+        fechaModificacion: req.body.fechaModificacion,
+        tamañoFinal: req.body.tamañoFinal,
+        esCachorro: this.cachorro,
+        edad: req.body.edad,
+        sexo: req.body.sexo,
+        razaPadre: req.body.razaPadre,
+        razaMadre: req.body.razaMadre,
+        estado: req.body.estado,
+        responsableCategoria: req.body.responsableCategoria,
+        responsableId: req.body.responsableId,
+        castrado: this.castrado,
+        conductaNiños: req.body.conductaNiños,
+        conductaPerros: req.body.conductaPerros,
+        conductaGatos: req.body.conductaGatos,
+        descripcion: req.body.descripcion
+
+    })
+   
+     const result = await animal.save()
+     const jwtToken = result.generateJWT()
+ 
        
     if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    const result = await cloudinary.v2.uploader.upload(req.file.path)
+    const result2 = await cloudinary.v2.uploader.upload(req.file.path)
     
     newFoto = new Foto ({
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
-        imagenURL: result.url, // la url que guardo cuando cloudinary me sube la imagen
-        public_id: result.public_id, 
-        id_Animal: req.body.id_Animal
+        imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
+        public_id: result2.public_id, 
+        id_Animal: result._id
     })
     let resultado = await newFoto.save()
-    await fs.unlink(`${req.file.path}`)
-    if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
-    res.sendStatus(200).json({mensaje: 'Se grabo correctamente'})
+    await fs.unlink(req.file.path)
+    if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
+    res.status(200).json({mensaje: 'Se grabo correctamente'})
        
     
 });
