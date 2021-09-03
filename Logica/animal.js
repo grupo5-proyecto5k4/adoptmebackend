@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/animal.js')
+const auth = require('../middleware/auth.js')
 
 const Foto = require('../modelos/foto.js')
 const cloudinary = require('cloudinary');
@@ -26,8 +27,13 @@ router.get('/idAnimal', async (req, res) => {
 })
 
 //Cargar un animal
+// agregar el token 
+// funciono para foto 
 
-router.post('/animal', async function(req, res) {
+
+
+router.post('/animal', auth,  async function(req, res) {
+    let userAux = req.user.user
     let castrado = true 
     if (req.body.castrado == 2) castrado = false 
     let cachorro = true 
@@ -45,44 +51,41 @@ router.post('/animal', async function(req, res) {
         razaMadre: req.body.razaMadre,
         estado: req.body.estado,
         responsableCategoria: req.body.responsableCategoria,
-        responsableId: req.body.responsableId,
+        responsableId: userAux._id,
         castrado: this.castrado,
         conductaNiños: req.body.conductaNiños,
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
-        descripcion: req.body.descripcion
-
-    })
+        descripcion: req.body.descripcion,
+        foto: req.body.foto
+ })
    
 const result = await animal.save()
 const jwtToken = result.generateJWT()
  
-console.log('llegamos...', req.body)
-if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
-const result2 = await cloudinary.v2.uploader.upload(req.file.path)
+// console.log('llegamos...', req.body.foto)
+// if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
+// const result2 = await cloudinary.v2.uploader.upload(req.body.foto.path)
 
-newFoto = new Foto ({
-    titulo: req.body.nombreMascota,
-    descripcion: req.body.descripcion,
-    imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
-    public_id: result2.public_id, 
-    id_Animal: result._id
-})
-let resultado = await newFoto.save()
-if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
-let resulta2  = await fs.unlink(req.file.path)
+// newFoto = new Foto ({
+//     titulo: req.body.nombreMascota,
+//     descripcion: req.body.descripcion,
+//     imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
+//     public_id: result2.public_id, 
+//     id_Animal: result._id
+// })
+// let resultado = await newFoto.save()
+// if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
+// let resulta2  = await fs.unlink(req.file.path)
 
-res.status(201).header('animal_creado', jwtToken).send()
+res.status(201).json({id_Animal: result._id})
 });
 
 
 // filtrar mascotas segun su estado
 router.get('/animal/:estados', async(req, res)=>{
 
-    //let estados = await Estado.findOne({nombre : req.params.estado}) 
-
-    //if (!animal) return res.status(404).json({error: 'El estado es inválido'})
-    
+        
     let animal = await Animal.find({estado : req.params.estados}) 
 
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})

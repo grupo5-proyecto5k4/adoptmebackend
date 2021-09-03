@@ -19,8 +19,8 @@ const animalSchema  = new mongosee.Schema({
   condutaNiños: {type: String},
   condutaPerros: {type: String},
   condutaGatos: {type: String},
-  descripcion: {type: String}
-});
+  descripcion: {type: String} 
+  });
 /* Tipo mascota: 0- perro, 1- Gato
   Tamaño final: Pequeño, Mediano, Grande, gato = null
   esCachorro: 0 (F)-Cachorro, 1(V)-Adulto
