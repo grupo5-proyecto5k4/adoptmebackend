@@ -43,7 +43,7 @@ router.post('/imagen/add/', async (req,res) => {
         descripcion: req.body.descripcion,
         imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
         public_id: result2.public_id, 
-        id_Animal: req.body._id
+        id_Animal: req.body.id_Animal
     })
     let resultado = await newFoto.save()
     await fs.unlink(req.file.path)

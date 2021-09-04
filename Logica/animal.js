@@ -63,20 +63,7 @@ router.post('/animal', auth,  async function(req, res) {
 const result = await animal.save()
 const jwtToken = result.generateJWT()
  
-// console.log('llegamos...', req.body.foto)
-// if (!req.file) res.sendStatus(400).json({error: 'Error, no llegamos'})
-// const result2 = await cloudinary.v2.uploader.upload(req.body.foto.path)
-
-// newFoto = new Foto ({
-//     titulo: req.body.nombreMascota,
-//     descripcion: req.body.descripcion,
-//     imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
-//     public_id: result2.public_id, 
-//     id_Animal: result._id
-// })
-// let resultado = await newFoto.save()
-// if (!resultado) res.sendStatus(400).json({error: 'Error, no llegamos'})
-// let resulta2  = await fs.unlink(req.file.path)
+console.log (result)
 
 res.status(201).json({id_Animal: result._id})
 });
