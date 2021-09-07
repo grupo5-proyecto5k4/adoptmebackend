@@ -1,3 +1,4 @@
+const { ObjectId } = require('bson');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 
@@ -14,13 +15,13 @@ const animalSchema  = new mongosee.Schema({
   razaMadre: {type: String},
   estado: {type: String},
   responsableCategoria: {type: Number},
-  responsableId: {type: Number},
+  responsableId: {type: ObjectId},
   castrado: {type: Boolean},
   condutaNiños: {type: String},
   condutaPerros: {type: String},
   condutaGatos: {type: String},
-  descripcion: {type: String}
-});
+  descripcion: {type: String} 
+  });
 /* Tipo mascota: 0- perro, 1- Gato
   Tamaño final: Pequeño, Mediano, Grande, gato = null
   esCachorro: 0 (F)-Cachorro, 1(V)-Adulto

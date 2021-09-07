@@ -1,10 +1,13 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 const mongosee = require('mongoose');
 
 const fotoSchema = new mongosee.Schema({
     titulo: {type: String},
     descripcion: {type: String},
-    imagenURL: {type: String}
+    imagenURL: {type: String},
+    public_id: {type:String},
+    id_Animal: ObjectId
 });
 
 fotoSchema.methods.generateJWT = function(){

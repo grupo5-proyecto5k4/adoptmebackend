@@ -22,10 +22,7 @@ router.use(function(req, res, next) {
     next();
   });
 
-// router.get('/user', async function(req, res) {
-//     let users =  await User.find();
-//     res.send(users)
-// });
+
 
 router.options('/registro', async function(req, res)  {
     res.status(200).send('Ok - Options')
@@ -40,7 +37,7 @@ router.options('/login', async function(req, res)  {
 // login del usuario 
 
  
- router.post('/login', [
+router.post('/login', [
     check('correoElectronico').isLength({min: 3}),
     check('contrasenia').isLength({min: 8, max:15})
 ], async(req, res) => {
@@ -52,15 +49,19 @@ router.options('/login', async function(req, res)  {
     }
     let user = await User.findOne({correoElectronico: req.body.correoElectronico})
     
-    if(!user) return res.status(400).json({error: 'Usuario o contraseña inválida'})
-    
+    if(!user) return res.status(400).json({error: 'Oops... El email ingresado no está registrado. Creá una cuenta para continuar'})
+        
     let validaContrasenia = await bcrypt.compare(req.body.contrasenia, user.contrasenia);
-    let estado = await Estado.findOne ({nombre: 'Activo'})
+    
+    
 
-    if(!validaContrasenia) return res.status(400).json({error: 'Usuario o contraseña inválida'})
+    if(!validaContrasenia) return res.status(400).json({error: 'Oops... La contraseña que ingresaste es incorrecta'})
     
-    if (user.idEstado != estado.id_estado ) return res.status(400).json({error: 'Usuario inactivo'})
-    
+   // if (user.idEstado != estado.id_estado ) return res.status(400).json({error: 'Usuario inactivo, comuníquese con el administrador desde la sección contáctanos'})
+   let estado = await Estado.findOne ({nombre: 'Activo'})
+   if (user.idEstado != estado.id_estado ) return res.status(400).json(
+       {error: 'Oops... Tu cuenta todavía está siendo analizada para ser habilitada'}
+       )
    
     //create token 
 
@@ -170,6 +171,16 @@ router.post('/registro', [
     
 });
 
+router.options('/centros/:estados', async function(req, res)  {
+    res.status(200).send('Ok - Options')
+   
+})
+
+router.options('/centros/:id_centro', async function(req, res)  {
+    res.status(200).send('Ok - Options')
+   
+})
+
 router.get('/centros/:estados', auth, async(req, res)=>{
         let userAux = req.user.user 
         
@@ -185,62 +196,36 @@ router.get('/centros/:estados', auth, async(req, res)=>{
         res.send(users)
 });
 
-// no se usa por ahora 
-router.get('/:correoElectronico', async(req, res)=>{
-    let user = await User.findById(req.params.correoElectronico)
-    if(!user) return res.status(404).send('No hemos encontrado un usuario con ese ID')
-    res(user)
+
+// habilitar centros rescatista por su id 
+
+router.put('/centros/:id_centro', auth, async(req, res)=> {
+    let userAux = req.user.user 
+     
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+   
+    //new Date(Date.now()).toISOString()
+     let user = await User.findByIdAndUpdate(req.params.id_centro,
+        { idEstado: req.body.idEstado,
+          fechaModificacion: new Date(Date.now()).toISOString()
+
+        }, {
+            new: true
+        })
+       
+        
+     if(!user) return res.status(404).json({error: 'No se ha encontrado el Centro Rescatista indicado'})
+ 
+   
+     
+    if (user.idEstado == 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido habilitado'})
+    if (user.idEstado != 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido rechazado'})
+      
+    
+
+
 });
 
-router.put('/:id', [
-    check('nombres').isLength({min: 3}),
-    check('apellidos').isLength({min: 3}),
-    check('dni').isLength({min:6, max: 8}),
-    check('correoElectronico').isLength({min: 3}),
-    check('contrasenia').isLength({min: 8, max:15})
-], async (req, res)=>{
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-    }
-
-    const user = await User.findByIdAndUpdate(req.params.id,{
-        nombres: req.body.nombres,
-        apellidos:req.body.apellidos,
-        dni:req.body.dni,
-        fechaNacimiento:req.body.fechaNacimiento,
-        Direccion:req.body.Direccion, 
-        instagram:req.body.instagram,
-        facebook:req.body.facebook,
-        correoElectronico: req.body.correoElectronico,
-        password: hashPassword,
-        tipoUsuario: req.body.tipoUsuario,
-        numeroContacto: req.body.numeroContacto,
-        idEstado: req.body.idEstado,
-        fechaCreacion: req.body.fechaCreacion
-    },
-    {
-        new: true
-    })
-
-    if(!user){
-        return res.status(404).send('El usuario con ese ID no esta')
-    }
-    
-    res.status(204).send()
-})
-
-router.delete('/:correoElectronico', async(req, res)=>{
-    
-    const user = await User.findOneAndDelete({correoElectronico: req.params.correoElectronico})
-
-    if(!user){
-        return res.status(404).send('El user con ese ID no esta, no se puede borrar')
-    }
-    
-    res.status(200).send('usuario borrado')
-
-});
 
 module.exports = router;
 
