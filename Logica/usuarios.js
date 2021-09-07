@@ -206,7 +206,7 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
    
     //new Date(Date.now()).toISOString()
      let user = await User.findByIdAndUpdate(req.params.id_centro,
-        { idEstado: req.body.idEstados,
+        { idEstado: req.body.idEstado,
           fechaModificacion: new Date(Date.now()).toISOString()
 
         }, {
