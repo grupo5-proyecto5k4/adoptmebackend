@@ -46,10 +46,6 @@ res.status(201).header('animal_creado', jwtToken).send()
 
 // filtrar mascotas segun su estado
 router.get('/animal/:estados', async(req, res)=>{
-
-    //let estados = await Estado.findOne({nombre : req.params.estado}) 
-
-    //if (!animal) return res.status(404).json({error: 'El estado es inválido'})
     
     let animal = await Animal.find({estado : req.params.estados}) 
 
