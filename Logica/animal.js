@@ -72,7 +72,6 @@ res.status(201).json({id_Animal: result._id})
 // filtrar mascotas segun su estado
 router.get('/animal/:estados', async(req, res)=>{
 
-        
     let animal = await Animal.find({estado : req.params.estados}) 
 
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
