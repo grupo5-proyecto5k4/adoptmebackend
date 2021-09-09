@@ -3,7 +3,7 @@ const mongosee = require('mongoose')
 
 const vacunaSchema  = new mongosee.Schema({
   nombre: {type: String},
-  cantidadDosis: {type: number},
+  cantidadDosis: {type: Number},
   fechaCreacion: {type: Date, default: Date.now},
   fechaModificacion:{type: Date, default: Date.now}
 });
