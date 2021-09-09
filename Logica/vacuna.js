@@ -8,7 +8,7 @@ const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/vacuna.js')
 
 router.get('/idvacuna', async function(req, res) {
-    let vacuna =  await Estados.find();
+    let vacuna =  await Vacuna.find();
     res.send(vacuna)
 })
 
