@@ -15,7 +15,8 @@ router.get('/idvacuna', async function(req, res) {
 router.post('/vacuna', async function(req, res) {
     let vacuna = new Vacuna({
         nombre : req.body.nombre,
-        cantidadDosis: req.body.cantidadDosis
+        cantidadDosis: req.body.cantidadDosis,
+        id_Animal: req.body.id_Animal
     })
 
 const result = await vacuna.save()
