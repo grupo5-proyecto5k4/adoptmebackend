@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/vacuna.js')
+const Animal = require('../modelos/animal.js')
 
 router.get('/idvacuna', async function(req, res) {
     let vacuna =  await Vacuna.find();
