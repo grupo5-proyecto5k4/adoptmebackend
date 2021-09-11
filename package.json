@@ -1,7 +1,6 @@
 {
   "name": "adoptmebackend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -31,9 +30,13 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.14",
-    "multer": "^1.4.2"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "web-push": "^3.4.5"
   },
   "devDependencies": {
     "dotenv": "^10.0.0"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }

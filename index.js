@@ -6,6 +6,15 @@ const user = require('./Logica/usuarios.js')
 const estados = require('./Logica/estados.js')
 const animal = require('./Logica/animal.js')
 const foto = require('./Logica/foto.js') //la constante que trabaja en la base de datos para consultas, etcs
+const notificacion = require('./Logica/notificacion.js')
+
+//middleware notificaciones
+const morgan = require('morgan');
+app.use(morgan('dev'));
+app.use(express.urlencoded({extended: false}))
+app.use(express.json());
+
+//routes notificaciones
 
 
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
@@ -31,6 +40,7 @@ app.use('/', user, estados)
 app.use('/estados/', estados)
 app.use('/animales/', animal)
 app.use('/fotos/', foto)
+
 
 
 
