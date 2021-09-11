@@ -79,13 +79,7 @@ router.put('/recomendaciones/:id_recomendacion', auth, async(req, res)=> {
         })
        
         
-     if(!recomendacion) return res.status(404).json({error: 'No se ha encontrado el Centro Rescatista indicado'})
- 
-   
-     
-    if (user.idEstado == 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido habilitado'})
-    if (user.idEstado != 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido rechazado'})
-      
+     if(!recomendacion) return res.status(404).json({error: 'No se ha encontrado el Centro Rescatista indicado'})  
 
 });
 
