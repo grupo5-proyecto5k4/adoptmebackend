@@ -40,10 +40,11 @@ router.get('/recomendaciones', async(req, res)=>{
     res.send(recomendaciones)
 });
 
-// enviar recomendaciones para el mapa
-router.get('/recomendacionesMapa', async(req, res)=>{
 
-    let recomendaciones = await Recomendacion.find({estado : 1}) 
+// enviar recomendaciones para el mapa (solo activas) de centros de veterinarias
+router.get('/recomendacionVeterinaria', async(req, res)=>{
+
+    let recomendaciones = await Recomendacion.find({estado : 1, tipoRecomendacion: 0}) 
 
     if (recomendaciones.length == 0) return res.status(404).json({error: 'No hemos encontrado ninguna recomendacion registrada o activa'})
     
@@ -52,33 +53,41 @@ router.get('/recomendacionesMapa', async(req, res)=>{
 
 
 
-/*
+// enviar recomendaciones para el mapa (solo activas) de centros de castracion
+router.get('/recomendacionCentroCastracion', async(req, res)=>{
+
+    let recomendaciones = await Recomendacion.find({estado : 1, tipoRecomendacion: 1}) 
+
+    if (recomendaciones.length == 0) return res.status(404).json({error: 'No hemos encontrado ninguna recomendacion registrada o activa'})
+    
+    res.send(recomendaciones)
+});
+
+
+
 router.put('/recomendaciones/:id_recomendacion', auth, async(req, res)=> {
     let userAux = req.user.user 
      
-    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para esta accion'})
    
     //new Date(Date.now()).toISOString()
-     let user = await User.findByIdAndUpdate(req.params.id_centro,
+     let recomendacion = await Recomendacion.findByIdAndUpdate(req.params.id_recomendacion,
         { idEstado: req.body.idEstado,
           fechaModificacion: new Date(Date.now()).toISOString()
-
         }, {
             new: true
         })
        
         
-     if(!user) return res.status(404).json({error: 'No se ha encontrado el Centro Rescatista indicado'})
+     if(!recomendacion) return res.status(404).json({error: 'No se ha encontrado el Centro Rescatista indicado'})
  
    
      
     if (user.idEstado == 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido habilitado'})
     if (user.idEstado != 1) return  res.status(200).json({mensaje: 'El Centro Rescatista ha sido rechazado'})
       
-    
-
 
 });
-*/
+
 
 module.exports = router;
