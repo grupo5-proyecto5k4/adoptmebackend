@@ -1,7 +1,32 @@
-const jwt = require('jsonwebtoken')
-const mongosee = require('mongoose')
+class NotificationDto {
+    id = 0;
+    accountIdApplicant = {type: String};
+    accountIdLender = {type: String};
+    dateReaded = {type: Date};
+    type = {type: String};
+    requestId = {type: String};
+    responseId = {type: String};
+    senderId = {type: String};
+    receiverId = {type: String};
+    userId = null;
+    createdAtNew = {type: Date, default: Date.now};
+    accessed = false;
+  }
+  
+  module.exports = NotificationDto;
+
+  const jwt = require('jsonwebtoken')
+const mongosee = require('mongoose'),
 
 const notificacionSchema  = new mongosee.Schema({
+  titulo: {type: String},
+  descripcion: {type: String},
+  imagenURL: {type: String},
+  public_id: {type:String},
+  id_Animal: ObjectId,
+
+
+
   nombres: {
     type: String,
     required: true
