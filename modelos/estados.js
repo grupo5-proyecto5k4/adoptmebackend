@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
+const { ObjectId } = require('mongodb')
 
 const estadoSchema  = new mongosee.Schema({
   id_estado: {type: Number},
