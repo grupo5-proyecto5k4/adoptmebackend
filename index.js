@@ -7,6 +7,7 @@ const estados = require('./Logica/estados.js')
 const animal = require('./Logica/animal.js')
 const foto = require('./Logica/foto.js') //la constante que trabaja en la base de datos para consultas, etcs
 const vacuna = require('./Logica/vacuna.js')
+const recomendacion = require('./Logica/recomendacion.js')
 
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
 app.use(express.urlencoded({extended:  false}))
@@ -32,6 +33,7 @@ app.use('/estados/', estados)
 app.use('/animales/', animal)
 app.use('/fotos/', foto)
 app.use('/vacunas', vacuna)
+app.use('/', recomendacion)
 
 
 
