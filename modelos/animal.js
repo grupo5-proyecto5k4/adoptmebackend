@@ -20,7 +20,12 @@ const animalSchema  = new mongosee.Schema({
   condutaNiños: {type: String},
   condutaPerros: {type: String},
   condutaGatos: {type: String},
-  descripcion: {type: String} 
+  descripcion: {type: String},
+  Foto:[{ foto: String,
+          esPrincipal: Boolean 
+         }
+     ] 
+  
   });
 /* Tipo mascota: 0- perro, 1- Gato
   Tamaño final: Pequeño, Mediano, Grande, gato = null
@@ -51,6 +56,7 @@ const animalSchema  = new mongosee.Schema({
         condutaPerros: this.conductaPerros,
         condutaGatos: this.conductaGatos,
         descripcion: this.descripcion
+        
     }, process.env.SECRET_KEY_JWT)
 }
 const Animal = mongosee.model('am-animal', animalSchema);

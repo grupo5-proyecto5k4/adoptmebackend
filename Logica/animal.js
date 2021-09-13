@@ -30,6 +30,12 @@ router.get('/idAnimal', async (req, res) => {
 // agregar el token 
 // funciono para foto 
 
+router.post('/mascotas', auth, async function(req, res){
+    let userAux = req.user.user
+    const mascotas = await Animal.find({responsableId : userAux._id})
+    
+    res.send(mascotas)
+} )
 
 
 router.post('/animal', auth,  async function(req, res) {
