@@ -51,9 +51,9 @@ router.post('/imagen/add/', async (req,res) => {
     
     let a = await Animal.findById({_id: req.body.id_Animal})
     const F = a.Foto
-    console.log (F)
+    
     F.push({ foto: result2.url, esPrincipal : false})
-    console.log ('antes' ,F)
+    
     let animal = await Animal.findByIdAndUpdate(req.body.id_Animal,
         { Foto: F,
           fechaModificacion: new Date(Date.now()).toISOString()

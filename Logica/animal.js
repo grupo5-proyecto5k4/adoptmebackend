@@ -5,7 +5,6 @@ const Animal = require('../modelos/animal.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
-const { schema } = require('../modelos/animal.js')
 const auth = require('../middleware/auth.js')
 
 const Foto = require('../modelos/foto.js')
@@ -21,8 +20,10 @@ const fs = require('fs-extra')
 
 
 //Buscar un animal por un determinado id
-router.get('/idAnimal', async (req, res) => {
-    let animal =  await Animal.find();
+router.get('/:idAnimal', async (req, res) => {
+    console.log('llega')
+    const animal =  await Animal.find({nombreMascota: req.params.idAnimal})
+    console.log(animal)
     res.send(animal)
 })
 
@@ -30,10 +31,11 @@ router.get('/idAnimal', async (req, res) => {
 // agregar el token 
 // funciono para foto 
 
-router.post('/mascotas', auth, async function(req, res){
+router.get('/mascotas', auth, async function(req, res){
     let userAux = req.user.user
-    const mascotas = await Animal.find({responsableId : userAux._id})
-    
+    console.log(userAux._id)
+    let mascotas = await Animal.find({responsableId : userAux._id})
+    console.log(mascotas)
     res.send(mascotas)
 } )
 
