@@ -34,6 +34,7 @@ const recomendacionSchema = new mongosee.Schema({
         type: Number,
         required: true
     },
+    
 });
 /* Tipo recomendacion: 0- veterinaria, 1- centro rescatista
     abierto24hs: 0- No, 1- Si
