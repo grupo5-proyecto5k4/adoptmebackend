@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const auth = require('../middleware/auth.js')
-
+const { ObjectId } = require('mongodb');
 const Foto = require('../modelos/foto.js')
 const cloudinary = require('cloudinary');
 const fs = require('fs-extra')
@@ -20,9 +20,10 @@ const fs = require('fs-extra')
 
 
 //Buscar un animal por un determinado id
-router.get('/:idAnimal', async (req, res) => {
+router.get('/buscar', async function(req, res) {
     console.log('llega')
-    const animal =  await Animal.find({nombreMascota: req.params.idAnimal})
+
+    const animal =  await Animal.find()
     console.log(animal)
     res.send(animal)
 })
@@ -79,8 +80,10 @@ res.status(201).json({id_Animal: result._id})
 
 // filtrar mascotas segun su estado
 router.get('/animal/:estados', async(req, res)=>{
+    let nueva = req.params.estados.replace(/_/g, " ")
+    console.log(nueva)
 
-    let animal = await Animal.find({estado : req.params.estados}) 
+    let animal = await Animal.find({estado : nueva}) 
 
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     
