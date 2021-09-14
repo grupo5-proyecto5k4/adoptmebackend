@@ -49,10 +49,11 @@ router.post('/imagen/add/', async (req,res) => {
     await fs.unlink(req.file.path)
     if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
     
-    let a = await Animal.findById(req.body.id_Animal)
+    let a = await Animal.findById({_id: req.body.id_Animal})
     const F = a.Foto
+    
     F.push({ foto: result2.url, esPrincipal : false})
-
+    
     let animal = await Animal.findByIdAndUpdate(req.body.id_Animal,
         { Foto: F,
           fechaModificacion: new Date(Date.now()).toISOString()
