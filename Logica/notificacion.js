@@ -39,11 +39,19 @@ router.get('/notificaciones', auth, async(req, res)=>{
         notificaciones = await Notificacion.find({tipoNotificacion : "usuarioNormal", remitenteId : userAux._id})
     }
     if (notificaciones.length == 0) return res.status(404).json({error: 'No ha recibido notificaciones'})
-    
-    notificacionesSinLeer = await Notificacion.find({leida : 0})
 
-    res.send(notificaciones).json({cantidadSinLeer: notificacionesSinLeer.length})
+
+    res.send(notificaciones)
     
 });
+
+router.get('/cantNotificaciones', auth, async(req, res)=>{
+   
+    notificacionesSinLeer = await Notificacion.find({leida : 0})
+
+    res.send(notificacionesSinLeer.length)
+    
+});
+
 
 module.exports = router;
