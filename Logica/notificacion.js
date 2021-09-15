@@ -11,14 +11,14 @@ const auth = require('../middleware/auth.js')
 
 router.post('/notificacion', auth,  async function(req, res) { 
     let notificacion = new Notificacion({
-        tipoRecomendacion: req.body.tipoRecomendacion,
-        nombre: req.body.nombre,
-        calle: req.body.calle,
-        numero: req.body.numero,
-        sitioWeb: req.body.sitioWeb,
-        abierto24hs: req.body.abierto24hs,
-        latitud: req.body.latitud,
-        longitud: req.body.longitud
+        tipoNotificacion: req.body.tipoNotificacion,
+        nombreNotificacion: req.body.nombreNotificacion,
+        descripcion: req.body.descripcion,
+        remitenteId: req.body.remitenteId,
+        fechaCreacion: req.body.fechaCreacion,
+        leida: req.body.leida,
+        objetoAMostrar: req.body.objetoAMostrar,
+        objetoAMostrarId: req.body.objetoAMostrarId
  })
    
 const result = await notificacion.save()
