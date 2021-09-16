@@ -20,7 +20,7 @@ const { schema } = require('../modelos/estados.js')
      api_secret: process.env.apisecret
  })
 
-
+//
 //Buscar un animal por un determinado id
 router.get('/buscar', async function(req, res) {
     console.log('llega')
