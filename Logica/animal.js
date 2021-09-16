@@ -93,13 +93,12 @@ router.get('/animal/:estados', async(req, res)=>{
 // filtrar mascotas segun su estado y segun el id del responsable
 router.get('/respestados/:responestados', auth, async(req, res)=>{
     let nueva = req.params.estados.replace(/_/g, " ")
-    let userAux = req.user.user
+    //let userAux = req.user.user
     console.log(userAux._id)
     let animal = await Animal.find({estado : nueva}) 
-    let mascotas = await Animal.find({responsableId : userAux._id})
+    //let mascotas = await Animal.find({responsableId : userAux._id})
 
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
-    if (mascotas.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese usuario'})
     res.send(animal, mascotas)
 });
 
