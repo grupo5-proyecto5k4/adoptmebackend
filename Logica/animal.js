@@ -99,7 +99,7 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     let animal = await Animal.find({estado : nueva, responsableId : userAux._id }) 
     
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
-    res.send(animal, mascotas)
+    res.send(animal)
 });
 
 
