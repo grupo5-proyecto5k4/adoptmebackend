@@ -30,10 +30,6 @@ router.get('/buscar', async function(req, res) {
     res.send(animal)
 })
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 425b5f17d6d32561d75d6ec99eea3e54dcbefe45
 router.post('/animal', auth,  async function(req, res) {
     let userAux = req.user.user
     let castrado = true 
@@ -86,11 +82,8 @@ router.get('/animal/:estados', async(req, res)=>{
 router.get('/respestados/:responestados', auth, async(req, res)=>{
     let nueva = req.params.responestados.replace(/_/g, " ")
     let userAux = req.user.user
-<<<<<<< HEAD
+
     let animal = await Animal.findAll({estado : nueva, responsableId : userAux._id }) 
-=======
-    let animal = await Animal.find({responsableId : userAux._id, estado : nueva }) 
->>>>>>> 425b5f17d6d32561d75d6ec99eea3e54dcbefe45
     
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     res.send(animal)
