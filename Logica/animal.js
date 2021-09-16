@@ -9,7 +9,9 @@ const auth = require('../middleware/auth.js')
 const { ObjectId } = require('mongodb');
 const Foto = require('../modelos/foto.js')
 const cloudinary = require('cloudinary');
-const fs = require('fs-extra')
+const fs = require('fs-extra');
+const Estados = require('../modelos/estados.js')
+const { schema } = require('../modelos/estados.js')
 
 
  cloudinary.config({
