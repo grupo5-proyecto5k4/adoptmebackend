@@ -30,19 +30,6 @@ router.get('/buscar', async function(req, res) {
     res.send(animal)
 })
 
-//Cargar un animal
-// agregar el token 
-// funciono para foto 
-
-router.get('/mascotas', auth, async function(req, res){
-    let userAux = req.user.user
-    console.log(userAux._id)
-    let mascotas = await Animal.find({responsableId : userAux._id})
-    console.log(mascotas)
-    res.send(mascotas)
-} )
-
-
 router.post('/animal', auth,  async function(req, res) {
     let userAux = req.user.user
     let castrado = true 
@@ -79,7 +66,6 @@ console.log (result)
 res.status(201).json({id_Animal: result._id})
 });
 
-
 // filtrar mascotas segun su estado
 router.get('/animal/:estados', async(req, res)=>{
     let nueva = req.params.estados.replace(/_/g, " ")
@@ -101,6 +87,5 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     res.send(animal)
 });
-
 
 module.exports = router;
