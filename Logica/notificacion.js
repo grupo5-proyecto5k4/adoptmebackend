@@ -26,7 +26,7 @@ const jwtToken = result.generateJWT()
  
 console.log (result)
 
-res.status(201).json() //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
+res.sendStatus(201).json() //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
 });
 
 router.get('/notificaciones', auth, async(req, res)=>{
@@ -38,19 +38,26 @@ router.get('/notificaciones', auth, async(req, res)=>{
     else{
         notificaciones = await Notificacion.find({tipoNotificacion : "usuarioNormal", remitenteId : userAux._id})
     }
-    if (notificaciones.length == 0) return res.status(404).json({error: 'No ha recibido notificaciones'})
+    if (notificaciones.length == 0) return res.sendStatus(404).json({error: 'No ha recibido notificaciones'})
 
 
     res.send(notificaciones)
     
 });
 
-router.get('/cantNotificaciones', auth, async(req, res)=>{
-   
-    notificacionesSinLeer = await Notificacion.find({leida : 0})
+router.put('/notificacion/:id_notificacion', auth, async(req, res)=> {
+  
+    //new Date(Date.now()).toISOString()
+     let notificacion = await Notificacion.findByIdAndUpdate(req.params.id_notificacion,
+        { idEstado: req.body.idEstado,
+          fechaModificacion: new Date(Date.now()).toISOString()
+        }, {
+            new: true
+        })
+       
+        
+     if(!notificacion) return res.status(404).json({error: 'No se ha encontrado la notificacion indicada'})  
 
-    res.send(notificacionesSinLeer.length)
-    
 });
 
 
