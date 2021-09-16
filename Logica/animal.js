@@ -12,6 +12,7 @@ const cloudinary = require('cloudinary');
 const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
+const Vacuna = require('../modelos/vacuna.js')
 
 
  cloudinary.config({
@@ -55,7 +56,9 @@ router.post('/animal', auth,  async function(req, res) {
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
         descripcion: req.body.descripcion,
-        foto: req.body.foto
+        foto: req.body.foto,
+        nombreVacuna: req.body.nombreVacuna,
+        cantidadDosis: req.body.cantidadDosis
  })
    
 const result = await animal.save()
@@ -87,5 +90,20 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     res.send(animal)
 });
+
+//filtrar por id_animal la vacuna y la cantidad de dosis
+router.get('/animal/:idMascotaVacuna', async(req, res)=>{
+    let nueva = req.params.animal.replace(/_/g, " ")
+    let idAnimal = req.params.id_Animal
+    let vacuna = req.params.nombreVacuna
+    let dosis = req.params.cantidadDosis
+    let animal = await Animal.find({idAnimal : id_Animal, nombreVacuna : vacuna, dosis: cantidadDosis}) 
+
+    if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal'})
+    
+    res.send(animal)
+});
+
+
 
 module.exports = router;
