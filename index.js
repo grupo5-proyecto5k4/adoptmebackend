@@ -9,11 +9,12 @@ const foto = require('./Logica/foto.js') //la constante que trabaja en la base d
 const vacuna = require('./Logica/vacuna.js')
 const recomendacion = require('./Logica/recomendacion.js')
 const notificacion = require('./Logica/notificacion.js')
+const adopcion  = require('./Formulario/adopcion-logica.js')
 
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
 app.use(express.urlencoded({extended:  false}))
 app.use(express.json())
-app.use(multer({dest:'fotos_mascotas'}).single('imagen'));
+app.use(multer({dest:'fotos_mascotas'}).array('imagen', 5));
 
 app.use((req, res, next) => {
 
@@ -36,6 +37,7 @@ app.use('/fotos/', foto)
 app.use('/vacunas', vacuna)
 app.use('/', recomendacion)
 app.use('/', notificacion)
+app.use('/formulario/', adopcion)
 
 
 

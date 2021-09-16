@@ -181,6 +181,7 @@ router.options('/centros/:id_centro', async function(req, res)  {
    
 })
 
+
 router.get('/centros/:estados', auth, async(req, res)=>{
         let userAux = req.user.user 
         
@@ -199,14 +200,13 @@ router.get('/centros/:estados', auth, async(req, res)=>{
 
 router.get('/usuarios/:estados', auth, async(req, res)=>{
     let userAux = req.user.user 
-    
-    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+        
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para esta accion'})
     let estados = await Estado.findOne({nombre : req.params.estados}) 
    
     if (!estados) return res.status(404).json({error: 'El estado es invalido'})
      
-    let users = await User.find({idEstado : estados.id_estado })
-
+    let users = await User.find({idEstado : estados.id_estado, tipoUsuario: 1})
     if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Usuarios en ese estado'})
     
     res.send(users)
