@@ -56,12 +56,11 @@ router.post('/animal', auth,  async function(req, res) {
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
         descripcion: req.body.descripcion,
-        foto: req.body.foto,
-        nombreVacuna: req.body.nombreVacuna,
-        cantidadDosis: req.body.cantidadDosis
+        foto: req.body.foto
  })
    
 const result = await animal.save()
+
 const jwtToken = result.generateJWT()
  
 console.log (result)
@@ -87,21 +86,8 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     let userAux = req.user.user
     let animal = await Animal.find({responsableId : userAux._id, estado : nueva }) 
     
-    if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
+    if (animal.length == 0) return res.status(200).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
     res.send(animal)
-});
-
-//filtrar por id_animal la vacuna y la cantidad de dosis
-router.get('/animalvacuna/:idMascotaVacuna', async(req, res)=>{
-    let nueva = req.params.idMascotaVacuna.replace(/_/g, " ")
-    let animal = req.Animal._id
-    let vacuna = req.Vacuna.Vacuna
-    let dosis = req.Vacuna.Vacuna
-    let animalfinal = await Animal.find({_id : nueva}) 
-
-    if (animalfinal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal'})
-    
-    res.send(animalfinal)
 });
 
 module.exports = router;

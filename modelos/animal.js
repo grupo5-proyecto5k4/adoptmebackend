@@ -25,10 +25,7 @@ const animalSchema  = new mongosee.Schema({
           esPrincipal: Boolean 
          }
      ],
-  nombreVacuna: {type: String},
-  cantidadDosis: {type: Number}
-  
-  });
+});
 /* Tipo mascota: 0- perro, 1- Gato
   Tamaño final: Pequeño, Mediano, Grande, gato = null
   esCachorro: 0 (F)-Cachorro, 1(V)-Adulto
@@ -57,9 +54,7 @@ const animalSchema  = new mongosee.Schema({
         condutaNiños: this.conductaNiños,
         condutaPerros: this.conductaPerros,
         condutaGatos: this.conductaGatos,
-        descripcion: this.descripcion,
-        nombreVacuna: this.nombreVacuna,
-        cantidadDosis: this.cantidadDosis
+        descripcion: this.descripcion
 
         
     }, process.env.SECRET_KEY_JWT)

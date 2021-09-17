@@ -14,13 +14,21 @@ router.get('/idvacuna', async function(req, res) {
 })
 
 router.post('/vacuna', async function(req, res) {
-    let vacuna = new Vacuna({
-        nombre : req.body.nombre,
-        cantidadDosis: req.body.cantidadDosis,
-        id_Animal: req.body.id_Animal
-    })
+    for (let index = 0;  req.body.Vacuna.length > index;  ++index ) {
+        let vacuna = new Vacuna({
+            nombreVacuna : req.body.Vacuna[index].nombreVacuna,
+            cantidadDosis: req.body.Vacuna[index].cantidadDosis,
+            id_Animal: req.body.id_Animal
+        })
+        const result = await vacuna.save()
+}
 
-const result = await vacuna.save()
+router.get('/filtrarVacunaAnimal/:idanimal', async function(req, res) {
+    let vacuna =  await Vacuna.find({id_Animal : req.params.idanimal});
+    if (vacuna.length == 0) return res.status(200).json({error: 'El animal es un anti vacunas, maldito!'})
+    res.send(vacuna)
+})
+    
 const jwtToken = vacuna.generateJWT()
 
 
