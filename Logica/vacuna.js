@@ -28,9 +28,6 @@ router.post('/vacuna', async function(req, res) {
         const jwtToken = vacuna.generateJWT()
 }
 
-  
-
-
 res.status(201).json({mensaje: 'vacuna creada correctamente'})
 });
 
