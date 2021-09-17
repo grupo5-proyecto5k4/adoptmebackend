@@ -97,7 +97,7 @@ router.get('/animalvacuna/:idMascotaVacuna', async(req, res)=>{
     let animal = req.Animal._id
     let vacuna = req.Vacuna.Vacuna
     let dosis = req.Vacuna.Vacuna
-    let animal = await Animal.find({animal : _id, vacuna : nombreVacuna, dosis: cantidadDosis}) 
+    let animal = await Animal.find({_id : nueva}) 
 
     if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal'})
     
