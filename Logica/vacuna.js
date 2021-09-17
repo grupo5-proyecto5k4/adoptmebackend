@@ -5,7 +5,7 @@ const Vacuna = require('../modelos/vacuna.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
-const { schema } = require('../modelos/vacuna.js')
+
 const Animal = require('../modelos/animal.js')
 
 router.get('/idvacuna', async function(req, res) {
@@ -23,17 +23,18 @@ router.post('/vacuna', async function(req, res) {
         const result = await vacuna.save()
 }
 
-router.get('/filtrarvacunanimal/:idanimal', async function(req, res) {
+  
+const jwtToken = vacuna.generateJWT()
+
+res.status(201).header('vacuna creada correctamente', jwtToken).send()
+});
+
+router.get('/filtrarVacunaAnimal/:idanimal', async function(req, res) {
     console.log(req.params.idanimal)
     let vacuna =  await Vacuna.find({id_Animal : req.params.idanimal});
     if (vacuna.length == 0) return res.status(200).json({error: 'El animal es un anti vacunas, maldito!'})
     res.send(vacuna)
 })
-    
-const jwtToken = vacuna.generateJWT()
-
-
-res.status(201).header('vacuna creada correctamente', jwtToken).send()
-});
+  
 
 module.exports = router;

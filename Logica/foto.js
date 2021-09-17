@@ -38,7 +38,7 @@ router.post('/imagen/add/', async (req,res) => {
     if (!req.file) res.status(400).json({error: 'Error, no llegamos'})
     //const result2 = await cloudinary.v2.uploader.upload(req.file.path)
     for (let index = 0;  req.file.length > index;  ++index ) {
-        const result2 = await cloudinary.v2.uploader.upload(index.path)
+        const result2 = await cloudinary.v2.uploader.upload(req.file[index].path)
             newFoto = new Foto ({
                 titulo: req.body.titulo,
                 descripcion: req.body.descripcion,
@@ -47,12 +47,12 @@ router.post('/imagen/add/', async (req,res) => {
                 id_Animal: req.body.id_Animal
             })
             let resultado = await newFoto.save()
-            await fs.unlink(index.path)
+            await fs.unlink(req.file[index].path)
             if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
-            
-            let a = await Animal.findById({_id: req.body.id_Animal})
-            const F = a.Foto
-            
+            if (index == 0)
+            {   let a = await Animal.findById({_id: req.body.id_Animal})
+                const F = a.Foto
+             }
             F.push({ foto: result2.url, esPrincipal : false})
     }
 
