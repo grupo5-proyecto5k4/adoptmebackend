@@ -92,7 +92,7 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
 });
 
 //filtrar por id_animal la vacuna y la cantidad de dosis
-router.get('/animal/:idMascotaVacuna', async(req, res)=>{
+router.get('/animalvacuna/:idMascotaVacuna', async(req, res)=>{
     let nueva = req.params.animal.replace(/_/g, " ")
     let idAnimal = req.params.id_Animal
     let vacuna = req.params.nombreVacuna

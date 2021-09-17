@@ -9,7 +9,7 @@ const { schema, eventNames } = require('../modelos/foto.js')
 var cloudinary = require('cloudinary')
 const fs = require('fs-extra')
 const Animal = require('../modelos/animal.js')
-
+//
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods','POST, GET, OPTIONS, DELETE, PUT');
