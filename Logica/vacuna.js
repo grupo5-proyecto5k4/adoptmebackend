@@ -18,14 +18,14 @@ router.post('/vacuna', async function(req, res) {
     let Vacuna = cuerpo[0] 
     let id     = cuerpo[1]
     console.log(req.body)
-    for (let index = 0;  Vacuna.length > index;  ++index ) {
-        let vacuna = new Vacuna({
-            nombreVacuna : Vacuna[index].nombreVacuna,
-            cantidadDosis: Vacuna[index].cantidadDosis,
+    for (let index = 0;  vectorvacuna.length > index;  ++index ) {
+        let vacuna = new vectorvacuna({
+            nombreVacuna : vectorvacuna[index].nombreVacuna,
+            cantidadDosis: vectorvacuna[index].cantidadDosis,
             id_Animal: id
         })
-        const result = await vacuna.save()
-        const jwtToken = vacuna.generateJWT()
+        const result = await vectorvacuna.save()
+        const jwtToken = vectorvacuna.generateJWT()
 }
 
 res.status(201).json({mensaje: 'vacuna creada correctamente'})
