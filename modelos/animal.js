@@ -24,7 +24,9 @@ const animalSchema  = new mongosee.Schema({
   Foto:[{ foto: String,
           esPrincipal: Boolean 
          }
-     ] 
+     ],
+  nombreVacuna: {type: String},
+  cantidadDosis: {type: Number}
   
   });
 /* Tipo mascota: 0- perro, 1- Gato
@@ -55,7 +57,10 @@ const animalSchema  = new mongosee.Schema({
         condutaNiños: this.conductaNiños,
         condutaPerros: this.conductaPerros,
         condutaGatos: this.conductaGatos,
-        descripcion: this.descripcion
+        descripcion: this.descripcion,
+        nombreVacuna: this.nombreVacuna,
+        cantidadDosis: this.cantidadDosis
+
         
     }, process.env.SECRET_KEY_JWT)
 }
