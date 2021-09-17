@@ -23,7 +23,7 @@ router.post('/vacuna', async function(req, res) {
         const result = await vacuna.save()
 }
 
-router.get('/filtrarVacunaAnimal/:idanimal', async function(req, res) {
+router.get('/filtrarvacunanimal/:idanimal', async function(req, res) {
     console.log(req.params.idanimal)
     let vacuna =  await Vacuna.find({id_Animal : req.params.idanimal});
     if (vacuna.length == 0) return res.status(200).json({error: 'El animal es un anti vacunas, maldito!'})
