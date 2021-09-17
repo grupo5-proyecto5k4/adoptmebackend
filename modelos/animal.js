@@ -25,6 +25,10 @@ const animalSchema  = new mongosee.Schema({
           esPrincipal: Boolean 
          }
      ],
+  Vacuna: [{ nombreVacuna: String,
+             cantidadDOsis: Number    
+           }
+     ],
 });
 /* Tipo mascota: 0- perro, 1- Gato
   Tamaño final: Pequeño, Mediano, Grande, gato = null
