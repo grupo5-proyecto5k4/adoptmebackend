@@ -86,7 +86,8 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     let userAux = req.user.user
     let animal = await Animal.find({responsableId : userAux._id, estado : nueva }) 
     
-    if (animal.length == 0) return res.status(200).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
+    //if (animal.length == 0) return res.status(200).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
+    if (animal.length == 0) return res.status(200)
     res.send(animal)
 });
 
