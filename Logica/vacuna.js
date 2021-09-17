@@ -17,6 +17,7 @@ router.post('/vacuna', async function(req, res) {
     let cuerpo = req.body
     let Vacuna = cuerpo[0] 
     let id     = cuerpo[1]
+    console.log(req.body)
     for (let index = 0;  Vacuna.length > index;  ++index ) {
         let vacuna = new Vacuna({
             nombreVacuna : Vacuna[index].nombreVacuna,
