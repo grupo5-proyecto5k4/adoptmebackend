@@ -101,7 +101,7 @@ router.get('/animalvacuna/:idMascotaVacuna', async(req, res)=>{
 
     if (animalfinal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal'})
     
-    res.send(animal)
+    res.send(animalfinal)
 });
 
 module.exports = router;
