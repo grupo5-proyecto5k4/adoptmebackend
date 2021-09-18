@@ -27,9 +27,9 @@ router.post('/vacuna', async function(req, res) {
         //})
     for (let index = 0;  Vacuna.length > index;  ++index ) {
             let vac = new Vacuna({
-                nombreVacuna : req.body[index].nombreVacuna,
-                cantidadDosis: req.body[index].cantidadDosis,
-                id_Animal: req.body[index].id
+                nombreVacuna : Vacuna[index].nombreVacuna,
+                cantidadDosis: Vacuna[index].cantidadDosis,
+                id_Animal: Vacuna[index].id
             })
            
     }
