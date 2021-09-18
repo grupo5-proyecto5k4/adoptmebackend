@@ -27,14 +27,14 @@ router.post('/vacuna', async function(req, res) {
         //})
     for (let index = 0;  Vacuna.length > index;  ++index ) {
             let vac = new Vacuna({
-                nombreVacuna : req.body.nombreVacuna,
-                cantidadDosis: req.body.cantidadDosis,
-                id_Animal: req.body.id
+                nombreVacuna : req.body[index].nombreVacuna,
+                cantidadDosis: req.body[index].cantidadDosis,
+                id_Animal: req.body[index].id
             })
-        const result = await vac.save()
-        const jwtToken = result.generateJWT()    
+           
     }
-    
+    const result = await vac.save()
+    const jwtToken = result.generateJWT() 
     res.status(201).json({mensaje: 'vacuna creada correctamente'})
 });
 
