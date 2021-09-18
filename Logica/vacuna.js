@@ -27,9 +27,9 @@ router.post('/vacuna', async function(req, res) {
         //})
     for (let index = 0;  Vacuna.length > index;  ++index ) {
             let vac = new Vacuna({
-                nombreVacuna : Vacuna.nombreVacuna,
-                cantidadDosis: Vacuna.cantidadDosis,
-                id_Animal: Vacuna.id_Animal
+                nombreVacuna : Vacuna.req.body.nombreVacuna,
+                cantidadDosis: Vacuna.req.body.cantidadDosis,
+                id_Animal: Vacuna.req.body.id
             })
         const result = await vac.save()
         const jwtToken = result.generateJWT() 
