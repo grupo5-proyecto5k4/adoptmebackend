@@ -34,9 +34,8 @@ router.post('/vacuna', async function(req, res) {
         console.log(vac)
         const result = await vac.save()
         const jwtToken = vac.generateJWT()
-        res.status(201).json({mensaje: 'vacuna creada correctamente'})
     }
-    //res.status(201).json({mensaje: 'vacuna creada correctamente'})
+    res.status(201).json({mensaje: 'vacuna creada correctamente'})
 });
 
 router.get('/filtrarVacunaAnimal/:idanimal', async function(req, res) {
