@@ -33,7 +33,7 @@ router.post('/vacuna', async function(req, res) {
             })
         console.log(vac)
         const result = await vac.save()
-        const jwtToken = vac.generateJWT()
+        const jwtToken = result.generateJWT()
     }
     res.status(201).json({mensaje: 'vacuna creada correctamente'})
 });
