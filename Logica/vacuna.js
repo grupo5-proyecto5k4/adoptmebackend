@@ -31,11 +31,12 @@ router.post('/vacuna', async function(req, res) {
                 cantidadDosis: req.body.cantidadDosis,
                 id_Animal: req.body.id_Animal
             })
-        const result = await vacuna.save()
-        const jwtToken = vacuna.generateJWT()
-        
-}
-res.status(201).json({mensaje: 'vacuna creada correctamente'})
+        //const result = await vacuna.save()
+        //const jwtToken = vacuna.generateJWT()
+    }
+    const result = await vacuna.save()
+    const jwtToken = vacuna.generateJWT()
+    res.status(201).json({mensaje: 'vacuna creada correctamente'})
 });
 
 router.get('/filtrarVacunaAnimal/:idanimal', async function(req, res) {
