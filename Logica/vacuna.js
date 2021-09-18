@@ -31,9 +31,10 @@ router.post('/vacuna', async function(req, res) {
                 cantidadDosis: req.body.cantidadDosis,
                 id_Animal: req.body.id
             })
+            const result = await vac.save()
+            const jwtToken = result.generateJWT()
     }
-    const result = await vac.save()
-    const jwtToken = result.generateJWT()
+    
     res.status(201).json({mensaje: 'vacuna creada correctamente'})
 });
 
