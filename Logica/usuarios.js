@@ -206,12 +206,14 @@ router.get('/usuarios/:estados', auth, async(req, res)=>{
    
     if (!estados) return res.status(404).json({error: 'El estado es invalido'})
      
-    let users = await User.find({idEstado : estados.id_estado, tipoUsuario: 1})
-    let usersCentro = await User.find({idEstado : estados.id_estado, tipoUsuario: 2}) //
-    if(users.length == 0 || usersCentro == 2) return res.status(404).json({error: 'No hemos encontrado un Usuarios en ese estado'})
+    //let users = await User.find({idEstado : estados.id_estado, tipoUsuario: 1})
+    //let usersCentro = await User.find({idEstado : estados.id_estado, tipoUsuario: 2}) //
+
+    let users = await User.find({idEstado : estados.id_estado})
+    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Usuarios en ese estado'})
     
     res.send(users)
-    res.send(usersCentro)
+    
 });
 
 
