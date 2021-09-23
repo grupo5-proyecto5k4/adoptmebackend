@@ -34,35 +34,33 @@ router.options('/imagen/add', async function(req, res)  {
 })
 
 router.post('/imagen/add/', async (req,res) => {
-    console.log("llegamos aca", req.files)       
+    console.log("llegamos aca", req.files)
+    let aniCod = req.body.id_Animal       
     if (!req.files) res.status(400).json({error: 'Error, no llegamos'})
     //const result2 = await cloudinary.v2.uploader.upload(req.file.path)
-    for (let index = 0;  req.files.length > index;  ++index ) {
-        const result2 = await cloudinary.v2.uploader.upload(req.files[index].path)
-            newFoto = new Foto ({
-                titulo: req.body.titulo,
-                descripcion: req.body.descripcion,
-                imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
-                public_id: result2.public_id, 
-                id_Animal: req.body.id_Animal
-            })
-            let resultado = await newFoto.save()
-            await fs.unlink(req.files[index].path)
-            if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
-            if (index == 0)
-            {   let a = await Animal.findById({_id: req.body.id_Animal})
-                const F = a.Foto
-             }
-            F.push({ foto: result2.url, esPrincipal : false})
-    }
-
+   req.files.forEach(element => {
+        const result2 = await cloudinary.v2.uploader.upload(element.path)
+        newFoto = new Foto ({
+            imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
+            public_id: result2.public_id, 
+            id_Animal: aniCod
+        })
+        let resultado = await newFoto.save()
+        await fs.unlink(element.path)
+        if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
+        if (index == 0)
+        {   let a = await Animal.findById({_id: req.body.id_Animal})
+            const F = a.Foto
+         }
+        F.push({ foto: result2.url, esPrincipal : false}) 
+   })    
     let animal = await Animal.findByIdAndUpdate(req.body.id_Animal,
         { Foto: F,
           fechaModificacion: new Date(Date.now()).toISOString()
         })
     if (!animal) res.status(400).json({error: 'Error, la mascota no esite'})    
     res.status(200).json({mensaje: 'Se grabo correctamente'})
-       
+    
     
 });
 
