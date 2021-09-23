@@ -56,10 +56,11 @@ router.post('/imagen/add/', async (req,res) => {
         console.log(F)
           
    })    
-    animal = await Animal.findByIdAndUpdate(req.body.id_Animal,
+    animal = await Animal.findByIdAndUpdate({id:req.body.id_Animal},
     { Foto: F,
       fechaModificacion: new Date(Date.now()).toISOString()
     })
+    console.log(animal.Foto)
     if (!animal) res.status(400).json({error: 'Error, la mascota no esite'}) 
     res.status(200).json({mensaje: 'Se grabo correctamente'})
     
