@@ -57,9 +57,9 @@ router.post('/imagen/add/', async (req,res) => {
             { Foto: F,
               fechaModificacion: new Date(Date.now()).toISOString()
             })
+        if (!animal) res.status(400).json({error: 'Error, la mascota no esite'})    
    })    
     
-    if (!animal) res.status(400).json({error: 'Error, la mascota no esite'})    
     res.status(200).json({mensaje: 'Se grabo correctamente'})
     
     
