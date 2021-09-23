@@ -38,8 +38,9 @@ router.post('/imagen/add/', async (req,res) => {
     let aniCod = req.body.id_Animal       
     if (!req.files) res.status(400).json({error: 'Error, no llegamos'})
     //const result2 = await cloudinary.v2.uploader.upload(req.file.path)
-   req.files.forEach(element => {
-        const result2 = await cloudinary.v2.uploader.upload(element.path)
+    let result2
+   req.files.forEach( async (element) => {
+        result2 = await cloudinary.v2.uploader.upload(element.path)
         newFoto = new Foto ({
             imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
             public_id: result2.public_id, 
