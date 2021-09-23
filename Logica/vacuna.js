@@ -15,8 +15,9 @@ router.get('/idvacuna', async function(req, res) {
 
 router.post('/vacuna', async function(req, res) {
     let Vacuna1 = req.body
-   
+    
     Vacuna1.forEach(async (element) => {
+        console.log(element)
         var idanimal = mongosee.Types.ObjectId(element.id_Animal);
         let vac = new Vacuna({
             nombreVacuna : element.nombreVacuna,
