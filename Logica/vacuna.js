@@ -14,27 +14,19 @@ router.get('/idvacuna', async function(req, res) {
 })
 
 router.post('/vacuna', async function(req, res) {
-    //let cuerpo = req.body
-    //let Vacuna = cuerpo[0]
-    //let dosis  = cuerpo[1] 
-    //let id     = cuerpo[3]
-    //console.log(cuerpo)
-    //for (let index = 0;  Vacuna.length > index;  ++index ) {
-        //let vacuna = new Vacuna({
-            //nombreVacuna : Vacuna[index].nombreVacuna,
-            //cantidadDosis: Vacuna[index].cantidadDosis,
-            //id_Animal: id
-        //})
-    for (let index = 0;  Vacuna.length -2  > index;  ++index ) {
-            let vac = new Vacuna({
-                nombreVacuna : req.body.nombreVacuna,
-                cantidadDosis: req.body.cantidadDosis,
-                id_Animal: req.body.id
-            })
+    let Vacuna1 = req.body
+   
+    Vacuna1.forEach(async (element) => {
+        var idanimal = mongosee.Types.ObjectId(element.id_Animal);
+        let vac = new Vacuna({
+            nombreVacuna : element.nombreVacuna,
+            cantidadDosis: element.cantidadDosis,
+            id_Animal: idanimal
+        })
         const result = await vac.save()
-        const jwtToken = result.generateJWT() 
-    }
-    
+        const jwtToken = result.generateJWT()
+    });     
+       
     res.status(201).json({mensaje: 'vacuna creada correctamente'})
 });
 

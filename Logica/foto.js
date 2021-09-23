@@ -39,8 +39,8 @@ router.post('/imagen/add/', async (req,res) => {
     if (!req.files) res.status(400).json({error: 'Error, no llegamos'})
     //const result2 = await cloudinary.v2.uploader.upload(req.file.path)
     let result2
-    let a = await Animal.findById({_id: req.body.id_Animal})
-    const F = a.Foto
+   var F = new Array({ foto: String,
+                       esPrincipal: Boolean})
    req.files.forEach( async (element) => {
         result2 = await cloudinary.v2.uploader.upload(element.path)
         newFoto = new Foto ({
