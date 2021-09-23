@@ -40,7 +40,8 @@ router.post('/imagen/add/', async (req,res) => {
     if (!req.files) res.status(400).json({error: 'Error, no llegamos'})
     //const result2 = await cloudinary.v2.uploader.upload(req.file.path)
     let result2
-    let F 
+    let animal = await Animal.findById(req.body.id_Animal)
+    let F = animal.Foto
    req.files.forEach( async (element) => {
         result2 = await cloudinary.v2.uploader.upload(element.path)
         newFoto = new Foto ({
@@ -53,13 +54,13 @@ router.post('/imagen/add/', async (req,res) => {
         if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
         F.push({ foto: result2.url, esPrincipal : false}) 
         console.log(F)
-        let animal = await Animal.findByIdAndUpdate(req.body.id_Animal,
-            { Foto: F,
-              fechaModificacion: new Date(Date.now()).toISOString()
-            })
-        if (!animal) res.status(400).json({error: 'Error, la mascota no esite'})    
+          
    })    
-    
+    animal = await Animal.findByIdAndUpdate(req.body.id_Animal,
+    { Foto: F,
+      fechaModificacion: new Date(Date.now()).toISOString()
+    })
+    if (!animal) res.status(400).json({error: 'Error, la mascota no esite'}) 
     res.status(200).json({mensaje: 'Se grabo correctamente'})
     
     
