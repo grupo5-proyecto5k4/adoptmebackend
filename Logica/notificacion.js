@@ -43,8 +43,6 @@ router.get('/notificaciones', auth, async(req, res)=>{
     else{
         notificaciones = await Notificacion.find({tipoNotificacion : "usuarioNormal", remitenteId : userAux._id}).sort({fechaCreacion: -1})
     }
-    if (notificaciones.length == 0) return res.sendStatus(404).json({error: 'No ha recibido notificaciones'})
-
 
     res.send(notificaciones)
     

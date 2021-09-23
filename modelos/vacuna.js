@@ -3,7 +3,7 @@ const mongosee = require('mongoose')
 const { ObjectId } = require('mongodb');
 
 const vacunaSchema  = new mongosee.Schema({
-  nombre: {type: String},
+  nombreVacuna: {type: String},
   cantidadDosis: {type: Number},
   fechaCreacion: {type: Date, default: Date.now},
   fechaModificacion:{type: Date, default: Date.now},
@@ -12,7 +12,7 @@ const vacunaSchema  = new mongosee.Schema({
   
 vacunaSchema.methods.generateJWT = function(){
     return jwt.sign({
-        nombre: this.nombre,
+        nombreVacuna: this.nombre,
         cantidadDosis: this.cantidadDosis,
         fechaCreacion: this.fechaCreacion,
         fechaModificacion: this.fechaModificacion
