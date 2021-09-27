@@ -43,6 +43,7 @@ router.post('/imagen/add', async (req,res) => {
     /* let animal = await Animal.findById(req.body.id_Animal)
     let F = animal.Foto */
    req.files.forEach( async (element) => {
+       console.log("elemento del archivo", element)
         result2 = await cloudinary.v2.uploader.upload(element.path)
         newFoto = new Foto ({
             imagenURL: result2.url, // la url que guardo cuando cloudinary me sube la imagen
