@@ -50,18 +50,19 @@ router.post('/imagen/add', async (req,res) => {
             public_id: result2.public_id, 
             id_Animal: aniCod
         })
+        console.log("id de Animal", aniCod)
         let resultado = await newFoto.save()
         await fs.unlink(element.path)
 
         if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
         
-        let a = await Animal.findById({_id: req.body.id_Animal})
+        let a = await Animal.findById({_id: aniCod})
         const F = a.Foto
         F.push({ foto: result2.url, esPrincipal : false}) 
 
         console.log("F", F)
         
-        let animal = await Animal.findByIdAndUpdate({_id :req.body.id_Animal},
+        let animal = await Animal.findByIdAndUpdate({_id :aniCod},
         { Foto: F,
             fechaModificacion: new Date(Date.now()).toISOString()      
         },
