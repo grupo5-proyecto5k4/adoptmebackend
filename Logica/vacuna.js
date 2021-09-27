@@ -18,12 +18,10 @@ router.post('/vacuna', async function(req, res) {
     
     Vacuna1.forEach(async (element) => {
         console.log("elemento:" , element)
-        var idanimal = mongosee.Types.ObjectId(element[1]);
-        console.log( "idanimal:", idanimal )
         let vac = new Vacuna({
             nombreVacuna : element.nombreVacuna,
             cantidadDosis: element.cantidadDosis,
-            id_Animal: idanimal
+            id_Animal: element.id_Animal
         })
         const result = await vac.save()
         const jwtToken = result.generateJWT()

@@ -53,12 +53,14 @@ router.post('/imagen/add/', async (req,res) => {
         await fs.unlink(element.path)
         if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
         F.push({ foto: result2.url, esPrincipal : false}) 
-        console.log(F)
+        console.log("F", F)
           
    })    
     animal = await Animal.findByIdAndUpdate({_id :req.body.id_Animal},
     { Foto: F,
-      fechaModificacion: new Date(Date.now()).toISOString()
+      fechaModificacion: new Date(Date.now()).toISOString()      
+    },
+    {new: true 
     })
     console.log(animal.Foto)
     if (!animal) res.status(400).json({error: 'Error, la mascota no esite'}) 
