@@ -26,7 +26,7 @@ const jwtToken = result.generateJWT()
  
 console.log (result)
 
-res.status(201).json() //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
+res.status(201).json({mensaje: 'recomendacion creada correctamente'}) //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
 });
 
 
