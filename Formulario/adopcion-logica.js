@@ -73,7 +73,7 @@ const result2 = await Animal.findByIdAndUpdate(objectId, { estado: "Adoptado",
 })
 
 if (!result)  res.status(404).json ({error: "Oop! hubo un error con la adopcion"})
-res.status(201).json({id_Solicitud : result._id})  
+res.status(200).json({ _id : result._id})  
 
 })
 
