@@ -22,7 +22,6 @@ router.use(function(req, res, next) {
 
 
 
-
 router.options('/adopcion', auth, async function(req, res)  {
   res.status(200).send('Ok - Options')
  
@@ -36,11 +35,11 @@ router.post('/adopcion', auth,  async function (req, res){
       
    const mascotas = await Adopcion.find({solitanteId : userAux._id, mascotaId: objectId}) 
       
-   if (mascotas.length != 0) return res.status(402).json({error: "Ya solicitaste la adopción de esta mascota"})
+   if (mascotas.length != 0) return res.status(400).json({error: "Ya solicitaste la adopción de esta mascota"})
 
    const animal = await Animal.findById({_id: objectId})
   
-   if (!animal) return res.status(402).json({error: "La mascota no existe"})
+   if (!animal) return res.status(400).json({error: "La mascota no existe"})
    if (animal.estado.indexOf('Adopción') == - 1) return res.status(402).json({error: "La mascota no esta disponible para la adopcion"})
     
    let estadoInicial = 'Abierta'
@@ -72,7 +71,7 @@ const result = await adopcion.save()
 //   fechaModificacion: new Date(Date.now()).toISOString()
 // })
 
-if (!result)  res.status(404).json ({error: "Oop! hubo un error con la adopcion"})
+if (!result)  res.status(400).json ({error: "Oop! hubo un error con la adopcion"})
 res.status(200).json({ _id : result._id})  
 
 })

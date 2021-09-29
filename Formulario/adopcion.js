@@ -102,12 +102,13 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
 
     solitanteId: ObjectId,
     
-    mascotaID : ObjectId,
 
     fechaCreacion:{
       type: Date, 
       default: Date.now
     },
+    
+    mascotaId : ObjectId,
 
     fechaModificacion:{
       type: Date, 
