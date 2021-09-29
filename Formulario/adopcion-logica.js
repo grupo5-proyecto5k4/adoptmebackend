@@ -36,12 +36,12 @@ router.post('/adopcion', auth,  async function (req, res){
       
    const mascotas = await Adopcion.find({solitanteId : userAux._id, mascotaId: objectId}) 
       
-   if (mascotas.length != 0) return res.status(402).json({error: "Oop!, Ya realizaste esta adopcion"})
+   if (mascotas.length != 0) return res.status(402).json({error: "Ya solicitaste la adopción de esta mascota"})
 
    const animal = await Animal.findById({_id: objectId})
   
-   if (!animal) return res.status(402).json({error: "Oop!, La mascota no existe"})
-   if (animal.estado.indexOf('Adopción') == - 1) return res.status(402).json({error: "Oop!, La mascota no esta disponible para la adopcion"})
+   if (!animal) return res.status(402).json({error: "La mascota no existe"})
+   if (animal.estado.indexOf('Adopción') == - 1) return res.status(402).json({error: "La mascota no esta disponible para la adopcion"})
     
    let estadoInicial = 'Abierta'
   
@@ -68,14 +68,16 @@ router.post('/adopcion', auth,  async function (req, res){
     })
 
 const result = await adopcion.save() 
-const result2 = await Animal.findByIdAndUpdate(objectId, { estado: "Adoptado",
-  fechaModificacion: new Date(Date.now()).toISOString()
-})
+// const result2 = await Animal.findByIdAndUpdate(objectId, { estado: "Adoptado",
+//   fechaModificacion: new Date(Date.now()).toISOString()
+// })
 
 if (!result)  res.status(404).json ({error: "Oop! hubo un error con la adopcion"})
 res.status(200).json({ _id : result._id})  
 
 })
+
+
 
 router.get('/buscarAdopciones', async function (req, res) {
   let adopciones = await Adopcion.find()
