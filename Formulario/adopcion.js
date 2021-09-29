@@ -100,7 +100,7 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
       required: true
     },
 
-    solitanteId: ObjectId,
+    solicitanteId: ObjectId,
     
 
     fechaCreacion:{
