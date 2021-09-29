@@ -32,9 +32,9 @@ router.options('/adopcion', auth, async function(req, res)  {
 router.post('/adopcion', auth,  async function (req, res){
    let userAux = req.user.user
    
-   var objectId = mongosee.Types.ObjectId(req.body.mascotaID);
+   var objectId = mongosee.Types.ObjectId(req.body.mascotaId);
       
-   const mascotas = await Adopcion.find({responsableID : userAux._id, mascotaID: objectId}) 
+   const mascotas = await Adopcion.find({solitanteId : userAux._id, mascotaId: objectId}) 
       
    if (mascotas.length != 0) return res.status(402).json({error: "Oop!, Ya realizaste esta adopcion"})
 
