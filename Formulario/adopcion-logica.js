@@ -41,29 +41,29 @@ router.post('/adopcion', auth,  async function (req, res){
    const animal = await Animal.findById({_id: objectId})
   
    if (!animal) return res.status(402).json({error: "Oop!, La mascota no existe"})
-   if (animal.estado.indexOf('Adopción') == -1) return res.status(402).json({error: "Oop!, La mascota no esta disponible para la adopcion"})
+   if (animal.estado.indexOf('Adopción') == - 1) return res.status(402).json({error: "Oop!, La mascota no esta disponible para la adopcion"})
     
    let estadoInicial = 'Abierta'
   
    let adopcion = new Adopcion({
     otraMascota: req.body.otraMascota,
     descripcionOtraMascota:req.body.descripcionOtraMascota,
+    tiempoSolo: req.body.tiempoSolo,
     accionViaje:req.body.accionViaje,
+    accionImpedimento : req.body.accionImpedimento, 
     vacunacionCastracion:req.body.vacunacionCastracion,
     seguimiento:req.body.seguimiento, 
     vivienda:req.body.vivienda,
-    FotoVivienda:req.body.FotoVivienda,
+    fotoVivienda:req.body.FotoVivienda,
     espacioAbierto: req.body.espacioAbierto,
     descripcionCercamiento: req.body.descripcionCercamiento,
     permiso: req.body.permiso, 
     tiempoPresupuesto: req.body.tiempoPresupuesto,
-    //idEstado: estado.id_estado,
-    //fechaCreacion: req.body.fechaCreacion,
     Direccion:req.body.Direccion, 
     composicionFamilia:req.body.composicionFamilia,
-    responsableID : userAux._id,
-    mascotaID : animal._id,
-    estado: estadoInicial
+    solitanteId : userAux._id,
+    mascotaId : animal._id,
+    estadoId: estadoInicial
 
     })
 
@@ -73,7 +73,7 @@ const result2 = await Animal.findByIdAndUpdate(objectId, { estado: "Adoptado",
 })
 
 if (!result)  res.status(404).json ({error: "Oop! hubo un error con la adopcion"})
-res.status(201).json({mensaje: "se grabo exitosamente la adopcion"})  
+res.status(201).json({id_Solicitud : result._id})  
 
 })
 

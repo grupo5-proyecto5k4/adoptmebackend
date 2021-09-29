@@ -68,7 +68,7 @@ router.post('/imagen/add', async (req,res) => {
         },
         {new: true 
         })
-        console.log(animal.Foto)
+       
         if (!animal) res.status(400).json({error: 'Error, la mascota no esite'})
           
    })    

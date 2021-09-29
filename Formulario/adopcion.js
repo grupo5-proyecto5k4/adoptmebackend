@@ -16,8 +16,10 @@ const { ObjectId } = require('mongodb');
    - otraMascota : Si - 1  / No - 0  
    - descripcionOtraMascota : String  ( descripcion de la otra mascota texto - dato opcional)
    - tiempoPresupuesto: Si - 1 / No - 0
+   - tiempoSolo: 0 - 1-3 hs / 1 - 4-8 hs / 2  - mas de 8 hs 
    - accionViaje: String ( que haría si viaja  y con quien se quedaría )
    - vacunacionCastracion: Vacunacion - 0 / VacunacionCastracion - 1 
+   - accionImpedimento: 
    - seguimiento: Si - 1  / No - 0  / hasta los 6 meses - 2 
 
 
@@ -51,10 +53,18 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
       type: Number,
       required: true
     },
+    tiempoSolo:{
+      type: Number,
+      required: true
+    },
     accionViaje:{
       type: String,
       required: true
     },
+    accionImpedimento:{
+      type: String,
+      required: true
+    }, 
     vacunacionCastracion : {
       type: Number,
       required: true
@@ -90,7 +100,7 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
       required: true
     },
 
-    responsableID: ObjectId,
+    solitanteId: ObjectId,
     
     mascotaID : ObjectId,
 
@@ -104,9 +114,8 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
       default: Date.now
     },
 
-    estado: {
-      type: String,
-      required: true
+    estadoId: {
+      type: String
     }
 
   });
