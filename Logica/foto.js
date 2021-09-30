@@ -40,6 +40,7 @@ router.post('/imagen/add', async (req,res) => {
     if (!req.files) res.status(400).json({error: 'Error, no llegamos'})
     
     let result2
+    let numero = 0 
     
    req.files.forEach( async (element) => {
         result2 = await cloudinary.v2.uploader.upload(element.path)
@@ -53,10 +54,12 @@ router.post('/imagen/add', async (req,res) => {
         await fs.unlink(element.path)
 
         if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
-        
+        var esPrincipal = false
+        if (numero == 0){esPrincipal = true }
+           
         let a = await Animal.findById({_id: aniCod})
         const F = a.Foto
-        F.push({ foto: result2.url, esPrincipal : element.esPrincipal}) 
+        F.push({ foto: result2.url, esPrincipal : esPrincipal}) 
   
         
         let animal = await Animal.findByIdAndUpdate({_id :aniCod},
