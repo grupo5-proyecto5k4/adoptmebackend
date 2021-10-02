@@ -139,13 +139,11 @@ router.get('/adopcion/:id', async function (req , res) {
 
 router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
   let userAux = req.user.user
-  console.log(userAux)
   let solicitudAdopciones = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
   let solicitudProvisorio = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
    
   let solicitudes = []
-
- console.log("tienen datos ",solicitudAdopciones.length, solicitudProvisorio.length )
+ 
   if (solicitudAdopciones.length == 0 && solicitudProvisorio.length == 0 )
   { return res.status(400).json({error: "No tenes solicitudes"})}
   
