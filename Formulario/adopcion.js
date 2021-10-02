@@ -117,7 +117,7 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
 
     estadoId: {
       type: String
-    }
+    },
 
   });
     

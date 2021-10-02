@@ -35,8 +35,18 @@ router.post('/animal', auth,  async function(req, res) {
     let userAux = req.user.user
     let castrado = true 
     if (req.body.castrado == 2) castrado = false 
-    let cachorro = true 
-    if (req.body.castrado == 2) cachorro = false 
+    let estado = ""
+    switch(req.body.estado){
+        case 7 : 
+           estado = "Disponible Adopción";
+           break;
+        case 8 : estado = "Disponible Adopción y Provisorio";
+                 break;
+        case 9 : estado = "Disponible Provisorio";
+                 break;
+    }
+      
+  
     let animal = new Animal({
         tipoMascota: req.body.tipoMascota,
         nombreMascota : req.body.nombreMascota,
