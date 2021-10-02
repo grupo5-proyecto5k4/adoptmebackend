@@ -12,6 +12,7 @@ const Adopcion = require('../Formulario/adopcion.js')
 const auth = require('../middleware/auth.js')
 const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
+const User = require('../modelos/usuarios.js')
 
  /*  Funcion de Adopcion   */
 async function adopcionFuncion(req, res, user, next){
@@ -46,7 +47,8 @@ async function adopcionFuncion(req, res, user, next){
     composicionFamilia:req.body.composicionFamilia,
     solicitanteId : user._id,
     mascotaId : animal._id,
-    estadoId: estadoInicial
+    estadoId: estadoInicial,
+    responsableId : animal.responsableId
 
     })
 
@@ -63,7 +65,7 @@ res.status(200).json({ _id : result._id})
 }
 
  /*  Funcion de Provisorio   */
-async function provisorioFuncion(req, res,user, next){
+async function provisorioFuncion(req, res, user, next){
   var objectId = mongosee.Types.ObjectId(req.body.mascotaId); 
   const mascotas = await Provisorio.find({solicitanteId : user._id, mascotaId: objectId}) 
       
@@ -87,7 +89,8 @@ async function provisorioFuncion(req, res,user, next){
     correoElectronico:req.body.correoElectronico,
     solicitanteId : user._id,
     mascotaId : animal._id,
-    estadoId: estadoInicial
+    estadoId: estadoInicial,
+    responsableId: animal.responsableId
 
     })
 
@@ -108,10 +111,10 @@ res.status(200).json({ _id : result._id})
 router.post('/adopcion', auth,  async function (req, res){
    let userAux = req.user.user
    //if(req.body.esAdopcion){
-   console.log("llego bien hasta aca ",req.body.vacunacionCastracion )
+   
    if (req.body.vacunacionCastracion)
    {
-    console.log("funcion aaadopciooon")
+    
       adopcionFuncion(req,res,userAux)
    }
    else
@@ -129,9 +132,16 @@ router.get('/buscarAdopciones', async function (req, res) {
 
 
 router.get('/adopcion/:id', async function (req , res) {
- 
+  let numero = 0 
   let solicitudAdopcion = await Adopcion.findById({_id : req.params.id})
-  if (!solicitudAdopcion) return res.status(400).json({error: "La Solicitud no exite"})
+  do {
+    if (!solicitudAdopcion){
+      solicitudAdopcion = await Provisorio.findById({_id : req.params.id})
+      numero++
+    }
+    else { break;} 
+    if(numero > 1 ) return res.status(400).json({error: "La Solicitud no exite"})
+  }while(numero > 0 )
   let animal = await Animal.findById ({_id: solicitudAdopcion.mascotaId})
   if (!animal) return res.status(400).json({error: "La Mascota no exite"})
   res.send(solicitudAdopcion)
@@ -139,8 +149,8 @@ router.get('/adopcion/:id', async function (req , res) {
 
 router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
   let userAux = req.user.user
-  let solicitudAdopciones = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
-  let solicitudProvisorio = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
+  let solicitudAdopciones = await Adopcion.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
+  let solicitudProvisorio = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
    
   let solicitudes = []
  
@@ -150,7 +160,9 @@ router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
 
   for (let i = 0 ; i < solicitudAdopciones.length; i ++ ){
     let animal = await Animal.findById ({_id: solicitudAdopciones[i].mascotaId})
-     if (!animal) return res.status(400).json({error: "La Mascota no exite"})
+    if (!animal) continue
+    let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
+    if (!usuario) continue
      var diferencia= Math.abs(Date.now() - animal.fechaNacimiento)
      var edadDias = Math.round(diferencia/(1000*3600*24))
      var nuevoArreglo = {
@@ -158,12 +170,12 @@ router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
                tipoSolicitud: 0,
                Animales: { nombreMascota :animal.nombreMascota,
                             edad:  edadDias },
-               Solicitante:{ nombre: userAux.nombres,
-                             apellido: userAux.apellidos,
-                             email: userAux.correoElectronico,
-                             telefono: userAux.numeroContacto,
-                             facebook: userAux.facebook, 
-                             instagram:userAux.instagram 
+               Solicitante:{ nombre: usuario.nombres,
+                             apellido: usuario.apellidos,
+                             email: usuario.correoElectronico,
+                             telefono: usuario.numeroContacto,
+                             facebook: usuario.facebook, 
+                             instagram:usuario.instagram 
                              } 
                 };
      solicitudes.push(nuevoArreglo)
@@ -172,7 +184,9 @@ router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
 
   for (let i = 0 ; i < solicitudProvisorio.length; i ++ ){
     let animal = await Animal.findById ({_id: solicitudProvisorio[i].mascotaId})
-     if (!animal) return res.status(400).json({error: "La Mascota no exite"})
+    if (!animal) continue
+    let usuario = await User.findById({_id: mongosee.Types.ObjectId(solicitudProvisorio[i].solicitanteId)})
+    if (!usuario) continue
      var diferencia= Math.abs(Date.now() - animal.fechaNacimiento)
      var edadDias = Math.round(diferencia/(1000*3600*24))
      var nuevoArreglo = {
@@ -180,12 +194,12 @@ router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
                tipoSolicitud: 1,
                Animales:   { nombreMascota :animal.nombreMascota,
                             edad:  edadDias },
-               Solicitante:{ nombre: userAux.nombres,
-                             apellido: userAux.apellidos,
-                             email: userAux.correoElectronico,
-                             telefono: userAux.numeroContacto,
-                             facebook: userAux.facebook, 
-                             instagram:userAux.instagram 
+               Solicitante:{ nombre: usuario.nombres,
+                             apellido: usuario.apellidos,
+                             email: usuario.correoElectronico,
+                             telefono: usuario.numeroContacto,
+                             facebook: usuario.facebook, 
+                             instagram:usuario.instagram 
                              } 
                 };
 

@@ -61,7 +61,7 @@ const { ObjectId } = require('mongodb');
     type: String,
     required: true
     },
-
+  responsableId: ObjectId,
   fechaCreacion:{
       type: Date, 
       default: Date.now
@@ -74,7 +74,8 @@ const { ObjectId } = require('mongodb');
       default: Date.now
   }, 
     
-  solicitudId : ObjectId
+  solicitanteId : ObjectId
+  
 
   });
     

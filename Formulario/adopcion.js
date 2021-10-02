@@ -119,6 +119,8 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
       type: String
     },
 
+    responsableId: ObjectId
+
   });
     
   
