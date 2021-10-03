@@ -74,7 +74,7 @@ async function provisorioFuncion(req, res, user, next){
    const animal = await Animal.findById({_id: objectId})
   
    if (!animal) return res.status(400).json({error: "La mascota no existe"})
-   if (animal.estado.indexOf('provisorio') == - 1) return res.status(402).json({error: "La mascota no esta disponible para Provisorio"})
+   if (animal.estado.indexOf('Provisorio') == - 1) return res.status(402).json({error: "La mascota no esta disponible para Provisorio"})
     
    let estadoInicial = 'Abierta'
   
@@ -147,17 +147,14 @@ router.get('/adopcion/:id', async function (req , res) {
   res.send(solicitudAdopcion)
 })
 
-router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
+router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (req , res) {
   let userAux = req.user.user
   let solicitudAdopciones = await Adopcion.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
-  let solicitudProvisorio = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
-   
+  if (req.params.tipoSolicitud.indexOf('adopcion') == - 1){
+    solicitudAdopciones = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
+  }  
   let solicitudes = []
- 
-  if (solicitudAdopciones.length == 0 && solicitudProvisorio.length == 0 )
-  { return res.status(400).json({error: "No tenes solicitudes"})}
   
-
   for (let i = 0 ; i < solicitudAdopciones.length; i ++ ){
     let animal = await Animal.findById ({_id: solicitudAdopciones[i].mascotaId})
     if (!animal) continue
@@ -167,7 +164,6 @@ router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
      var edadDias = Math.round(diferencia/(1000*3600*24))
      var nuevoArreglo = {
                Solicitud: solicitudAdopciones[i],
-               tipoSolicitud: 0,
                Animales: { nombreMascota :animal.nombreMascota,
                             edad:  edadDias },
                Solicitante:{ nombre: usuario.nombres,
@@ -182,30 +178,7 @@ router.get('/buscar/solicitudadopcion', auth,  async function (req , res) {
 
   }
 
-  for (let i = 0 ; i < solicitudProvisorio.length; i ++ ){
-    let animal = await Animal.findById ({_id: solicitudProvisorio[i].mascotaId})
-    if (!animal) continue
-    let usuario = await User.findById({_id: mongosee.Types.ObjectId(solicitudProvisorio[i].solicitanteId)})
-    if (!usuario) continue
-     var diferencia= Math.abs(Date.now() - animal.fechaNacimiento)
-     var edadDias = Math.round(diferencia/(1000*3600*24))
-     var nuevoArreglo = {
-               Solicitud:   solicitudProvisorio[i],
-               tipoSolicitud: 1,
-               Animales:   { nombreMascota :animal.nombreMascota,
-                            edad:  edadDias },
-               Solicitante:{ nombre: usuario.nombres,
-                             apellido: usuario.apellidos,
-                             email: usuario.correoElectronico,
-                             telefono: usuario.numeroContacto,
-                             facebook: usuario.facebook, 
-                             instagram:usuario.instagram 
-                             } 
-                };
-
-      solicitudes.push(nuevoArreglo)
-
-  }
+  
  
   res.send(solicitudes)
 })
