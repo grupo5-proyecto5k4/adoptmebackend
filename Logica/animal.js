@@ -83,12 +83,8 @@ res.status(201).json({id_Animal: result._id})
 // filtrar mascotas segun su estado
 router.get('/animal/:estados', async(req, res)=>{
     let nueva = req.params.estados.replace(/_/g, " ")
-    console.log(nueva)
-
     let animal = await Animal.find({estado : nueva}) 
-
-    if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
-    
+    if (animal.length == 0) return res.status(200).json({mesage:'[]'})
     res.send(animal)
 });
 
@@ -97,8 +93,7 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     let nueva = req.params.responestados.replace(/_/g, " ")
     let userAux = req.user.user
     let animal = await Animal.find({responsableId : userAux._id, estado : nueva }) 
-    
-    //if (animal.length == 0) return res.status(200).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
+        
     if (animal.length == 0) return res.status(200).json({mesage:'[]'})
     res.send(animal)
 });

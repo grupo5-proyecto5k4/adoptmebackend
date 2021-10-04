@@ -15,9 +15,9 @@ const animalSchema  = new mongosee.Schema({
   responsableCategoria: {type: Number},
   responsableId: {type: ObjectId},
   castrado: {type: Boolean},
-  condutaNiños: {type: String},
-  condutaPerros: {type: String},
-  condutaGatos: {type: String},
+  conductaNiños: {type: String},
+  conductaPerros: {type: String},
+  conductaGatos: {type: String},
   descripcion: {type: String},
   Foto:[{ foto: String,
           esPrincipal: Boolean 
