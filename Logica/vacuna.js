@@ -20,7 +20,7 @@ router.post('/vacuna', async function(req, res) {
         console.log("elemento:" , element)
         let vac = new Vacuna({
             nombreVacuna : element.nombreVacuna,
-            cantidadDosis: element.cantidadDosis,
+            fechaAplicacion: element.fechaAplicacion,
             id_Animal: element.id_Animal
         })
         const result = await vac.save()
