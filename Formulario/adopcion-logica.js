@@ -106,56 +106,39 @@ res.status(200).json({ _id : result._id})
 
 }
 
-/*  post de adopcion y provisorio */
-
-router.post('/adopcion', auth,  async function (req, res){
-   let userAux = req.user.user
-   //if(req.body.esAdopcion){
-   
-   if (req.body.vacunacionCastracion)
-   {
-    
-      adopcionFuncion(req,res,userAux)
-   }
-   else
-   {
-     provisorioFuncion(req,res,userAux)
-   }
-})
-
-
-
-router.get('/buscarAdopciones', async function (req, res) {
-  let adopciones = await Adopcion.find()
-  res.send(adopciones)
-})
-
-
-router.get('/adopcion/:id', async function (req , res) {
-  let numero = 0 
-  let solicitudAdopcion = await Adopcion.findById({_id : req.params.id})
-  do {
-    if (!solicitudAdopcion){
-      solicitudAdopcion = await Provisorio.findById({_id : req.params.id})
-      numero++
-    }
-    else { break;} 
-    if(numero > 1 ) return res.status(400).json({error: "La Solicitud no exite"})
-  }while(numero > 0 )
-  let animal = await Animal.findById ({_id: solicitudAdopcion.mascotaId})
-  if (!animal) return res.status(400).json({error: "La Mascota no exite"})
-  res.send(solicitudAdopcion)
-})
-
-router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (req , res) {
-  let userAux = req.user.user
-  let solicitudAdopciones = await Adopcion.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
-  if (req.params.tipoSolicitud.indexOf('adopcion') == - 1){
-    solicitudAdopciones = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
-  }  
-  let solicitudes = []
+/* Funcion para traer solicitudes*/ 
+async function realizarSolicitud(solicitudAdopciones,res,  next){
+  let solicitudes = []  
   
-  for (let i = 0 ; i < solicitudAdopciones.length; i ++ ){
+  let desde = solicitudAdopciones.length
+  
+  if (solicitudAdopciones.length == undefined) {
+    desde = 0 
+    let animal = await Animal.findById ({_id: solicitudAdopciones.mascotaId})
+    if (!animal) return solicitudes
+    let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
+    if (!usuario) return solicitudes
+     var diferencia= Math.abs(Date.now() - animal.fechaNacimiento)
+     var edadDias = Math.round(diferencia/(1000*3600*24))
+     var nuevoArreglo = {
+               Solicitud: solicitudAdopciones,
+               Animales: { nombreMascota :animal.nombreMascota,
+                            edad:  edadDias },
+               Solicitante:{ nombre: usuario.nombres,
+                             apellido: usuario.apellidos,
+                             email: usuario.correoElectronico,
+                             telefono: usuario.numeroContacto,
+                             facebook: usuario.facebook, 
+                             instagram:usuario.instagram 
+                             } 
+                };
+     
+     return nuevoArreglo
+
+  }
+  
+  for (let i = 0 ; i < desde ; i ++ ){
+    
     let animal = await Animal.findById ({_id: solicitudAdopciones[i].mascotaId})
     if (!animal) continue
     let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
@@ -176,11 +159,76 @@ router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (re
                 };
      solicitudes.push(nuevoArreglo)
 
-  }
+}
+return (solicitudes)
+}
 
-  
+
+router.post('/adopcion', auth,  async function (req, res){
+   let userAux = req.user.user
+   //if(req.body.esAdopcion){
+   
+   if (req.body.vacunacionCastracion)
+   {
+    
+      adopcionFuncion(req,res,userAux)
+   }
+   else
+   {
+     provisorioFuncion( req, res ,userAux)
+   }
+})
+
+
+
+router.get('/buscarAdopciones', async function (req, res) {
+  let adopciones = await Adopcion.find()
+  res.send(adopciones)
+})
+
+
+router.get('/adopcion/:id', async function (req , res) {
+  let numero = 0 
+  let solicitudAdopcion = await Adopcion.findById({_id : req.params.id})
+  do {
+    if (!solicitudAdopcion){
+      solicitudAdopcion = await Provisorio.findById({_id : req.params.id})
+      numero++
+    }
+    else { break;} 
+    if(numero > 1 ) return res.send(solicitudAdopcion)
+  }while(numero > 0 )
  
-  res.send(solicitudes)
+  
+  realizarSolicitud(solicitudAdopcion).then(val => res.send(val))
+  
+})
+
+router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (req , res) {
+  let userAux = req.user.user
+  let solicitudAdopciones = await Adopcion.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
+ 
+  if (req.params.tipoSolicitud.indexOf('provisorio') ==  0){
+    solicitudAdopciones = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
+    
+  }  
+ 
+   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
+
+
+})
+
+router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (req , res) {
+  
+  let userAux = req.user.user
+ 
+  let solicitudAdopciones = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
+  
+  if (req.params.tipoSolicitud.indexOf('provisorio') == 0){
+    solicitudAdopciones = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
+  }  
+    
+  realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
 
