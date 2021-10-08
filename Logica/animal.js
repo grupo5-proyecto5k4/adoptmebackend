@@ -98,4 +98,25 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     res.send(animal)
 });
 
+//Filtrar mascota de un determinado estado ( x resp) y aplicar filtro: sexo, tipo animal(perro-gato)
+//Tamaño, centro rescatista, barrio/zona
+router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal:', auth, async(req, res)=>{
+    let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
+    let nuevousuario = req.user.user
+    let nuevoSexo= req.params.sexoAnimal
+    if (nuevousuario.tipoUsuario != 0)
+    {
+        let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo})
+        if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
+        res.send(animalDevuelto)
+    }
+    else
+    {
+        return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
+    }
+});
+
 module.exports = router;
+    
+
+
