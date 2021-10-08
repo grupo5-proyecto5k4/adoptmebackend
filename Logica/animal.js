@@ -98,16 +98,13 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     res.send(animal)
 });
 
+//Traer todas las mascotas que cumplen con los filtros, en gral, no responden a un det usuario
 router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
-    //let nuevousuario = req.req.user
     const filter = {}
-    //filter.responsableId = req.body.responsableId
     if(req.body.estado)filter.estado = req.body.estado 
     if(req.body.sexo) filter.sexo = req.body.sexo
     if(req.body.tamañoFinal) filter.tamanoFinal = req.body.tamanoFinal
     if(req.body.tipoAnimal) filter.tipoAnimal = req.body.tipoAnimal
-    
-    //if (nuevousuario.tipoUsuario == 0) return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
     let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
     res.send(animalDevuelto)
