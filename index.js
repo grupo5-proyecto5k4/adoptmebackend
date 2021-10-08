@@ -39,6 +39,7 @@ app.use('/vacunas/', vacuna)
 app.use('/', recomendacion)
 app.use('/', notificacion)
 app.use('/formulario/', adopcion)
+app.use('/animales/filtrosMascota/', animal)
 
 
 
