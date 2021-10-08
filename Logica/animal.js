@@ -13,6 +13,7 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
+const Usuario = requiere('../modelos/usuario.js')
 
 
  cloudinary.config({
@@ -100,17 +101,19 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
 
 //Filtrar mascota de un determinado estado ( x resp) y aplicar filtro: sexo, tipo animal(perro-gato)
 //Tamaño, centro rescatista, barrio/zona
-router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal/', auth, async(req, res)=>{
+router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal/:barrioUsuario', auth, async(req, res)=>{
     let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
     let nuevousuario = req.user.user
     let nuevoSexo = req.params.sexoAnimal
     let nuevoTipoAnimal = req.params.tipoAnimal
     let nuevoTamanoAnimal = req.params.tamanoAnimal
-    //let nuevoBarrioAnimal = req.params.barrioAnimal
+    let nuevoBarrioUsuario = req.params.barrioUsuario
     if (nuevousuario.tipoUsuario != 0){
         let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal })
+        let usuarioDevuelto = await Usuario.find({barrio: nuevoBarrioUsuario})
         if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
         res.send(animalDevuelto)
+        res.send(usuarioDevuelto)
     }
     else{
         return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
