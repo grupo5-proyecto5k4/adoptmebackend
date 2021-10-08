@@ -100,15 +100,15 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
 
 //Filtrar mascota de un determinado estado ( x resp) y aplicar filtro: sexo, tipo animal(perro-gato)
 //Tamaño, centro rescatista, barrio/zona
-router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamañoAnimal', auth, async(req, res)=>{
+router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal', auth, async(req, res)=>{
     let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
     let nuevousuario = req.user.user
     let nuevoSexo = req.params.sexoAnimal
     let nuevoTipoAnimal = req.params.tipoAnimal
-    let nuevoTamañoAnimal = req.params.tamañoAnimal
+    let nuevoTamanoAnimal = req.params.tamanoAnimal
     //let nuevoBarrioAnimal = req.params.barrioAnimal
     if (nuevousuario.tipoUsuario != 0){
-        let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamañoAnimal })
+        let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal })
         if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
         res.send(animalDevuelto)
     }
