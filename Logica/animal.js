@@ -99,9 +99,9 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
 });
 
 router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
-    let nuevousuario = req.req.user
+    //let nuevousuario = req.req.user
     const filter = {}
-    filter.responsableId = req.body.responsableId
+    //filter.responsableId = req.body.responsableId
     if(req.body.estado)filter.estado = req.body.estado 
     if(req.body.sexo) filter.sexo = req.body.sexo
     if(req.body.tamanoFinal) filter.tamanoFinal = req.body.tamanoFinal
