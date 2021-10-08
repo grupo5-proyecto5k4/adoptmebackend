@@ -104,7 +104,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
     //filter.responsableId = req.body.responsableId
     if(req.body.estado)filter.estado = req.body.estado 
     if(req.body.sexo) filter.sexo = req.body.sexo
-    if(req.body.tamanoFinal) filter.tamanoFinal = req.body.tamanoFinal
+    if(req.body.tamañoFinal) filter.tamanoFinal = req.body.tamanoFinal
     if(req.body.tipoAnimal) filter.tipoAnimal = req.body.tipoAnimal
     
     //if (nuevousuario.tipoUsuario == 0) return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
