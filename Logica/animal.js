@@ -100,7 +100,7 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
 
 //Filtrar mascota de un determinado estado ( x resp) y aplicar filtro: sexo, tipo animal(perro-gato)
 //Tamaño, centro rescatista, barrio/zona
-router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal:/barrioAnimal', auth, async(req, res)=>{
+router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal/:barrioAnimal', auth, async(req, res)=>{
     let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
     let nuevousuario = req.user.user
     let nuevoSexo = req.params.sexoAnimal
