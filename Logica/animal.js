@@ -104,14 +104,12 @@ router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal', auth, async(req, res)=>{
     let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
     let nuevousuario = req.user.user
     let nuevoSexo= req.params.sexoAnimal
-    if (nuevousuario.tipoUsuario != 0)
-    {
+    if (nuevousuario.tipoUsuario != 0){
         let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo})
         if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
         res.send(animalDevuelto)
     }
-    else
-    {
+    else{
         return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
     }
 });
