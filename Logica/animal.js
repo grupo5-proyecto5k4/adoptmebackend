@@ -98,44 +98,21 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     res.send(animal)
 });
 
-//Filtrar mascota de un determinado estado ( x resp) y aplicar filtro: sexo, tipo animal(perro-gato)
-//Tamaño, centro rescatista, barrio/zona
-// router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal', auth, async(req, res)=>{
-//     let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
-//     let nuevousuario = req.user.user
-//     let nuevoSexo = req.params.sexoAnimal
-//     let nuevoTipoAnimal = req.params.tipoAnimal
-//     let nuevoTamanoAnimal = req.params.tamanoAnimal
-//     //let nuevoBarrioUsuario = req.params.barrioUsuario
-//     if (nuevousuario.tipoUsuario != 0){
-//         let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal })
-//         //let usuarioDevuelto = await Usuario.find({barrio: nuevoBarrioUsuario})
-//         if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
-//         res.send(animalDevuelto)
-//     }
-//     else{
-//         return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
-//     }
-// });
-
-
 router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
-        let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
-        let nuevousuario = req.user.user
-        let nuevoSexo = req.params.sexoAnimal
-        let nuevoTipoAnimal = req.params.tipoAnimal
-        let nuevoTamanoAnimal = req.params.tamanoAnimal
-        //let nuevoBarrioUsuario = req.params.barrioUsuario
-        if (nuevousuario.tipoUsuario != 0){
-            let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal })
-            //let usuarioDevuelto = await Usuario.find({barrio: nuevoBarrioUsuario})
-            if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
-            res.send(animalDevuelto)
-        }
-        else{
-            return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
-        }
-    });
+    let nuevousuario = user.req.req
+    const filter = {}
+    filter.responsableId = req.body.responsableId
+    if(req.body.estado)filter.estado = req.body.estado 
+    if(req.body.sexo) filter.sexo = req.body.sexo
+    if(req.body.tamanoFinal) filter.sexo = req.body.tamanoFinal
+    if(req.body.tipoAnimal) filter.sexo = req.body.tipoAnimal
+    
+    if (nuevousuario.tipoUsuario == 0) return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
+    let animalDevuelto = await Animal.find(filter)
+    if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
+    res.send(animalDevuelto)
+});
+
 module.exports = router;
     
 
