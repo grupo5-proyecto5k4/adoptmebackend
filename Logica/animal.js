@@ -106,9 +106,9 @@ router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal:
     let nuevoSexo = req.params.sexoAnimal
     let nuevoTipoAnimal = req.params.tipoAnimal
     let nuevoTamanoAnimal = req.params.tamanoAnimal
-    //let nuevoBarrioAnimal = req.params.barrioAnimal
+    let nuevoBarrioAnimal = req.params.barrioAnimal
     if (nuevousuario.tipoUsuario != 0){
-        let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal, barrio : nuevoUsuario.barrio  })
+        let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal, barrio : nuevoBarrioAnimal })
         if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
         res.send(animalDevuelto)
     }
