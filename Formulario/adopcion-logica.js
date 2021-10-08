@@ -231,5 +231,32 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
+router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, res, next){
+  let userAux = req.user.user
+  
+  if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
+  if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
+ 
+  let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
+  let result2 = await Provisorio.findByIdAndUpdate(Solicitud._id, 
+    {estadoId: req.params.estado,
+     fechaModificacion : new Date(Date.now()).toISOString()},
+     {new : true})
+
+  if(req.params.estado.indexOf('Aprobado') ==  0){
+    let result = await Animal.findByIdAndUpdate(Solicitud.mascotaId, 
+      {estado: 'En Provisorio',
+      fechaModificacion : new Date(Date.now()).toISOString()
+      }, 
+      {new: true} )
+  }
+    
+ if (!result2) res.status(400).json({error:' no se actualizo correctamente'})
+
+ res.send('actualizacion correctamente')
+ 
+
+})
+
 
 module.exports = router;

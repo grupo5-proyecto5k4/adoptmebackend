@@ -280,6 +280,27 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
 
 })
 
+/* modificar datos centro rescatista*/ 
+router.put('/user/modificacion/centrorescatista', auth, async function(req, res) {
+    let userAux = req.user.user 
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    
+    let usuario = await User.findById({_id :req.body._id })
+    if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
+    
+    let result = await User.findByIdAndUpdate(usuario._id,
+        {banco : (req.body.banco).toUpperCase(),
+         cbu   : req.body.cbu,
+         alias : (req.body.alias).toUpperCase(),   
+         fechaModificacion : new Date(Date.now()).toISOString()
+        },
+        { new : true}
+        )
+
+    if (!result) return res.status(400).json({error: ' No se grabo correctamente'})
+    res.send('Actualizacion Ok ')    
+
+})
 
 module.exports = router;
 
