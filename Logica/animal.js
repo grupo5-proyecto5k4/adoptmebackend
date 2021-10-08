@@ -107,7 +107,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
     if(req.body.tamanoFinal) filter.tamanoFinal = req.body.tamanoFinal
     if(req.body.tipoAnimal) filter.tipoAnimal = req.body.tipoAnimal
     
-    if (nuevousuario.tipoUsuario == 0) return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
+    //if (nuevousuario.tipoUsuario == 0) return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
     let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
     res.send(animalDevuelto)
