@@ -13,7 +13,6 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
-const Usuario = requiere('../modelos/usuario.js')
 
 
  cloudinary.config({
@@ -113,7 +112,6 @@ router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal'
         //let usuarioDevuelto = await Usuario.find({barrio: nuevoBarrioUsuario})
         if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
         res.send(animalDevuelto)
-        
     }
     else{
         return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
