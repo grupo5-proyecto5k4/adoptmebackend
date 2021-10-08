@@ -31,7 +31,7 @@ router.options('/notificacion/:id_notificacion', async function(req, res)  {
    
 })
 
-res.sendStatus(201).json() //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
+res.sendStatus(201).json({mensaje: 'notificacion creada correctamente'}) //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
 });
 
 router.get('/notificaciones', auth, async(req, res)=>{

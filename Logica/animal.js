@@ -35,8 +35,22 @@ router.post('/animal', auth,  async function(req, res) {
     let userAux = req.user.user
     let castrado = true 
     if (req.body.castrado == 2) castrado = false 
-    let cachorro = true 
-    if (req.body.castrado == 2) cachorro = false 
+    let estado = " "
+    switch(req.body.estado){
+        case 7 : 
+           estado = "Disponible Adopción";
+           break;
+        case 8 : 
+           estado = "Disponible Adopción y Provisorio";
+           break;
+        case 9 : 
+           estado = "Disponible Provisorio";
+           break;
+        default: 
+           estado = "Disponible Adopción y Provisorio";          
+    }
+      
+  
     let animal = new Animal({
         tipoMascota: req.body.tipoMascota,
         nombreMascota : req.body.nombreMascota,
@@ -45,9 +59,8 @@ router.post('/animal', auth,  async function(req, res) {
         tamañoFinal: req.body.tamañoFinal,
         fechaNacimiento: req.body.fechaNacimiento,
         sexo: req.body.sexo,
-        razaPadre: req.body.razaPadre,
-        razaMadre: req.body.razaMadre,
-        estado: req.body.estado,
+        raza: req.body.raza,
+        estado: estado,
         responsableCategoria: req.body.responsableCategoria,
         responsableId: userAux._id,
         castrado: this.castrado,
@@ -70,12 +83,8 @@ res.status(201).json({id_Animal: result._id})
 // filtrar mascotas segun su estado
 router.get('/animal/:estados', async(req, res)=>{
     let nueva = req.params.estados.replace(/_/g, " ")
-    console.log(nueva)
-
     let animal = await Animal.find({estado : nueva}) 
-
-    if (animal.length == 0) return res.status(404).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
-    
+    if (animal.length == 0) return res.status(200).json({mesage:'[]'})
     res.send(animal)
 });
 
@@ -84,8 +93,7 @@ router.get('/respestados/:responestados', auth, async(req, res)=>{
     let nueva = req.params.responestados.replace(/_/g, " ")
     let userAux = req.user.user
     let animal = await Animal.find({responsableId : userAux._id, estado : nueva }) 
-    
-    //if (animal.length == 0) return res.status(200).json({error: 'No hemos encontrado ningún animal que coincida con ese estado'})
+        
     if (animal.length == 0) return res.status(200).json({mesage:'[]'})
     res.send(animal)
 });

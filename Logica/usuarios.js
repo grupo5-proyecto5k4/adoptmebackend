@@ -246,6 +246,61 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
 
 });
 
+function comparar(user, nuevouser, next){
+
+}
+router.put('/user/modificacionPerfil', auth, async function(req, res) {
+    let userAux = req.user.user
+    let n = await User.findById({_id : userAux._id})
+        let p = req.body
+    let val_user = User
+    if(n.nombres != p.nombres && p.nombres) n.nombres = p.nombres
+    if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = p.apellidos
+    if(n.dni != p.dni && p.dni) n.dni = p.dni
+    if(n.fechaNacimiento != p.fechaNacimiento && p.fechaNacimiento) n.fechaNacimiento=p.fechaNacimiento
+    if(n.Direccion != p.Direccion && p.Direccion) n.Direccion = p.Direccion
+    if(n.instagram != p.instagram && p.instagram) n.instagram=p.instagram
+    if(n.facebook != p.facebook && p.facebook) n.facebook = p.facebook
+    if(n.numeroContacto != p.numeroContacto && p.numeroContacto) n.numeroContacto=p.numeroContacto
+    
+    const salt = await bcrypt.genSalt(10)
+    
+    if(p.contrasenia) 
+    {
+        let validaContrasenia = await bcrypt.compare(p.contrasenia, n.contrasenia)
+        if (!validaContrasenia) n.contrasenia = await bcrypt.hash(p.contrasenia, salt)
+         
+    }    
+    n.fechaModificacion = new Date(Date.now()).toISOString()
+    let result = await User.findByIdAndUpdate(n._id, n, {new: true} )
+    
+    if ( !result) return  res.status(400).json({mensaje:'no se pudo realizar la actualizacion'})
+
+    res.send('Actualizacion OK')
+
+})
+
+/* modificar datos centro rescatista*/ 
+router.put('/user/modificacion/centrorescatista', auth, async function(req, res) {
+    let userAux = req.user.user 
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    
+    let usuario = await User.findById({_id :req.body._id })
+    if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
+    
+    let result = await User.findByIdAndUpdate(usuario._id,
+        {banco : (req.body.banco).toUpperCase(),
+         cbu   : req.body.cbu,
+         alias : (req.body.alias).toUpperCase(),   
+         fechaModificacion : new Date(Date.now()).toISOString()
+        },
+        { new : true}
+        )
+
+    if (!result) return res.status(400).json({error: ' No se grabo correctamente'})
+    res.send('Actualizacion Ok ')    
+
+})
 
 module.exports = router;
 
