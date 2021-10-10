@@ -69,7 +69,12 @@ userSchema.methods.generateJWT = function(){
   }, process.env.SECRET_KEY_JWT)
 }
 
+var usuarioFiltradoSchema = mongoose.Schema({
+  barrio: String,
+  nombres: String,
+  animalFiltrado: [{type: mongoose.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
+});
 
-
+var animalFiltrado = mongoose.Model('animalFiltrado', animalFiltradoSchema);
 const Usuario = mongosee.model('am-usuarios', userSchema);
 module.exports = Usuario

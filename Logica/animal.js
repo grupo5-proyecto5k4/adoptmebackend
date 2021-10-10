@@ -117,26 +117,25 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
 
 
 router.get('/filtrosMascotaCentro/filtroAnimalCentro', auth, async(req, res)=>{
-    var usuarioFiltradoSchema = mongoose.Schema({
-        barrio: req.body.barrio,
-        nombres: req.body.nombres,
-        animalFiltrado: [{type: mongoose.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
-      });
+    // var usuarioFiltradoSchema = mongoose.Schema({
+    //     barrio: req.body.barrio,
+    //     nombres: req.body.nombres,
+    //     animalFiltrado: [{type: mongoose.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
+    //   });
       
-    var animalFiltradoSchema = mongoose.Schema({
-        usuarioFiltrado: {type: mongoose.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
-        estado: req.body.estado,
-        sexo: req.body.sexo,
-        tamañoFinal: req.body.tamañoFinal,
-        tipoAnimal: req.body.tipoAnimal
-      });
+    // var animalFiltradoSchema = mongoose.Schema({
+    //     usuarioFiltrado: {type: mongoose.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
+    //     estado: req.body.estado,
+    //     sexo: req.body.sexo,
+    //     tamañoFinal: req.body.tamañoFinal,
+    //     tipoAnimal: req.body.tipoAnimal
+    //   });
       
-    var usuarioFiltrado = mongoose.Model('usuarioFiltrado', usuarioFiltradoSchema);
-    var animalFiltrado = mongoose.Model('animalFiltrado', animalFiltradoSchema);
+    // var usuarioFiltrado = mongoose.Model('usuarioFiltrado', usuarioFiltradoSchema);
+    //var animalFiltrado = mongoose.Model('animalFiltrado', animalFiltradoSchema);
     usuarioFiltrado.find().populate('animalFiltrado').exec(function(err, users) {
         if (err) throw err;
-    
-        var animalVec = [];
+    var animalVec = [];
         usuarioFiltrado.forEach(function(usuarioFiltrado) {
             usuarioFiltrado.animalFiltrado.forEach(function(animalFiltrado) {
                 animalVec.push(animalFiltrado.estado),
