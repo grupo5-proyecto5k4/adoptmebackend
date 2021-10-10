@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
+const {Schema, model} = require("mongoose")
 
 const animalSchema  = new mongosee.Schema({
   tipoMascota: {type: Number},
