@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
-const {Schema, model} = require("mongoose")
+//const {Schema, model} = require("mongoose")
 
 const animalSchema  = new mongosee.Schema({
   tipoMascota: {type: Number},
@@ -56,15 +56,14 @@ const animalSchema  = new mongosee.Schema({
         
     }, process.env.SECRET_KEY_JWT)
 }
-var animalFiltradoSchema = mongosee.Schema({
+var usuarioFiltradoSchema = mongosee.Schema({
       usuarioFiltrado: {type: mongosee.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
-      estado: String,
-      sexo: String,
-      tamañoFinal: String,
-      tipoAnimal: String
-    });
+      barrio: String,
+      nombres: String,
+});
 
-var usuarioFiltrado = mongosee.Model('usuarioFiltrado', usuarioFiltradoSchema);    
+var usuarioFiltrado = mongosee.model('usuarioFiltrado', usuarioFiltradoSchema);    
 const Animal = mongosee.model('am-animal', animalSchema);
 module.exports = Animal
+module.exports = usuarioFiltrado
   

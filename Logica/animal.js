@@ -13,7 +13,7 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
-const {Schema, model} = require("mongoose")
+//const {Schema, model} = require("mongoose")
 
 
 cloudinary.config({
