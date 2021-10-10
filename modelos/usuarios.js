@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 const { ObjectId } = require('mongodb')
+const Schema = mongosee.Schema
+
 
 const userSchema  = new mongosee.Schema({
   nombres: {
