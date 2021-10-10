@@ -151,6 +151,7 @@ router.get('/filtrosMascotaCentro/filtroAnimalCentro', auth, async(req, res)=>{
     
     response.send(animalVec); // adTimes should contain all addTimes from his friends
     });
+});
       
   
   
