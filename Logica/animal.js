@@ -14,7 +14,7 @@ const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
 //x los filtros
-const Schema = mongoose.Schema
+const Schema = mongosee.Schema
 //
 
 cloudinary.config({
