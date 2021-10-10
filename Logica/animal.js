@@ -133,18 +133,25 @@ router.get('/filtrosMascotaCentro/filtroAnimalCentro', auth, async(req, res)=>{
     // var usuarioFiltrado = mongoose.Model('usuarioFiltrado', usuarioFiltradoSchema);
     //var animalFiltrado = mongoose.Model('animalFiltrado', animalFiltradoSchema);
     usuarioFiltrado.find().populate('animalFiltrado').exec(function(err, users) {
-        if (err) throw err;
+    if (err) throw err;
     var animalVec = [];
         usuarioFiltrado.forEach(function(usuarioFiltrado) {
             usuarioFiltrado.animalFiltrado.forEach(function(animalFiltrado) {
-                animalVec.push(animalFiltrado.estado),
-                animalVec.push(animalFiltrado.sexo),
-                animalVec.push(animalFiltrado.tamañoFinal),
-                animalVec.push(animalFiltrado.tiponAnimal)
+                animalVec.push(req.body.estado),
+                animalVec.push(req.body.sexo),
+                animalVec.push(req.body.tamañoFinal),
+                animalVec.push(req.body.tiponAnimal)
             });
+    var usuarioVec = [];        
+        animalFiltrado.forEach(function(animalFiltrado) {
+            animalFiltrado.usuarioFiltrado.forEach(function(usuarioFiltrado) {
+                usuarioVec.push(req.body.nombres),
+                usuarioVec.push(req.body.barrio)
+            });    
         });
     
-    response.send(animalVec); // adTimes should contain all addTimes from his friends
+    response.send(animalVec);
+    //response.send(usuarioVec); 
     });
 });
       
