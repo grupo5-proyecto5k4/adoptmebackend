@@ -142,6 +142,7 @@ router.get('/filtrosMascotaCentro/filtroAnimalCentro', auth, async(req, res)=>{
                 animalVec.push(req.body.tamañoFinal),
                 animalVec.push(req.body.tiponAnimal)
             });
+        });      
     var usuarioVec = [];        
         animalFiltrado.forEach(function(animalFiltrado) {
             animalFiltrado.usuarioFiltrado.forEach(function(usuarioFiltrado) {
