@@ -14,9 +14,6 @@ const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
 //x los filtros
-const { ObjectId } = require('mongodb');
-const jwt = require('jsonwebtoken')
-const mongosee = require('mongoose')
 const Schema = mongoose.Schema
 //
 
