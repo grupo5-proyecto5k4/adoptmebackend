@@ -56,15 +56,15 @@ const animalSchema  = new mongosee.Schema({
         
     }, process.env.SECRET_KEY_JWT)
 }
-var animalFiltradoSchema = mongoose.Schema({
-      usuarioFiltrado: {type: mongoose.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
+var animalFiltradoSchema = mongosee.Schema({
+      usuarioFiltrado: {type: mongosee.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
       estado: String,
       sexo: String,
       tamañoFinal: String,
       tipoAnimal: String
     });
 
-var usuarioFiltrado = mongoose.Model('usuarioFiltrado', usuarioFiltradoSchema);    
+var usuarioFiltrado = mongosee.Model('usuarioFiltrado', usuarioFiltradoSchema);    
 const Animal = mongosee.model('am-animal', animalSchema);
 module.exports = Animal
   
