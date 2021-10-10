@@ -17,7 +17,7 @@ const Vacuna = require('../modelos/vacuna.js')
 const { ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 //
 
 cloudinary.config({
@@ -153,17 +153,6 @@ router.get('/filtrosMascotaCentro/filtroAnimalCentro', auth, async(req, res)=>{
     });
 });
       
-  
-  
-  //
-
-
-
-
-
-
-
-
 module.exports = router;
 
 

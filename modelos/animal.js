@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const animalSchema  = new mongosee.Schema({
   tipoMascota: {type: Number},
@@ -56,11 +56,6 @@ const animalSchema  = new mongosee.Schema({
         
     }, process.env.SECRET_KEY_JWT)
 }
-
-//filtro mascota
-
-
-//
 
 const Animal = mongosee.model('am-animal', animalSchema);
 module.exports = Animal
