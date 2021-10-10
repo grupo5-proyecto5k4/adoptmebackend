@@ -117,24 +117,25 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
 
 //Filtrar las mascotas por los filtros del item anterior y ademas filtrar en funcion
 //de los datos del centro recatista (barrio del centro y nombre del centro)
-var usuarioFiltradoSchema = mongoose.Schema({
-    barrio: String,
-    nombres: String,
-    animalFiltrado: [{type: mongoose.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
-  });
-  
-  var animalFiltradoSchema = mongoose.Schema({
-    usuarioFiltrado: {type: mongoose.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
-    estado: String,
-    sexo: String,
-    tamañoFinal: String,
-    tipoAnimal: String
-  });
-  
-var usuarioFiltrado = mongoose.Model('usuarioFiltrado', usuarioFiltradoSchema);
-var animalFiltrado = mongoose.Model('animalFiltrado', animalFiltradoSchema);
+
 
 router.get('/filtrosMascotaCentro/filtroAnimalCentro', auth, async(req, res)=>{
+    var usuarioFiltradoSchema = mongoose.Schema({
+        barrio: req.body.barrio,
+        nombres: req.body.nombres,
+        animalFiltrado: [{type: mongoose.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
+      });
+      
+    var animalFiltradoSchema = mongoose.Schema({
+        usuarioFiltrado: {type: mongoose.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
+        estado: req.body.estado,
+        sexo: req.body.sexo,
+        tamañoFinal: req.body.tamañoFinal,
+        tipoAnimal: req.body.tipoAnimal
+      });
+      
+    var usuarioFiltrado = mongoose.Model('usuarioFiltrado', usuarioFiltradoSchema);
+    var animalFiltrado = mongoose.Model('animalFiltrado', animalFiltradoSchema);
     usuarioFiltrado.find().populate('animalFiltrado').exec(function(err, users) {
         if (err) throw err;
     
