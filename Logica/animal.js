@@ -13,9 +13,6 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
-//x los filtros
-const Schema = mongosee.Schema
-//
 
 cloudinary.config({
      cloud_name: process.env.cloudname,
