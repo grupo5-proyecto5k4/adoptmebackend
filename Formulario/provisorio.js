@@ -42,12 +42,12 @@ const { ObjectId } = require('mongodb');
       required: true
       },     
   gastosCubierto :{
-    type: Boolean,
+    type: Number,
     required: true
     },    
 
   tiempoSuficiente :{
-    type: Boolean,
+    type: Number,
     required: true
     },
   numeroContacto :{

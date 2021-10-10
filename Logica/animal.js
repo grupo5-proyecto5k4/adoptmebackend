@@ -13,9 +13,14 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
+//x los filtros
+const { ObjectId } = require('mongodb');
+const jwt = require('jsonwebtoken')
+const mongosee = require('mongoose')
+const Schema = mongoose.Schema;
+//
 
-
- cloudinary.config({
+cloudinary.config({
      cloud_name: process.env.cloudname,
      api_key: process.env.apikey,
      api_secret: process.env.apisecret
@@ -110,7 +115,56 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
     res.send(animalDevuelto)
 });
 
+//Filtrar las mascotas por los filtros del item anterior y ademas filtrar en funcion
+//de los datos del centro recatista (barrio del centro y nombre del centro)
+var usuarioFiltradoSchema = mongoose.Schema({
+    barrio: String,
+    nombres: String,
+    animalFiltrado: [{type: mongoose.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
+  });
+  
+  var animalFiltradoSchema = mongoose.Schema({
+    usuarioFiltrado: {type: mongoose.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
+    estado: String,
+    sexo: String,
+    tamañoFinal: String,
+    tipoAnimal: String
+  });
+  
+var usuarioFiltrado = mongoose.Model('usuarioFiltrado', usuarioFiltradoSchema);
+var animalFiltrado = mongoose.Model('animalFiltrado', animalFiltradoSchema);
+
+router.get('/filtrosMascotaCentro/filtroAnimalCentro', auth, async(req, res)=>{
+    usuarioFiltrado.find().populate('animalFiltrado').exec(function(err, users) {
+        if (err) throw err;
+    
+        var animalVec = [];
+        usuarioFiltrado.forEach(function(usuarioFiltrado) {
+            usuarioFiltrado.animalFiltrado.forEach(function(animalFiltrado) {
+                animalVec.push(animalFiltrado.estado),
+                animalVec.push(animalFiltrado.sexo),
+                animalVec.push(animalFiltrado.tamañoFinal),
+                animalVec.push(animalFiltrado.tiponAnimal)
+            });
+        });
+    
+    response.send(animalVec); // adTimes should contain all addTimes from his friends
+    });
+      
+  
+  
+  //
+
+
+
+
+
+
+
+
 module.exports = router;
+
+
     
 
 
