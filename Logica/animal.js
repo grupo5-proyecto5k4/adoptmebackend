@@ -131,12 +131,12 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
             
     //let usuarioDevuelto = await Usuario.find(filter3)
     var nuevoArreglo = {
-        Animales: { estado : animalDevuelto.estado,
-                    sexo :  animalDevuelto.sexo,
-                    tamañoFinal : animalDevuelto.tamañoFinal,
-                    tipoAnimal : animalDevuelto.tipoAnimal},
-        Usuarios:{  barrio: usuarioDevuelto.barrio,
-                    nombres: usuarioDevuelto.nombres} 
+        Animales: { estado : filter2.estado,
+                    sexo :  filter2.sexo,
+                    tamañoFinal : filter2.tamañoFinal,
+                    tipoAnimal : filter2.tipoAnimal},
+        Usuarios:{  barrio: filter3.barrio,
+                    nombres: filter3.nombres} 
          };
 filtroDevuelto.push(nuevoArreglo)
 return (filtroDevuelto)
