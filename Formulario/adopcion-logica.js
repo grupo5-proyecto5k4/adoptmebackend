@@ -16,8 +16,9 @@ const User = require('../modelos/usuarios.js')
 
  /*  Funcion de Adopcion   */
 async function adopcionFuncion(req, res, user, next){
+  var objectId = mongosee.Types.ObjectId(req.body.mascotaId);   
   const mascotas = await Adopcion.find({solicitanteId : user._id, mascotaId: objectId}) 
-  var objectId = mongosee.Types.ObjectId(req.body.mascotaId);    
+   
    if (mascotas.length != 0) return res.status(400).json({error: "Ya solicitaste la adopción de esta mascota"})
 
    const animal = await Animal.findById({_id: objectId})
@@ -182,7 +183,7 @@ router.post('/adopcion', auth,  async function (req, res){
 
 
 router.get('/buscarAdopciones', async function (req, res) {
-  let adopciones = await Adopcion.find()
+  let adopciones = await Adopcion.find(_id = req.body)
   res.send(adopciones)
 })
 

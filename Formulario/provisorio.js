@@ -13,12 +13,21 @@ const { ObjectId } = require('mongodb');
 /*
  datos de la Provisorio  
  MASCOTA:
-   - animalTenencia : 0 - Perro   / 1 - Gatos / 2 - Ambos 
+   - animalTenencia : 0 - Perro   / 1 - Gatos / 2 - Ambos -->  
    - tiempoTenencia : -> numero indicando dias  
    - otraMascota : 0 - Ninguno   / 1 - Gato  / 2 - Perro / 3 - Ambos
-   - cuantosMascotas:  numero de mascora 
+   - cuantosMascotas:  numero de mascota 
    - gastosCubierto: true - si / false - no   
    - tiempoSuficiente: true - si / false - no 
+   - seguimiento: Si - 1  / No - 0  / hasta los 6 meses - 2 
+
+   VIVIENDA: 
+   - vivienda:  casa: 0 /  depto: 1 
+   - fotoVivienda :  (foto opcional)
+   - permiso:  Si - 1 / No - 0   ¿Permita mascota?  
+   - espacioAbierto: Balcon - 0 / Patio - 1 / Ambos - 2 / Ninguno - 3 ¿la vivienda tiene patio y/o balcon?  
+   - descripcionCercamiento:   String (datos opcional)  
+   - Direccion: idem a CentroRescatista 
 
   DATOS CONTACTO  
    - numeroContacto : 
@@ -37,10 +46,8 @@ const { ObjectId } = require('mongodb');
     type: Number,
     required: true
     }, 
-  cuantosMascotas :{
-      type: Number,
-      required: true
-      },     
+  descripcionOtraMascota: {type: String},
+        
   gastosCubierto :{
     type: Boolean,
     required: true

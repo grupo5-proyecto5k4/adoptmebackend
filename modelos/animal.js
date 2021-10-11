@@ -2,6 +2,7 @@ const { ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 
+/* agregar un campo de esVisible*/
 const animalSchema  = new mongosee.Schema({
   tipoMascota: {type: Number},
   nombreMascota: {type: String},

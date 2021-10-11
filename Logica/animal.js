@@ -13,7 +13,7 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
-
+const User = require('../modelos/usuarios.js')
 
  cloudinary.config({
      cloud_name: process.env.cloudname,
@@ -92,49 +92,50 @@ router.get('/animal/:estados', async(req, res)=>{
 router.get('/respestados/:responestados', auth, async(req, res)=>{
     let nueva = req.params.responestados.replace(/_/g, " ")
     let userAux = req.user.user
-    let animal = await Animal.find({responsableId : userAux._id, estado : nueva }) 
+    let animal = await Animal.find({responsableId : userAux._id , estado : nueva }) 
         
     if (animal.length == 0) return res.status(200).json({mesage:'[]'})
     res.send(animal)
 });
 
-//Filtrar mascota de un determinado estado ( x resp) y aplicar filtro: sexo, tipo animal(perro-gato)
-//Tamaño, centro rescatista, barrio/zona
-// router.get('/filtrosMascota/:estadoAnimal/:sexoAnimal/:tipoAnimal/:tamanoAnimal', auth, async(req, res)=>{
-//     let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
-//     let nuevousuario = req.user.user
-//     let nuevoSexo = req.params.sexoAnimal
-//     let nuevoTipoAnimal = req.params.tipoAnimal
-//     let nuevoTamanoAnimal = req.params.tamanoAnimal
-//     //let nuevoBarrioUsuario = req.params.barrioUsuario
-//     if (nuevousuario.tipoUsuario != 0){
-//         let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal })
-//         //let usuarioDevuelto = await Usuario.find({barrio: nuevoBarrioUsuario})
-//         if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
-//         res.send(animalDevuelto)
-//     }
-//     else{
-//         return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
-//     }
-// });
+async function filtrar(req){
+  
+    const filter = {}
+    if(req.body.estado)filter.estado = req.body.estado 
+    if(req.body.sexo) filter.sexo = req.body.sexo
+    if(req.body.tamanoFinal) filter.sexo = req.body.tamanoFinal
+    if(req.body.tipoAnimal) filter.sexo = req.body.tipoAnimal
 
+}
 
 router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
-        let nuevoEstado = req.params.estadoAnimal.replace(/_/g, " ")
-        let nuevousuario = req.user.user
-        let nuevoSexo = req.params.sexoAnimal
-        let nuevoTipoAnimal = req.params.tipoAnimal
-        let nuevoTamanoAnimal = req.params.tamanoAnimal
-        //let nuevoBarrioUsuario = req.params.barrioUsuario
-        if (nuevousuario.tipoUsuario != 0){
-            let animalDevuelto = await Animal.find({estado : nuevoEstado, sexo: nuevoSexo, tipoMascota : nuevoTipoAnimal, tamañoFinal : nuevoTamanoAnimal })
-            //let usuarioDevuelto = await Usuario.find({barrio: nuevoBarrioUsuario})
-            if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
-            res.send(animalDevuelto)
-        }
-        else{
-            return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
-        }
+    let nuevousuario = req.user.user
+    const filter = {}
+    filter.responsableId = req.body.responsableId
+    if(req.body.estado)filter.estado = req.body.estado 
+    if(req.body.sexo) filter.sexo = req.body.sexo
+    if(req.body.tamanoFinal) filter.sexo = req.body.tamanoFinal
+    if(req.body.tipoAnimal) filter.sexo = req.body.tipoAnimal
+    const filtroResponsable= {}
+    if(req.body.barrio) filtroResponsable.Direccion.barrio = req.body.barrio
+    if(req.body.nombres) filtroResponsable.nombres = req.body.nombres 
+    
+    
+    if (nuevousuario.tipoUsuario == 0) return res.status(400).json({mesage:'El usuario tiene que ser particular o centro rescatista'})
+    
+    let users = await User.find(filtroResponsable)
+    let idUsers = []
+    users.forEach(element => {
+        idUsers = element._id
+          
+      });
+    
+    filter.responsableId = idUsers  
+
+    let animalDevuelto = await Animal.find(filter)
+    if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
+    res.send(animalDevuelto)
+       
     });
 module.exports = router;
     
