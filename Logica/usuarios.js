@@ -170,7 +170,7 @@ router.post('/registro', [
         fechaCreacion: user.fechaCreacion
 
     })
-    console.log("resultado", result)
+  
     
     
 });

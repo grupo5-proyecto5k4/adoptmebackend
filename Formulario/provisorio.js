@@ -34,54 +34,80 @@ const { ObjectId } = require('mongodb');
    - correoElectronico : 
   */
  const FormularioProvisionSchema  = new mongosee.Schema({
-  animalTenencia :{
-    type: Number,
-    required: true
-    },
-  tiempoTenencia :{
-    type: Number,
-    required: true
-    },
-  otraMascota :{
-    type: Number,
-    required: true
-    }, 
-  descripcionOtraMascota: {type: String},
+ 
+ otraMascota :{
+   type: Number,
+   required: true
+   },
+ cuantosMascotas: { type: Number},   
+ descripcionOtraMascota: {type: String},
         
-  gastosCubierto :{
-    type: Number,
-    required: true
-    },    
+ gastosCubierto :{
+   type: Number,
+   required: true
+   },    
 
-  tiempoSuficiente :{
-    type: Number,
-    required: true
-    },
-  numeroContacto :{
-      type: Number
-    },  
-  correoElectronico :{
-    type: String,
+ seguimiento: {
+     type: Number,
+     required: true
+   },  
+ vivienda : {
+     type: Number,
+     required: true
+   },
+
+ permiso: {
+     type: Number,
+     required: true
+   },
+ tiempoTenencia :{
+   type: Number,
+   required: true
+   },
+ espacioAbierto: {
+     type: Number,
+     required: true
+   },
+ descripcionCercamiento: {type: String},
+   
+ tiempoSuficiente :{
+   type: Number,
+   required: true
+   },
+ Direccion:{
+     calle: {type: String},
+     numero: {type: Number}, 
+     referencia: {type: String},
+     barrio: {type: String},
+     localidad:{type: String}
+      
+   },
+
+ numeroContacto :{
+     type: Number
+   },  
+ correoElectronico :{
+   type: String,
        
-    },
-  estadoId: {
-    type: String,
-    required: true
-    },
-  responsableId: ObjectId,
-  fechaCreacion:{
-      type: Date, 
-      default: Date.now
-  },
+   },
+ estadoId: {
+   type: String,
+   required: true
+   },
+ responsableId: ObjectId,
+ fechaCreacion:{
+     type: Date, 
+     default: Date.now
+ },
     
-  mascotaId : ObjectId,
+ mascotaId : ObjectId,
 
-  fechaModificacion:{
-      type: Date, 
-      default: Date.now
-  }, 
+ fechaModificacion:{
+     type: Date, 
+     default: Date.now
+ }, 
     
-  solicitanteId : ObjectId
+ solicitanteId : ObjectId
   
 
   });

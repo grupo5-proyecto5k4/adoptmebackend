@@ -80,16 +80,22 @@ async function provisorioFuncion(req, res, user, next){
    let estadoInicial = 'Abierta'
   
    let provisorio = new Provisorio({
-    animalTenencia:req.body.animalTenencia,
+    otraMascota: req.body.otraMascota, 
+    descripcionOtraMascota: req.body.descripcionOtraMascota,
+    gastosCubierto : req.body.gastosCubierto,
+    seguimiento:req.body.seguimiento, 
+    vivienda:req.body.vivienda,
+    permiso: req.body.permiso,
     tiempoTenencia: req.body.tiempoTenencia,
-    otraMascota: req.body.otraMascota,
-    cuantosMascotas:req.body.cuantosMascotas,
-    gastosCubierto : req.body.gastosCubierto, 
+    espacioAbierto: req.body.espacioAbierto,
+    descripcionCercamiento: req.body.descripcionCercamiento,
     tiempoSuficiente:req.body.tiempoSuficiente,
-    numeroContacto:req.body.numeroContacto, 
-    correoElectronico:req.body.correoElectronico,
-    solicitanteId : user._id,
+    Direccion:req.body.Direccion, 
+    numeroContacto:user.numeroContacto, 
+    correoElectronico:user.correoElectronico,
     mascotaId : animal._id,
+    cuantosMascotas:req.body.cuantosMascotas,
+    solicitanteId : user._id,
     estadoId: estadoInicial,
     responsableId: animal.responsableId
 
