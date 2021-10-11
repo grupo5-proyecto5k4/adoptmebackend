@@ -35,7 +35,7 @@ router.get('/buscar', async function(req, res) {
 router.post('/animal', auth,  async function(req, res) {
     let userAux = req.user.user
     let castrado = true 
-    if (req.body.castrado == 2) castrado = false 
+    if (req.body.castrado == 'No') castrado = false 
     let estado = " "
     switch(req.body.estado){
         case 7 : 
@@ -64,7 +64,7 @@ router.post('/animal', auth,  async function(req, res) {
         estado: estado,
         responsableCategoria: req.body.responsableCategoria,
         responsableId: userAux._id,
-        castrado: this.castrado,
+        castrado: castrado,
         conductaNiños: req.body.conductaNiños,
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
