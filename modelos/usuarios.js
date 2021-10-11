@@ -63,21 +63,22 @@ userSchema.methods.generateJWT = function(){
       idEstado: this.idEstado,
       fechaCreacion: this.fechaCreacion,
       fechaModificacion:this.fechaModificacion,
-      banco: this.banco,
-      cbu: this.cbu,
-      alias : this.alia
+      
     }, process.env.SECRET_KEY_JWT)
 }
 
-var animalFiltradoSchema = mongosee.Schema({
-  estado: String,
-  sexo: String,
-  tamañoFinal: String,
-  tipoAnimal: String,
-  animalFiltrado: [{type: mongosee.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
-});
+// var animalFiltradoSchema = mongosee.Schema({
+//   estado: String,
+//   sexo: String,
+//   tamañoFinal: String,
+//   tipoAnimal: String,
+//   animalFiltrado: [{type: mongosee.Schema.Types.ObjectId, ref: 'animalFiltrado'}]
+// });
 
-var animalFiltrado = mongosee.model('animalFiltrado', animalFiltradoSchema);
+// var animalFiltrado = mongosee.model('animalFiltrado', animalFiltradoSchema);
+// const Usuario = mongosee.model('am-usuarios', userSchema);
+// module.exports = Usuario
+// module.exports = animalFiltrado
+
 const Usuario = mongosee.model('am-usuarios', userSchema);
 module.exports = Usuario
-module.exports = animalFiltrado
