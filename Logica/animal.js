@@ -13,7 +13,7 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
-const Usuario = require('../modelos/usuario.js')
+const Usuario = require('../modelos/usuarios.js')
 //const {Schema, model} = require("mongoose")
 
 
@@ -110,7 +110,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
     let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
     res.send(animalDevuelto)
-});
+})
 
 //Filtrar las mascotas por los filtros del item anterior y ademas filtrar en funcion
 //de los datos del centro recatista (barrio del centro y nombre del centro)
