@@ -130,7 +130,8 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
      var nuevoArreglo = {
                Solicitud: solicitudAdopciones,
                Animales: { nombreMascota :animal.nombreMascota,
-                            edad:  edadDias },
+                           edad:  edadDias
+                          },
                Solicitante:{ nombre: usuario.nombres,
                              apellido: usuario.apellidos,
                              email: usuario.correoElectronico,
@@ -241,7 +242,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
 router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, res, next){
   let userAux = req.user.user
   
-  if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
+  if(userAux.tipoUsuario != 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
  
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
