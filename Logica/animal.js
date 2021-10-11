@@ -128,22 +128,20 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
             if(req.body.barrio)filter3.barrio = req.body.barrio
             if(req.body.nombres)filter3.nombres = req.body.nombres
             let usuarioDevuelto = await Usuario.find(filter3)
-            
-    //let usuarioDevuelto = await Usuario.find(filter3)
-    var nuevoArreglo = {
-        Animales: { estado : filter2.estado,
-                    sexo :  filter2.sexo,
-                    tamañoFinal : filter2.tamañoFinal,
-                    tipoAnimal : filter2.tipoAnimal},
-        Usuarios:{  barrio: filter3.barrio,
+            var nuevoArreglo = {
+            Animales: { estado : filter2.estado,
+                        sexo :  filter2.sexo,
+                        tamañoFinal : filter2.tamañoFinal,
+                        tipoAnimal : filter2.tipoAnimal},
+            Usuarios:{  barrio: filter3.barrio,
                     nombres: filter3.nombres} 
          };
-filtroDevuelto.push(nuevoArreglo)
-return (filtroDevuelto)
+    filtroDevuelto.push(nuevoArreglo)
+    return (filtroDevuelto)
 })
 }else{
         if(req.body.barrio)filter3.barrio = req.body.barrio
-        if(req.body.nombres)filter2.nombres = req.body.nombres
+        if(req.body.nombres)filter3.nombres = req.body.nombres
         let usuarioDevuelto = await Usuario.find(filter3)
         res.send(usuarioDevuelto)
     }
