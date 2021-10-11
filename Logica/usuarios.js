@@ -151,27 +151,27 @@ router.post('/registro', [
 
     const result = await user.save()
 
-    // const jwtToken = user.generateJWT();
+    const jwtToken = user.generateJWT();
 
-    // res.status(201).header('Authorization', jwtToken).send({
-    //     _id: user._id,
-    //     nombres: user.nombres,
-    //     apellidos:user.apellidos,
-    //     dni:user.dni,
-    //     fechaNacimiento:user.fechaNacimiento,
-    //     Direccion: user.Direccion, 
-    //     instagram:user.instagram,
-    //     facebook:user.facebook,
-    //     correoElectronico: user.correoElectronico,
-    //     password: hashPassword,
-    //     tipoUsuario: user.tipoUsuario, 
-    //     numeroContacto: user.numeroContacto,
-    //     idEstado: user.idEstado,
-    //     fechaCreacion: user.fechaCreacion
+    res.status(201).header('Authorization', jwtToken).send({
+        _id: user._id,
+        nombres: user.nombres,
+        apellidos:user.apellidos,
+        dni:user.dni,
+        fechaNacimiento:user.fechaNacimiento,
+        Direccion: user.Direccion, 
+        instagram:user.instagram,
+        facebook:user.facebook,
+        correoElectronico: user.correoElectronico,
+        password: hashPassword,
+        tipoUsuario: user.tipoUsuario, 
+        numeroContacto: user.numeroContacto,
+        idEstado: user.idEstado,
+        fechaCreacion: user.fechaCreacion
 
-    // })
+    })
     console.log("resultado", result)
-    res.status(201).send(result)
+    
     
 });
 
