@@ -127,8 +127,9 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
         animalDevuelto.forEach(async (element) => {
             if(req.body.barrio)filter3.barrio = req.body.barrio
             if(req.body.nombres)filter3.nombres = req.body.nombres
-            })
-    let usuarioDevuelto = await Usuario.find(filter3)
+            let usuarioDevuelto = await Usuario.find(filter3)
+            
+    //let usuarioDevuelto = await Usuario.find(filter3)
     var nuevoArreglo = {
         Animales: { estado : animalDevuelto.estado,
                     sexo :  animalDevuelto.sexo,
@@ -139,6 +140,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
          };
 filtroDevuelto.push(nuevoArreglo)
 return (filtroDevuelto)
+})
 }else{
         if(req.body.barrio)filter3.barrio = req.body.barrio
         if(req.body.nombres)filter2.nombres = req.body.nombres
