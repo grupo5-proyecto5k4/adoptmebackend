@@ -117,15 +117,16 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
 router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
     const filter2 = {}
     const filter3 = {}
+    const filter4 = {} 
     let filtroDevuelto = []
     let nuevoArreglo = {}  
     if(req.body.estado)filter2.estado = req.body.estado 
     if(req.body.sexo) filter2.sexo = req.body.sexo
     if(req.body.tamañoFinal) filter2.tamanoFinal = req.body.tamanoFinal
     if(req.body.tipoAnimal) filter2.tipoAnimal = req.body.tipoAnimal
-        let animalDevuelto = await Animal.find(filter2)
     if(req.body.barrio)filter3.barrio = req.body.barrio
     if(req.body.nombres)filter3.nombres = req.body.nombres
+        let animalDevuelto = await Animal.find(filter2)
         let usuarioDevuelto = await Usuario.find(filter3)
     if (animalDevuelto.length != 0 && usuarioDevuelto.length == 0){
         res.send(animalDevuelto)}
@@ -133,16 +134,16 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
         res.send(usuarioDevuelto)}
     if (animalDevuelto.length != 0 && usuarioDevuelto.length != 0){
         animalDevuelto.forEach(async (element) => {
-          if(req.body.nombres)filter3.nombres = req.body.nombres
-          if(req.body.barrio)filter3.barrio = req.body.barrio
-          let usuarioDevueltoNew = await Usuario.find(filter3)
+          if(req.body.nombres)filter4.nombres = req.body.nombres
+          if(req.body.barrio)filter4.barrio = req.body.barrio
+          let usuarioDevueltoNew = await Usuario.find(filter4)
           var nuevoArreglo = {
-            Animales: { estado : filter2.estado,
-                        sexo :  filter2.sexo,
-                        tamañoFinal : filter2.tamañoFinal,
-                        tipoAnimal : filter2.tipoAnimal},
-            Usuarios:{  barrio: filter3.barrio,
-                        nombres: filter3.nombres} 
+            Animales: { estado : animalDevuelto.estado,
+                        sexo :  animalDevuelto.sexo,
+                        tamañoFinal : animalDevuelto.tamañoFinal,
+                        tipoAnimal : animalDevuelto.tipoAnimal},
+            Usuarios:{  barrio: usuarioDevueltoNew.barrio,
+                        nombres: usuarioDevueltoNew.nombres} 
          }
         });
         //filtroDevuelto.push(nuevoArreglo)
