@@ -170,6 +170,7 @@ router.post('/registro', [
     //     fechaCreacion: user.fechaCreacion
 
     // })
+    console.log("resultado", result)
     res.status(201).send(result)
     
 });
