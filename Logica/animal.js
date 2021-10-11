@@ -114,9 +114,41 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
 
 //Filtrar las mascotas por los filtros del item anterior y ademas filtrar en funcion
 //de los datos del centro recatista (barrio del centro y nombre del centro)
+router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
+    const filter2 = {}
+    const filter3 = {}
+    let filtroDevuelto = []  
+    if(req.body.estado)filter2.estado = req.body.estado 
+    if(req.body.sexo) filter2.sexo = req.body.sexo
+    if(req.body.tamañoFinal) filter2.tamanoFinal = req.body.tamanoFinal
+    if(req.body.tipoAnimal) filter2.tipoAnimal = req.body.tipoAnimal
+    let animalDevuelto = await Animal.find(filter2)
+    if (animalDevuelto.length != 0){
+        animalDevuelto.forEach(async (element) => {
+            if(req.body.barrio)filter3.barrio = req.body.barrio
+            if(req.body.nombres)filter3.nombres = req.body.nombres
+            })
+    let usuarioDevuelto = await Usuario.find(filter3)
+    var nuevoArreglo = {
+        Animales: { estado : animalDevuelto.estado,
+                    sexo :  animalDevuelto.sexo,
+                    tamañoFinal : animalDevuelto.tamañoFinal,
+                    tipoAnimal : animalDevuelto.tipoAnimal},
+        Usuarios:{  barrio: usuarioDevuelto.barrio,
+                    nombres: usuarioDevuelto.nombres} 
+         };
+solicitudes.push(nuevoArreglo)
+return (filtroDevuelto)
+}else{
+        if(req.body.barrio)filter3.barrio = req.body.barrio
+        if(req.body.nombres)filter2.nombres = req.body.nombres
+        let usuarioDevuelto = await Usuario.find(filter3)
+        res.send(usuarioDevuelto)
+    }
 
+})
 
-
+//
 module.exports = router;
 
 
