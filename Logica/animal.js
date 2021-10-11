@@ -137,7 +137,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
         Usuarios:{  barrio: usuarioDevuelto.barrio,
                     nombres: usuarioDevuelto.nombres} 
          };
-solicitudes.push(nuevoArreglo)
+filtroDevuelto.push(nuevoArreglo)
 return (filtroDevuelto)
 }else{
         if(req.body.barrio)filter3.barrio = req.body.barrio
