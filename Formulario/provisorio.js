@@ -42,7 +42,7 @@ const { ObjectId } = require('mongodb');
  cuantosMascotas: { type: Number},   
  descripcionOtraMascota: {type: String},
         
- gastosCubierto :{
+ gastosCubiertos :{
    type: Number,
    required: true
    },    

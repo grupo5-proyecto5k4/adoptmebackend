@@ -82,7 +82,7 @@ async function provisorioFuncion(req, res, user, next){
    let provisorio = new Provisorio({
     otraMascota: req.body.otraMascota, 
     descripcionOtraMascota: req.body.descripcionOtraMascota,
-    gastosCubierto : req.body.gastosCubierto,
+    gastosCubiertos : req.body.gastosCubiertos,
     seguimiento:req.body.seguimiento, 
     vivienda:req.body.vivienda,
     permiso: req.body.permiso,
