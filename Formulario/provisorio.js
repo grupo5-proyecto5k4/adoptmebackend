@@ -49,12 +49,12 @@ const { ObjectId } = require('mongodb');
   descripcionOtraMascota: {type: String},
         
   gastosCubierto :{
-    type: Boolean,
+    type: Number,
     required: true
     },    
 
   tiempoSuficiente :{
-    type: Boolean,
+    type: Number,
     required: true
     },
   numeroContacto :{

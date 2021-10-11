@@ -13,9 +13,10 @@ const fs = require('fs-extra');
 const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
-const User = require('../modelos/usuarios.js')
+//const {Schema, model} = require("mongoose")
 
- cloudinary.config({
+
+cloudinary.config({
      cloud_name: process.env.cloudname,
      api_key: process.env.apikey,
      api_secret: process.env.apisecret
@@ -136,8 +137,12 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
     if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
     res.send(animalDevuelto)
        
-    });
+
+});
+      
 module.exports = router;
+
+
     
 
 
