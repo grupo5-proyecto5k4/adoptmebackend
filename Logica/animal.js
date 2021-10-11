@@ -122,31 +122,34 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
     if(req.body.sexo) filter2.sexo = req.body.sexo
     if(req.body.tamañoFinal) filter2.tamanoFinal = req.body.tamanoFinal
     if(req.body.tipoAnimal) filter2.tipoAnimal = req.body.tipoAnimal
-    let animalDevuelto = await Animal.find(filter2)
-    if (animalDevuelto.length != 0){
+        let animalDevuelto = await Animal.find(filter2)
+    if(req.body.barrio)filter3.barrio = req.body.barrio
+    if(req.body.nombres)filter3.nombres = req.body.nombres
+        let usuarioDevuelto = await Usuario.find(filter3)
+    if (animalDevuelto.length != 0 && usuarioDevuelto.length == 0){
+        res.send(animalDevuelto)}
+    if (animalDevuelto.length == 0 && usuarioDevuelto.length != 0){
+        res.send(usuarioDevuelto)}
+    if (animalDevuelto.length != 0 && usuarioDevuelto.length != 0){
         animalDevuelto.forEach(async (element) => {
-            if(req.body.barrio)filter3.barrio = req.body.barrio
-            if(req.body.nombres)filter3.nombres = req.body.nombres
-            let usuarioDevuelto = await Usuario.find(filter3)
-            var nuevoArreglo = {
+          if(req.body.nombres)filter3.nombres = req.body.nombres
+          if(req.body.barrio)filter3.barrio = req.body.barrio
+          let usuarioDevueltoNew = await Usuario.find(filter3)
+          var nuevoArreglo = {
             Animales: { estado : filter2.estado,
                         sexo :  filter2.sexo,
                         tamañoFinal : filter2.tamañoFinal,
                         tipoAnimal : filter2.tipoAnimal},
             Usuarios:{  barrio: filter3.barrio,
-                    nombres: filter3.nombres} 
+                        nombres: filter3.nombres} 
          };
-    filtroDevuelto.push(nuevoArreglo)
-    return (filtroDevuelto)
-})
-}else{
-        if(req.body.barrio)filter3.barrio = req.body.barrio
-        if(req.body.nombres)filter3.nombres = req.body.nombres
-        let usuarioDevuelto = await Usuario.find(filter3)
-        res.send(usuarioDevuelto)
+        filtroDevuelto.push(nuevoArreglo)
+        return (filtroDevuelto)
     }
 
-})
+        )};
+        
+
 
 //
 module.exports = router;
