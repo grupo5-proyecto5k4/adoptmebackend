@@ -62,7 +62,10 @@ userSchema.methods.generateJWT = function(){
       numeroContacto: this.numeroContacto,
       idEstado: this.idEstado,
       fechaCreacion: this.fechaCreacion,
-      fechaModificacion:this.fechaModificacion
+      fechaModificacion:this.fechaModificacion,
+      banco: this.banco,
+      cbu: this.cbu,
+      alias : this.alia
     }, process.env.SECRET_KEY_JWT)
 }
 

@@ -143,7 +143,10 @@ router.post('/registro', [
         numeroContacto: req.body.numeroContacto,
         idEstado: estado.id_estado,
         fechaCreacion: req.body.fechaCreacion,
-        fechaModificacion:req.body.fechaModificacion
+        fechaModificacion:req.body.fechaModificacion,
+        banco: req.body.banco,
+        cbu:  req.body.cbu,
+        alias :req.body.alia
     })
 
     const result = await user.save()
