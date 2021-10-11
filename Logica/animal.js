@@ -142,12 +142,13 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
                         tipoAnimal : filter2.tipoAnimal},
             Usuarios:{  barrio: filter3.barrio,
                         nombres: filter3.nombres} 
-         };
+         }
+        });
         filtroDevuelto.push(nuevoArreglo)
         return (filtroDevuelto)
     }
+});
 
-        )};
         
 
 
