@@ -117,7 +117,8 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
 router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
     const filter2 = {}
     const filter3 = {}
-    let filtroDevuelto = []  
+    let filtroDevuelto = []
+    let nuevoArreglo = []  
     if(req.body.estado)filter2.estado = req.body.estado 
     if(req.body.sexo) filter2.sexo = req.body.sexo
     if(req.body.tamañoFinal) filter2.tamanoFinal = req.body.tamanoFinal
@@ -144,8 +145,8 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', auth, async(req, res)=>{
                         nombres: filter3.nombres} 
          }
         });
-        filtroDevuelto.push(nuevoArreglo)
-        return (filtroDevuelto)
+        //filtroDevuelto.push(nuevoArreglo)
+        return nuevoArreglo
     }
 });
 
