@@ -129,15 +129,16 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
 
     for (let i = 0 ; i < animalDevuelto.length ; i ++ ){
             const filter4 = {} 
-            filter4._id = animalDevuelto[i].responsableId
-            filter4.tipoUsuario = 2
+            //filter4._id = animalDevuelto[i].responsableId
+            //filter4.tipoUsuario = 2
             if(req.body.nombres)filter4.nombres = req.body.nombres
             if(req.body.Direccion)filter4.Direccion = req.body.Direccion
-            //filter4._id = animalDevuelto[i].responsableId
+            filter4._id = animalDevuelto[i].responsableId
             //console.log(filter4)
             let usuarioDevueltoNew = await Usuario.findById(filter4)
             //console.log(usuarioDevueltoNew)
             if(!usuarioDevueltoNew) continue
+            if(usuarioDevueltoNew.nombres != req.body.nombres || usuarioDevueltoNew.Direccion.barrio != req.body.Direccion.barrio) continue
             var nuevoArreglo = {
                 Animal: animalDevuelto[i], 
                 Usuarios:{  Direccion: usuarioDevueltoNew.Direccion,
