@@ -133,6 +133,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
             filter4._id = animalDevuelto[i].responsableId
             console.log(filter4)
             let usuarioDevueltoNew = await Usuario.findById(filter4)
+            console.log(usuarioDevueltoNew)
             if(!usuarioDevueltoNew) continue
             var nuevoArreglo = {
                 Animal: animalDevuelto[i], 
