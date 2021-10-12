@@ -120,7 +120,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
 
     if(req.body.estado)filter2.estado = req.body.estado 
     if(req.body.sexo) filter2.sexo = req.body.sexo
-    if(req.body.tamañoFinal) filter2.tamanoFinal = req.body.tamanoFinal
+    if(req.body.tamañoFinal) filter2.tamañoFinal = req.body.tamañoFinal
     if(req.body.tipoAnimal) filter2.tipoAnimal = req.body.tipoAnimal
     
     let animalDevuelto = await Animal.find(filter2)
