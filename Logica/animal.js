@@ -131,6 +131,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
             if(req.body.nombres)filter4.nombres = req.body.nombres
             if(req.body.Direccion)filter4.Direccion = req.body.Direccion
             filter4._id = animalDevuelto[i].responsableId
+            console.log(filter4)
             let usuarioDevueltoNew = await Usuario.findById(filter4)
             if(!usuarioDevueltoNew) continue
             var nuevoArreglo = {
