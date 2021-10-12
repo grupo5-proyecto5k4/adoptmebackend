@@ -125,7 +125,8 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
     
     let animalDevuelto = await Animal.find(filter2)
     if(animalDevuelto.length == 0) return res.status(400).json({mesage:'Error'})
-    
+    console.log(animalDevuelto)
+
     for (let i = 0 ; i < animalDevuelto.length ; i ++ ){
             const filter4 = {} 
             filter4._id = animalDevuelto[i].responsableId
@@ -133,9 +134,9 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
             if(req.body.nombres)filter4.nombres = req.body.nombres
             if(req.body.Direccion)filter4.Direccion = req.body.Direccion
             //filter4._id = animalDevuelto[i].responsableId
-            console.log(filter4)
+            //console.log(filter4)
             let usuarioDevueltoNew = await Usuario.findById(filter4)
-            console.log(usuarioDevueltoNew)
+            //console.log(usuarioDevueltoNew)
             if(!usuarioDevueltoNew) continue
             var nuevoArreglo = {
                 Animal: animalDevuelto[i], 
