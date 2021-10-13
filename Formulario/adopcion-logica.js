@@ -14,6 +14,16 @@ const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
 
+/* Constantes*/
+
+const estadoAprobado = "Aprobado"
+const estadoAdoptado    = "Adoptado"
+const estadoEnProvisorio= "En Provisorio"
+const estadoDisProvisorio= "Disponible Provisorio"
+const estadoDispAdopcion= "Disponible Adopcion" 
+const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
+const estadoInicial = 'Abierta'
+
  /*  Funcion de Adopcion   */
 async function adopcionFuncion(req, res, user, next){
   var objectId = mongosee.Types.ObjectId(req.body.mascotaId);   
@@ -26,7 +36,7 @@ async function adopcionFuncion(req, res, user, next){
    if (!animal) return res.status(400).json({error: "La mascota no existe"})
    if (animal.estado.indexOf('Adopción') == - 1) return res.status(402).json({error: "La mascota no esta disponible para la adopcion"})
     
-   let estadoInicial = 'Abierta'
+  
   
    let adopcion = new Adopcion({
     otraMascota: req.body.otraMascota,
@@ -77,8 +87,7 @@ async function provisorioFuncion(req, res, user, next){
    if (!animal) return res.status(400).json({error: "La mascota no existe"})
    if (animal.estado.indexOf('Provisorio') == - 1) return res.status(402).json({error: "La mascota no esta disponible para Provisorio"})
     
-   let estadoInicial = 'Abierta'
-  
+    
    let provisorio = new Provisorio({
     otraMascota: req.body.otraMascota, 
     descripcionOtraMascota: req.body.descripcionOtraMascota,
@@ -216,7 +225,7 @@ router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (re
   let userAux = req.user.user
   let solicitudAdopciones = await Adopcion.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
  
-  if (req.params.tipoSolicitud.indexOf('provisorio') ==  0){
+  if (req.params.tipoSolicitud.indexOf('Provisorio') ==  0){
     solicitudAdopciones = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
     
   }  
@@ -232,37 +241,96 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
  
   let solicitudAdopciones = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
   
-  if (req.params.tipoSolicitud.indexOf('provisorio') == 0){
+  if (req.params.tipoSolicitud.indexOf('Provisorio') == 0){
     solicitudAdopciones = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
   }  
     
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
+async function modificarSolicitud(solicitud, tipo, usuario, estado){
+  let esAprobado  = false
+  let estadoNuevo = undefined
+  let modelo      = Provisorio
+  if (tipo) modelo = Adopcion
+  
+  if (solicitud.responsableId = usuario._id && estado) estadoNuevo = "Aprobado Por Responsable" 
+
+  if (solicitud.responsableId = usuario._id && !estado) estadoNuevo = "Suspendido"
+  
+  
+  if (solicitud.SolicitanteId = usuario._id && esAprobado && solicitud.estadoId == "Aprobado Por Responsable")
+    { 
+      estadoNuevo = "Aprobado"
+        
+    }
+  if (solicitud.SolicitanteId = usuario._id && !esAprobado) estadoNuevo = "Suspendido Por Solicitante"
+  
+    
+  let result2 = await modelo.findByIdAndUpdate(solicitud._id, 
+     {estadoId: estadoNuevo,
+        fechaModificacion : new Date(Date.now()).toISOString()},
+     {new : true}
+     
+     )
+  
+    ani = modificarAnimal(solicitud, modelo, tipo, estadoNuevo)
+   
+   return (result2) 
+  
+}
+
+async function modificarAnimal(solicitud, modelo, tipo, estadoNuevo){
+  let esAprobado  = false
+  let estadoNueAnimal = undefined
+  
+
+  let animal = await Animal.findById(solicitud.mascotaId)
+  if (estadoNuevo != estadoAprobado ) return animal
+
+  let estadoAntAnimal = animal.estado
+
+  
+  switch(animal.estado)
+  {      case estadoDisProvisorio : 
+            if(!tipo) estadoNueAnimal = estadoEnProvisorio;
+            break;
+         case estAdopcionProvisorio  : 
+            if(!tipo) estadoNueAnimal = estadoDispAdopcion;
+            break;
+         default: 
+            estado = undefined;
+ 
+   }
+
+   if (tipo) estadoNueAnimal = estadoAdoptado
+   let  result = await Animal.findByIdAndUpdate(solicitud.mascotaId, 
+    {estado: estadoNueAnimal,
+    fechaModificacion : new Date(Date.now()).toISOString()
+    }, 
+    {new: true} )
+   
+   
+    return (result)
+  
+}
+
 router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, res, next){
   let userAux = req.user.user
-  
+  let banderaSolicitante = false 
+  let esAprobado  = false
+  let estadoNuevo = undefined
+  let tipoAdopcion = false 
   if(userAux.tipoUsuario != 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
- 
+  
+  if(req.params.estado.indexOf('Aprobado') ==  0) esAprobado  = true 
+
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
-  let result2 = await Provisorio.findByIdAndUpdate(Solicitud._id, 
-    {estadoId: req.params.estado,
-     fechaModificacion : new Date(Date.now()).toISOString()},
-     {new : true})
+  if (!Solicitud)tipoAdopcion = true 
 
-  if(req.params.estado.indexOf('Aprobado') ==  0){
-    let result = await Animal.findByIdAndUpdate(Solicitud.mascotaId, 
-      {estado: 'En Provisorio',
-      fechaModificacion : new Date(Date.now()).toISOString()
-      }, 
-      {new: true} )
-  }
-    
- if (!result2) res.status(400).json({error:' no se actualizo correctamente'})
-
- res.send('actualizacion correctamente')
- 
+  
+  modificarSolicitud (Solicitud, tipoAdopcion , userAux, esAprobado ).then(val => res.send(val))
 
 })
 

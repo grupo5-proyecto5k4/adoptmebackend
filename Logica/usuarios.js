@@ -280,7 +280,11 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     
     if ( !result) return  res.status(400).json({mensaje:'no se pudo realizar la actualizacion'})
 
-    res.send('Actualizacion OK')
+    const jwtToken = jwt.sign({result}, process.env.SECRET_KEY_JWT);
+
+    res.header('auth-token', jwtToken ).json({
+        token : jwtToken
+    })
 
 })
 
@@ -302,7 +306,7 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
         )
 
     if (!result) return res.status(400).json({error: ' No se grabo correctamente'})
-    res.send('Actualizacion Ok ')    
+    res.send(result)    
 
 })
 
