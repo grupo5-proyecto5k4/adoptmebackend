@@ -225,7 +225,7 @@ router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (re
   let userAux = req.user.user
   let solicitudAdopciones = await Adopcion.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
  
-  if (req.params.tipoSolicitud.indexOf('Provisorio') ==  0){
+  if (req.params.tipoSolicitud.indexOf('provisorio') ==  0){
     solicitudAdopciones = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
     
   }  
@@ -241,7 +241,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
  
   let solicitudAdopciones = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
   
-  if (req.params.tipoSolicitud.indexOf('Provisorio') == 0){
+  if (req.params.tipoSolicitud.indexOf('provisorio') == 0){
     solicitudAdopciones = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
   }  
     
