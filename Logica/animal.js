@@ -148,16 +148,14 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
 
 //Filtros de mascota segun el id de un determinado usuario
 
-router.get('/filtrosMascotaUsuario/:filtroUsuarioAnimales', auth, async(req, res)=>{
+router.get('/filtrosMascotaUsuario/', auth, async(req, res)=>{
     const filter = {}
     if(req.body.estado)filter.estado = req.body.estado 
     if(req.body.sexo) filter.sexo = req.body.sexo
     if(req.body.tamañoFinal) filter.tamanoFinal = req.body.tamanoFinal
     if(req.body.tipoAnimal) filter.tipoAnimal = req.body.tipoAnimal
-    //let nueva = req.params.responestados.replace(/_/g, " ")
-    let userAux = req.params.filtroUsuarioAnimales
-    //let animal = await Animal.find({responsableId : userAux._id, estado : nueva })
-    let animalDevuelto = await Animal.find({responsableId : userAux._id, filter})
+    if(req.body.responsableId) filter.responsableId = req.body.responsableId
+    let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
     res.send(animalDevuelto)
 })
