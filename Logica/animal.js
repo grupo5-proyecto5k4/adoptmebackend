@@ -136,17 +136,16 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
             if(!usuarioDevueltoNew) continue
             if(usuarioDevueltoNew.nombres != req.body.nombres && req.body.nombres) continue
             if(usuarioDevueltoNew.Direccion.barrio != req.body.barrio && req.body.barrio) continue
-            //var nuevoArreglo = {
-                //Animal: animalDevuelto[i], 
+            var nuevoArreglo = {
+                Animal: animalDevuelto[i], 
                 //Usuarios:{  Direccion: usuarioDevueltoNew.Direccion,
                 //            nombres: usuarioDevueltoNew.nombres} 
-                //}
-            //filtroDevuelto.push(nuevoArreglo)
-            //filtroDevuelto.push(Animal)    
-            //};
-            //res.send(filtroDevuelto)
-            res.send(animalDevuelto[i])
-        }//borrrar si anda
+                }
+            filtroDevuelto.push(nuevoArreglo)
+              
+            };
+            res.send(filtroDevuelto)
+            
 })
 
 
