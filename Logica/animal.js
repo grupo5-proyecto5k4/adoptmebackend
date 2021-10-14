@@ -148,7 +148,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
 
 //Filtros de mascota segun el id de un determinado usuario
 
-router.get('/filtrosMascotaUsuario/', auth, async(req, res)=>{
+router.get('/filtrosMascotaUsuario', async(req, res)=>{
     const filter = {}
     if(req.body.estado)filter.estado = req.body.estado 
     if(req.body.sexo) filter.sexo = req.body.sexo
@@ -158,7 +158,7 @@ router.get('/filtrosMascotaUsuario/', auth, async(req, res)=>{
     let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({mesage:'No existen animales que coincidan con los filtros deseados'})
     res.send(animalDevuelto)
-})
+});
 
 module.exports = router;
 
