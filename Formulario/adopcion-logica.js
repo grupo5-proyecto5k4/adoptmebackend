@@ -321,7 +321,7 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   let esAprobado  = false
   let estadoNuevo = undefined
   let tipoAdopcion = false 
-  if(userAux.tipoUsuario != 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
+  if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
   
   if(req.params.estado.indexOf('Aprobado') ==  0) esAprobado  = true 
