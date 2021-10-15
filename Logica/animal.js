@@ -102,10 +102,12 @@ router.get('/respestados/:responestados', auth, async (req, res) => {
 //Traer todas las mascotas que cumplen con los filtros, en gral, no responden a un det usuario
 router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     const filter = {}
+    const { estado, sexo, tamañoFinal, tipoMascota } = req.query;
+    
     if (estado) filter.estado = estado;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
-    if (tipoAnimal) filter.tipoAnimal = Number.parseInt(tipoAnimal);
+    if (tipoMascota) filter.tipoMascota = Number.parseInt(tipoMascota);
     let animalDevuelto = await Animal.find(filter)
     res.send(animalDevuelto)
 })
@@ -115,13 +117,13 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
     const filter2 = {}
     let filtroDevuelto = []
-    const { estado, sexo, tamañoFinal, tipoAnimal } = req.query;
+    const { estado, sexo, tamañoFinal, tipoMascota } = req.query;
 
     if (estado) filter2.estado = estado;
     if (sexo) filter2.sexo = sexo;
     if (tamañoFinal) filter2.tamañoFinal = tamañoFinal;
-    if (tipoAnimal) filter2.tipoAnimal = Number.parseInt(tipoAnimal);
-
+    if (tipoMascota) filter2.tipoMascota = Number.parseInt(tipoMascota);
+    console.log(filter2);
     let animalDevuelto = await Animal.find(filter2)
     console.log(animalDevuelto)
     for (let i = 0; i < animalDevuelto.length; i++) {
@@ -146,13 +148,14 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
 router.get('/filtrosMascotaUsuario/', async (req, res) => {
     const filter = {}
 
-    const { estado, sexo, tamañoFinal, tipoAnimal, responsableId } = req.query;
+    const { estado, sexo, tamañoFinal, tipoMascota, responsableId } = req.query;
 
     if (estado) filter.estado = estado;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
-    if (tipoAnimal) filter.tipoAnimal = Number.parseInt(tipoAnimal);
+    if (tipoMascota) filter.tipoMascota = Number.parseInt(tipoMascota);
     if (responsableId) filter.responsableId = responsableId;
+
     let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({ mesage: 'No existen animales que coincidan con los filtros deseados' })
     res.send(animalDevuelto)
