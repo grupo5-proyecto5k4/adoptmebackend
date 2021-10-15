@@ -139,7 +139,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
                 //Usuarios:{  Direccion: usuarioDevueltoNew.Direccion,
                 //            nombres: usuarioDevueltoNew.nombres} 
                 }
-            filtroDevuelto.push(nuevoArreglo)    
+            filtroDevuelto.push(nuevoArreglo.Animal)    
             };
             res.send(filtroDevuelto)
 })
