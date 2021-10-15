@@ -86,7 +86,6 @@ router.post('/animal', auth, async function (req, res) {
 router.get('/animal/:estados', async (req, res) => {
     let nueva = req.params.estados.replace(/_/g, " ")
     let animal = await Animal.find({ estado: nueva })
-    if (animal.length == 0) return res.status(200).json({ mesage: '[]' })
     res.send(animal)
 });
 
@@ -108,7 +107,6 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     if (req.body.tamañoFinal) filter.tamanoFinal = req.body.tamanoFinal
     if (req.body.tipoAnimal) filter.tipoAnimal = req.body.tipoAnimal
     let animalDevuelto = await Animal.find(filter)
-    if (animalDevuelto.length == 0) return res.status(400).json({ mesage: 'No existen animales que coincidan con los filtros deseados' })
     res.send(animalDevuelto)
 })
 
@@ -125,7 +123,6 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
     if (tipoAnimal) filter2.tipoAnimal = tipoAnimal;
 
     let animalDevuelto = await Animal.find(filter2)
-    if (animalDevuelto.length == 0) return res.status(400).json({ mesage: 'Error' })
     console.log(animalDevuelto)
     for (let i = 0; i < animalDevuelto.length; i++) {
         const filter4 = {}
