@@ -10,6 +10,7 @@ const vacuna = require('./Logica/vacuna.js')
 const recomendacion = require('./Logica/recomendacion.js')
 const notificacion = require('./Logica/notificacion.js')
 const adopcion  = require('./Formulario/adopcion-logica.js')
+const seguimiento = require('./Logica/seguimiento.js')
  
 
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
@@ -39,6 +40,7 @@ app.use('/vacunas/', vacuna)
 app.use('/', recomendacion)
 app.use('/', notificacion)
 app.use('/formulario/', adopcion)
+app.use('/seguimiento/', seguimiento)
 
 
 

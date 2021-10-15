@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 
 const seguimientoSchema  = new mongosee.Schema({
-  idSolicitud: {
+  SolicitudId: {
       type: ObjectId,
       required: true     
     },
@@ -14,6 +14,7 @@ const seguimientoSchema  = new mongosee.Schema({
   cadaCuanto: {type: String},  
   fechaCreacion: {type: Date, default: Date.now},
   fechaModificacion:{type: Date, default: Date.now},
+  Visita: [], 
   fecha: {type: Date, default: Date.now}  
 });
 

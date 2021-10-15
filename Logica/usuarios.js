@@ -146,7 +146,7 @@ router.post('/registro', [
         fechaModificacion:req.body.fechaModificacion,
         banco: req.body.banco,
         cbu:  req.body.cbu,
-        alias :req.body.alia
+        alias :req.body.alias
     })
 
     const result = await user.save()
