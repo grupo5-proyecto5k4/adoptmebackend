@@ -35,7 +35,7 @@ const userSchema  = new mongosee.Schema({
    fechaCreacion: {type: Date, default: Date.now},
    fechaModificacion:{type: Date, default: Date.now},
    banco: { type: String},
-   cbu: {type: Number},
+   cbu: {type:String},
    alias : { type: String} 
    
 

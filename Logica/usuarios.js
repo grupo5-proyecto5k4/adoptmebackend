@@ -296,6 +296,7 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
     let usuario = await User.findById({_id :req.body._id })
     if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
     
+
     let result = await User.findByIdAndUpdate(usuario._id,
         {banco : (req.body.banco).toUpperCase(),
          cbu   : req.body.cbu,

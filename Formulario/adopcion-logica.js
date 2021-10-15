@@ -14,15 +14,20 @@ const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
 
-/* Constantes*/
-
+/* estados Animal*/
 const estadoAprobado = "Aprobado"
 const estadoAdoptado    = "Adoptado"
 const estadoEnProvisorio= "En Provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
 const estadoDispAdopcion= "Disponible Adopcion" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
+/*Estados de Solicitud */
 const estadoInicial = 'Abierta'
+const estadoAproResponsable = "Aprobado Por Responsable" 
+const estadoSuspendido = "Suspendido"
+const estadoSuspSolicitante="Suspendido por Solicitante"
+
+
 
  /*  Funcion de Adopcion   */
 async function adopcionFuncion(req, res, user, next){
@@ -248,23 +253,23 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
-async function modificarSolicitud(solicitud, tipo, usuario, estado){
-  let esAprobado  = false
+async function modificarSolicitud( tipo, usuario, esAprobado, idSolicitud){
+  
   let estadoNuevo = undefined
-  let modelo      = Provisorio
-  if (tipo) modelo = Adopcion
-  
-  if (solicitud.responsableId = usuario._id && estado) estadoNuevo = "Aprobado Por Responsable" 
+  let solicitud   = await tipo.findById({_id: idSolicitud})  
 
-  if (solicitud.responsableId = usuario._id && !estado) estadoNuevo = "Suspendido"
+  
+  if (solicitud.responsableId = usuario._id && esAprobado) estadoNuevo = estadoAproResponsable
+
+  if (solicitud.responsableId = usuario._id && !esAprobado) estadoNuevo = estadoSuspendido
   
   
-  if (solicitud.SolicitanteId = usuario._id && esAprobado && solicitud.estadoId == "Aprobado Por Responsable")
+  if (solicitud.SolicitanteId = usuario._id && esAprobado && solicitud.estadoId == estadoAproResponsable)
     { 
       estadoNuevo = "Aprobado"
         
     }
-  if (solicitud.SolicitanteId = usuario._id && !esAprobado) estadoNuevo = "Suspendido Por Solicitante"
+  if (solicitud.SolicitanteId = usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
   
     
   let result2 = await modelo.findByIdAndUpdate(solicitud._id, 
@@ -317,20 +322,18 @@ async function modificarAnimal(solicitud, modelo, tipo, estadoNuevo){
 
 router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, res, next){
   let userAux = req.user.user
-  let banderaSolicitante = false 
   let esAprobado  = false
-  let estadoNuevo = undefined
-  let tipoAdopcion = false 
+  let modelo = Provisorio 
+  
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
   
   if(req.params.estado.indexOf('Aprobado') ==  0) esAprobado  = true 
 
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
-  if (!Solicitud)tipoAdopcion = true 
-
-  
-  modificarSolicitud (Solicitud, tipoAdopcion , userAux, esAprobado ).then(val => res.send(val))
+  if (!Solicitud) modelo = Adopcion
+     
+  modificarSolicitud ( modelo , userAux, esAprobado, req.params.idSolicitud).then(val => res.send(val))
 
 })
 
