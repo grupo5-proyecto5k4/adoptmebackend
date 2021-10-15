@@ -137,7 +137,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
             if(usuarioDevueltoNew.nombres != req.body.nombres && req.body.nombres) continue
             if(usuarioDevueltoNew.Direccion.barrio != req.body.barrio && req.body.barrio) continue
             var nuevoArreglo = {
-                Animal: animalDevuelto[i] 
+                Animal: animalDevuelto[i], 
                 // Usuarios:{  Direccion: usuarioDevueltoNew.Direccion,
                 //             nombres: usuarioDevueltoNew.nombres} 
                 }
