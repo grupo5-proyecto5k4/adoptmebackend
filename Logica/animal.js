@@ -117,7 +117,6 @@ router.get('/filtrosMascota/filtroAnimal', auth, async(req, res)=>{
 router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
     const filter2 = {}
     let filtroDevuelto = []
-
     if(req.body.estado)filter2.estado = req.body.estado 
     if(req.body.sexo) filter2.sexo = req.body.sexo
     if(req.body.tamañoFinal) filter2.tamañoFinal = req.body.tamañoFinal
@@ -126,7 +125,6 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
     let animalDevuelto = await Animal.find(filter2)
     if(animalDevuelto.length == 0) return res.status(400).json({mesage:'Error'})
     console.log(animalDevuelto)
-
     for (let i = 0 ; i < animalDevuelto.length ; i ++ ){
             const filter4 = {} 
             
@@ -138,8 +136,8 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async(req, res)=>{
             if(usuarioDevueltoNew.Direccion.barrio != req.body.barrio && req.body.barrio) continue
             var nuevoArreglo = {
                 Animal: animalDevuelto[i], 
-                // Usuarios:{  Direccion: usuarioDevueltoNew.Direccion,
-                //             nombres: usuarioDevueltoNew.nombres} 
+                Usuarios:{  Direccion: usuarioDevueltoNew.Direccion,
+                            nombres: usuarioDevueltoNew.nombres} 
                 }
             filtroDevuelto.push(nuevoArreglo)    
             };
