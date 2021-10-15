@@ -102,10 +102,10 @@ router.get('/respestados/:responestados', auth, async (req, res) => {
 //Traer todas las mascotas que cumplen con los filtros, en gral, no responden a un det usuario
 router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     const filter = {}
-    if (req.body.estado) filter.estado = req.body.estado
-    if (req.body.sexo) filter.sexo = req.body.sexo
-    if (req.body.tamañoFinal) filter.tamanoFinal = req.body.tamanoFinal
-    if (req.body.tipoAnimal) filter.tipoAnimal = req.body.tipoAnimal
+    if (estado) filter.estado = estado;
+    if (sexo) filter.sexo = sexo;
+    if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
+    if (tipoAnimal) filter.tipoAnimal = Number.parseInt(tipoAnimal);
     let animalDevuelto = await Animal.find(filter)
     res.send(animalDevuelto)
 })
@@ -120,7 +120,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
     if (estado) filter2.estado = estado;
     if (sexo) filter2.sexo = sexo;
     if (tamañoFinal) filter2.tamañoFinal = tamañoFinal;
-    if (tipoAnimal) filter2.tipoAnimal = tipoAnimal;
+    if (tipoAnimal) filter2.tipoAnimal = Number.parseInt(tipoAnimal);
 
     let animalDevuelto = await Animal.find(filter2)
     console.log(animalDevuelto)
@@ -151,7 +151,7 @@ router.get('/filtrosMascotaUsuario/', async (req, res) => {
     if (estado) filter.estado = estado;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
-    if (tipoAnimal) filter.tipoAnimal = tipoAnimal;
+    if (tipoAnimal) filter.tipoAnimal = Number.parseInt(tipoAnimal);
     if (responsableId) filter.responsableId = responsableId;
     let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({ mesage: 'No existen animales que coincidan con los filtros deseados' })
