@@ -35,12 +35,8 @@ router.get('/buscar', async function (req, res) {
 
 router.post('/animal', auth, async function (req, res) {
     let userAux = req.user.user
-<<<<<<< HEAD
-    
-=======
     let castrado = true
     if (req.body.castrado == 2) castrado = false
->>>>>>> testingBack
     let estado = " "
     switch (req.body.estado) {
         case 7:
