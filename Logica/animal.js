@@ -107,7 +107,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     if (estado) filter.estado = estado;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
-    if (tipoMascota) filter.tipoMascota = Number.parseInt(tipoMascota);
+    if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
     let animalDevuelto = await Animal.find(filter)
     res.send(animalDevuelto)
 })
@@ -122,7 +122,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
     if (estado) filter2.estado = estado;
     if (sexo) filter2.sexo = sexo;
     if (tamañoFinal) filter2.tamañoFinal = tamañoFinal;
-    if (tipoMascota) filter2.tipoMascota = Number.parseInt(tipoMascota);
+    if (tipoMascota) filter2.tipoMascota = Number(tipoMascota);
     console.log(filter2);
     let animalDevuelto = await Animal.find(filter2)
     console.log(animalDevuelto)
@@ -153,7 +153,7 @@ router.get('/filtrosMascotaUsuario/', async (req, res) => {
     if (estado) filter.estado = estado;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
-    if (tipoMascota) filter.tipoMascota = Number.parseInt(tipoMascota);
+    if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
     if (responsableId) filter.responsableId = responsableId;
 
     let animalDevuelto = await Animal.find(filter)
