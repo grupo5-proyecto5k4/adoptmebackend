@@ -250,9 +250,15 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
 
 });
 
-function comparar(user, nuevouser, next){
+router.get('/user/modificacionPerfil', auth, async function(req, res) {
+    let userAux = req.user.user
+    let n = await User.findById({_id : userAux._id})
+    if (!n) return res.status(401).json({error : "no se encontro ese usuario"})
+    res.send(n)  
 
-}
+})
+
+
 router.put('/user/modificacionPerfil', auth, async function(req, res) {
     let userAux = req.user.user
     let n = await User.findById({_id : userAux._id})
@@ -310,6 +316,21 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
     res.send(result)    
 
 })
+
+router.get('/user/modificacion/centrorescatista', auth, async function(req, res) {
+    let userAux = req.user.user 
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    
+    let usuario = await User.findById({_id :req.body._id })
+    if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
+    
+    
+    if(!usuario) return res.status(401).json({error : "no se encontro ese usuario"})
+    
+    res.send(usuario)  
+
+})
+
 
 module.exports = router;
 
