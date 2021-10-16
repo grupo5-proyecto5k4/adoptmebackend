@@ -272,7 +272,7 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
     { 
       estadoNuevo = "Aprobado"
       let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
-      modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido)
+      modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
         
     }
   if (solicitud.solicitanteId == usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
@@ -350,9 +350,10 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
 }
 
 /* Modificacion del Estado de Las Solicitudes */
-async function modificarSolicitudBloqueada(solicitud, modelo, estadoNuevo){
+async function modificarSolicitudBloqueada(solicitud, modelo, estadoNuevo, SolicitudAceptada){
   let desde = solicitud.length
   for (let i = 0; i < desde; i++){
+    if (solicitud[i]._id == SolicitudAceptada._id) continue
     await modelo.findByIdAndUpdate(solicitud[i]._id, 
       {estadoId: estadoNuevo,
        fechaModificacion : new Date(Date.now()).toISOString()},
