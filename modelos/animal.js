@@ -56,7 +56,7 @@ const animalSchema  = new mongosee.Schema({
 
         
     }, process.env.SECRET_KEY_JWT)
-}
+};
 
 const Animal = mongosee.model('am-animal', animalSchema);
 module.exports = Animal
