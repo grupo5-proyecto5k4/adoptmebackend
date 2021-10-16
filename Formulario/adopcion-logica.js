@@ -173,7 +173,9 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
      var nuevoArreglo = {
                Solicitud: solicitudAdopciones[i],
                Animales: { nombreMascota :animal.nombreMascota,
-                            edad:  edadDias },
+                            edad:  edadDias, 
+                            responsableId: animal.responsableId
+                          },
                Solicitante:{ nombre: usuario.nombres,
                              apellido: usuario.apellidos,
                              email: usuario.correoElectronico,
@@ -287,7 +289,7 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
   
      
   // si es aprobado por el responsables las demas solicitudes deben estar bloqueadas 
-    if (result2.estadoId == estadoAproResponsable ) 
+    if (result2.estadoId == estadoAproResponsable) 
      { let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
        modificarSolicitudBloqueada(solicitudes, modelo, estadoBloqueado, solicitud)
     }
