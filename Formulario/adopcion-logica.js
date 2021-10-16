@@ -341,7 +341,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
             solicitud: solicitud._id,
             estadoId :  estadoAntAnimal})
             await historial.save()
-            console.log("historial", historial)
+            
         }
      
   }
