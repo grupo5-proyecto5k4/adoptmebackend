@@ -135,7 +135,8 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
   
   let desde = solicitudAdopciones.length
   
-  if (solicitudAdopciones.length == undefined) {
+  if (solicitudAdopciones.length == undefined && solicitudAdopciones.estadoId != (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante))
+   {
     desde = 0 
     let animal = await Animal.findById ({_id: solicitudAdopciones.mascotaId})
     if (!animal) return solicitudes
@@ -162,7 +163,7 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
   }
   
   for (let i = 0 ; i < desde ; i ++ ){
-    
+    if(solicitudAdopciones[i].estadoId == (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante)) continue  
     let animal = await Animal.findById ({_id: solicitudAdopciones[i].mascotaId})
     if (!animal) continue
     let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
@@ -234,6 +235,7 @@ router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (re
  
   if (req.params.tipoSolicitud.indexOf('provisorio') ==  0){
     solicitudAdopciones = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
+
     
   }  
  
@@ -268,13 +270,8 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
   if (solicitud.responsableId == usuario._id && !esAprobado) estadoNuevo = estadoSuspendido
   
   
-  if (solicitud.solicitanteId == usuario._id && esAprobado && solicitud.estadoId == estadoAproResponsable)
-    { 
-      estadoNuevo = "Aprobado"
-      let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
-      modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
-        
-    }
+  if (solicitud.solicitanteId == usuario._id && esAprobado && solicitud.estadoId == estadoAproResponsable) estadoNuevo = estadoAprobado
+              
   if (solicitud.solicitanteId == usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
   
   if(estadoNuevo) {
@@ -289,14 +286,21 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
     
   
      
-    /* si es aprobado por el responsables las demas solicitudes deben estar bloqueadas 
-    if (result2.estadoId = estadoAproResponsable ) 
-     { let solicitudes = await tipo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
-       modificarSolicitudBloqueada(solicitudes, tipo, estadoBloqueado)
+  // si es aprobado por el responsables las demas solicitudes deben estar bloqueadas 
+    if (result2.estadoId == estadoAproResponsable ) 
+     { let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
+       modificarSolicitudBloqueada(solicitudes, modelo, estadoBloqueado, solicitud)
     }
-    */
-    
-   
+  
+ // Si el aprobado por el solicitante las demas Solicitudes debe quedar Suspendidas   
+    if (result2.estadoId == estadoAprobado ) 
+     { 
+       let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
+       modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
+     }
+
+ 
+
    return (result2) 
   
 }
