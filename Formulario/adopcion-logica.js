@@ -85,7 +85,7 @@ res.status(200).json({ _id : result._id})
  /*  Funcion de Provisorio   */
 async function provisorioFuncion(req, res, user, next){
   var objectId = mongosee.Types.ObjectId(req.body.mascotaId); 
-  const mascotas = await Provisorio.find({solicitanteId : user._id, mascotaId: objectId}) 
+  const mascotas = await Provisorio.find({solicitanteId : user._id, mascotaId: objectId, estadoId: estadoInicial}) 
       
    if (mascotas.length != 0) return res.status(400).json({error: "Ya solicitaste el Provisorio de esta mascota"})
 
@@ -193,12 +193,12 @@ return (solicitudes)
 
 router.post('/adopcion', auth,  async function (req, res){
    let userAux = req.user.user
-   //if(req.body.esAdopcion){
-   
-   if (req.body.vacunacionCastracion)
+   let esAdoptado = false
+   if(req.body.vacunacionCastracion != undefined) esAdoptado = false
+      
+   if (esAdoptado)
    {
-    
-      adopcionFuncion(req,res,userAux)
+     adopcionFuncion(req,res,userAux)
    }
    else
    {
