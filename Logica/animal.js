@@ -63,7 +63,7 @@ router.post('/animal', auth, async function (req, res) {
         estado: estado,
         responsableCategoria: req.body.responsableCategoria,
         responsableId: userAux._id,
-        castrado: this.castrado,
+        castrado: req.body.castrado,
         conductaNiños: req.body.conductaNiños,
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
@@ -108,7 +108,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
     let animalDevuelto = await Animal.find(filter)
     res.send(animalDevuelto)
-})
+});
 
 //Filtrar las mascotas por los filtros del item anterior y ademas filtrar en funcion
 //de los datos del centro recatista (barrio del centro y nombre del centro)
@@ -139,7 +139,7 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
         filtroDevuelto.push(nuevoArreglo.Animal)
     };
     res.send(filtroDevuelto)
-})
+});
 
 //Filtros de mascota segun el id de un determinado usuario
 
@@ -157,7 +157,7 @@ router.get('/filtrosMascotaUsuario/', async (req, res) => {
     let animalDevuelto = await Animal.find(filter)
     if (animalDevuelto.length == 0) return res.status(400).json({ mesage: 'No existen animales que coincidan con los filtros deseados' })
     res.send(animalDevuelto)
-})
+});
 
 
 

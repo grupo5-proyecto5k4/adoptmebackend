@@ -143,7 +143,10 @@ router.post('/registro', [
         numeroContacto: req.body.numeroContacto,
         idEstado: estado.id_estado,
         fechaCreacion: req.body.fechaCreacion,
-        fechaModificacion:req.body.fechaModificacion
+        fechaModificacion:req.body.fechaModificacion,
+        banco: req.body.banco,
+        cbu:  req.body.cbu,
+        alias :req.body.alias
     })
 
     const result = await user.save()
@@ -167,6 +170,7 @@ router.post('/registro', [
         fechaCreacion: user.fechaCreacion
 
     })
+  
     
     
 });
@@ -246,9 +250,15 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
 
 });
 
-function comparar(user, nuevouser, next){
+router.get('/user/modificacionPerfil', auth, async function(req, res) {
+    let userAux = req.user.user
+    let n = await User.findById({_id : userAux._id})
+    if (!n) return res.status(401).json({error : "no se encontro ese usuario"})
+    res.send(n)  
 
-}
+})
+
+
 router.put('/user/modificacionPerfil', auth, async function(req, res) {
     let userAux = req.user.user
     let n = await User.findById({_id : userAux._id})
@@ -276,7 +286,11 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     
     if ( !result) return  res.status(400).json({mensaje:'no se pudo realizar la actualizacion'})
 
-    res.send('Actualizacion OK')
+    const jwtToken = jwt.sign({result}, process.env.SECRET_KEY_JWT);
+
+    res.header('auth-token', jwtToken ).json({
+        token : jwtToken
+    })
 
 })
 
@@ -288,6 +302,7 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
     let usuario = await User.findById({_id :req.body._id })
     if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
     
+
     let result = await User.findByIdAndUpdate(usuario._id,
         {banco : (req.body.banco).toUpperCase(),
          cbu   : req.body.cbu,
@@ -298,9 +313,24 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
         )
 
     if (!result) return res.status(400).json({error: ' No se grabo correctamente'})
-    res.send('Actualizacion Ok ')    
+    res.send(result)    
 
 })
+
+router.get('/user/modificacion/centrorescatista', auth, async function(req, res) {
+    let userAux = req.user.user 
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    
+    let usuario = await User.findById({_id :req.body._id })
+    if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
+    
+    
+    if(!usuario) return res.status(401).json({error : "no se encontro ese usuario"})
+    
+    res.send(usuario)  
+
+})
+
 
 module.exports = router;
 

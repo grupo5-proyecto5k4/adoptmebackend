@@ -35,7 +35,7 @@ const userSchema  = new mongosee.Schema({
    fechaCreacion: {type: Date, default: Date.now},
    fechaModificacion:{type: Date, default: Date.now},
    banco: { type: String},
-   cbu: {type: Number},
+   cbu: {type:String},
    alias : { type: String} 
    
 
@@ -63,11 +63,8 @@ userSchema.methods.generateJWT = function(){
       idEstado: this.idEstado,
       fechaCreacion: this.fechaCreacion,
       fechaModificacion:this.fechaModificacion,
-      banco: this.banco,
-      cbu: this.cbu,
-      alias : this.alias
-
-  }, process.env.SECRET_KEY_JWT)
+      
+    }, process.env.SECRET_KEY_JWT)
 }
 
 

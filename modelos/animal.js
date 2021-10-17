@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 //const {Schema, model} = require("mongoose")
 
+/* agregar un campo de esVisible*/
 const animalSchema  = new mongosee.Schema({
   tipoMascota: {type: Number},
   nombreMascota: {type: String},
@@ -15,7 +16,7 @@ const animalSchema  = new mongosee.Schema({
   estado: {type: String},
   responsableCategoria: {type: Number},
   responsableId: {type: ObjectId},
-  castrado: {type: Boolean},
+  castrado: {type: String},
   conductaNiños: {type: String},
   conductaPerros: {type: String},
   conductaGatos: {type: String},
@@ -55,7 +56,7 @@ const animalSchema  = new mongosee.Schema({
 
         
     }, process.env.SECRET_KEY_JWT)
-}
+};
 
 const Animal = mongosee.model('am-animal', animalSchema);
 module.exports = Animal
