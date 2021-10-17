@@ -26,7 +26,7 @@ router.get('/animales/provisorio', auth, async function(req,res, next ){
 //Reporte de estadísticas de cuanto tiempo pasa un animal desde que se le da de alta en la aplicación
 // hasta que es finalmente adoptado
 
-router.get('/animales/reporteTiempoAdopcion', auth, async function(req,res, next ){
+router.get('/animales/reporteTiempoAdopcion', async (req,res) => {
     if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'Esta función es solo para centros rescatistas'})
     let perrosFiltrados = []
     let gatosFiltrados = []
