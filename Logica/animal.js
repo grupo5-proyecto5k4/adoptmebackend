@@ -110,20 +110,6 @@ router.get('/filtrosMascota/filtroAnimalSinResp', auth, async (req, res) => {
     res.send(animalDevuelto)
 });
 
-//Traer todas las mascotas que cumplen con los filtros de un determinado usuario
-router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
-    const filter = {}
-    const { estado, sexo, tamañoFinal, tipoMascota, responsableId } = req.query;
-    
-    if (responsableId) filter.responsableId = responsableId;
-    if (estado) filter.estado = estado;
-    if (sexo) filter.sexo = sexo;
-    if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
-    if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
-    let animalDevuelto = await Animal.find(filter)
-    res.send(animalDevuelto)
-});
-
 //Filtrar las mascotas por los filtros del item anterior y ademas filtrar en funcion
 //de los datos del centro recatista (barrio del centro y nombre del centro)
 router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
@@ -157,9 +143,9 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
 
 //Filtros de mascota segun el id de un determinado usuario
 
-router.get('/filtrosMascotaUsuario/', async (req, res) => {
+router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     const filter = {}
-
+    let userAux = req.user.user
     const { estado, sexo, tamañoFinal, tipoMascota, responsableId } = req.query;
 
     if (estado) filter.estado = estado;
