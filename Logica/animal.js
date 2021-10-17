@@ -14,8 +14,6 @@ const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
 const Usuario = require('../modelos/usuarios.js')
-//const {Schema, model} = require("mongoose")
-
 
 cloudinary.config({
     cloud_name: process.env.cloudname,
@@ -160,6 +158,8 @@ router.get('/filtrosMascotaUsuario/', async (req, res) => {
     if (animalDevuelto.length == 0) return res.status(400).json({ mesage: 'No existen animales que coincidan con los filtros deseados' })
     res.send(animalDevuelto)
 })
+
+
 
 module.exports = router;
 
