@@ -98,10 +98,24 @@ router.get('/respestados/:responestados', auth, async (req, res) => {
 });
 
 //Traer todas las mascotas que cumplen con los filtros, en gral, no responden a un det usuario
-router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
+router.get('/filtrosMascota/filtroAnimalSinResp', auth, async (req, res) => {
     const filter = {}
     const { estado, sexo, tamañoFinal, tipoMascota } = req.query;
     
+    if (estado) filter.estado = estado;
+    if (sexo) filter.sexo = sexo;
+    if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
+    if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
+    let animalDevuelto = await Animal.find(filter)
+    res.send(animalDevuelto)
+});
+
+//Traer todas las mascotas que cumplen con los filtros de un determinado usuario
+router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
+    const filter = {}
+    const { estado, sexo, tamañoFinal, tipoMascota, responsableId } = req.query;
+    
+    if (responsableId) filter.responsableId = responsableId;
     if (estado) filter.estado = estado;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
