@@ -52,5 +52,5 @@ router.get('/animales/reporteTiempoAdopcion', auth, async function(req,res, next
     let ValorMinimoPerro = Math.min.apply(null, perrosFiltrados)
     let valorMaximoGato = Math.max.apply(null, gatosFiltrados)
     let ValorMinimoGato = Math.min.apply(null, gatosFiltrados)
-    res.send(valorMaximoPerro, ValorMinimoPerro, valorMaximoGato, ValorMinimoGato)
+    res.send(valorMaximoPerro)
 })
