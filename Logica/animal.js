@@ -173,13 +173,13 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
             {
                 var fechaAlta = animalesAdoptados[i].fechaAlta
                 var fechaModificacion = animalesAdoptados[i].fechaModificacion
-                var resta = fechaAlta.getTime() - fechaModificacion.getTime()
+                var resta = fechaAlta - fechaModificacion
                 perrosFiltrados.push(resta)
             }
             else{ //gato
                 var fechaAlta = animalesAdoptados[i].fechaAlta
                 var fechaModificacion = animalesAdoptados[i].fechaModificacion
-                var resta = fechaAlta.getTime() - fechaModificacion.getTime()
+                var resta = fechaAlta - fechaModificacion
                 gatosFiltrados.push(resta)
             }
         }
