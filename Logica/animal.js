@@ -163,12 +163,10 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 // hasta que es finalmente adoptado
 
 router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
-    //let userAux = req.user.user
-    //if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'Esta función es solo para centros rescatistas'})
     let perrosFiltrados = []
-    let animalesAdoptados = await Animal.find({estado : "Adoptado"})
-    console.log(animalesAdoptados)
     let gatosFiltrados = []
+    let animalesAdoptados = await Animal.find({estado : "Adoptado"})
+    
     for (let i = 0; i < animalesAdoptados.length; i++) {
         if(animalesAdoptados[i].tipoMascota == 0) //perro
             {
@@ -185,6 +183,7 @@ router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
             }
         }
     
+    console.log(perrosFiltrados)    
     let valorMaximoPerro = Math.max.apply(null, perrosFiltrados)
     let ValorMinimoPerro = Math.min.apply(null, perrosFiltrados)
     let valorMaximoGato = Math.max.apply(null, gatosFiltrados)
