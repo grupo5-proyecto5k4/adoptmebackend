@@ -164,32 +164,35 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
 router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let userAux = req.user.user
-    if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'Esta función es solo para centros rescatistas'})
+    //if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'Esta función es solo para centros rescatistas'})
     let perrosFiltrados = []
+    let animalesAdoptados = await Animal.find({estado : "Adoptado"})
     let gatosFiltrados = []
-    for (let i = 0; i < Animal.length; i++) {
-        if(Animal[i].estado == "Adoptado")
-        {
-            if(Animal[i].tipoAnimal == 0) //perro
+    for (let i = 0; i < animalesAdoptados.length; i++) {
+        if(animalAdoptado[i].tipoAnimal == 0) //perro
             {
-                var fechaAlta = Animal[i].fechaAlta
-                var fechaModificacion = Animal[i].fechaModificacion
+                var fechaAlta = animalAdoptado[i].fechaAlta
+                var fechaModificacion = animalAdoptado[i].fechaModificacion
                 var resta = fechaAlta.getTime() - fechaModificacion.getTime()
                 perrosFiltrados.push(resta)
             }
             else{ //gato
-                var fechaAlta = Animal[i].fechaAlta
-                var fechaModificacion = Animal[i].fechaModificacion
+                var fechaAlta = animalAdoptado[i].fechaAlta
+                var fechaModificacion = animalAdoptado[i].fechaModificacion
                 var resta = fechaAlta.getTime() - fechaModificacion.getTime()
                 gatosFiltrados.push(resta)
             }
         }
-    }
+    
     let valorMaximoPerro = Math.max.apply(null, perrosFiltrados)
     let ValorMinimoPerro = Math.min.apply(null, perrosFiltrados)
     let valorMaximoGato = Math.max.apply(null, gatosFiltrados)
     let ValorMinimoGato = Math.min.apply(null, gatosFiltrados)
-    res.send(valorMaximoPerro)
+    res.send.json({valorMaximoPerro : valorMaximoPerro, 
+        ValorMinimoPerro : ValorMinimoPerro, 
+        valorMaximoGato : valorMaximoGato,
+        ValorMinimoGato : ValorMinimoGato
+    })
 })
 
 module.exports = router;
