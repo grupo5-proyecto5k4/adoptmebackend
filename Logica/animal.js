@@ -155,13 +155,8 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     if (responsableId) filter.responsableId = responsableId;
 
     let animalDevuelto = await Animal.find(filter)
-    //if (animalDevuelto.length == 0) return res.status(400).json({filter})
     res.send(animalDevuelto)
 });
-
-
-
-
 
 //---------------------------------------------------------------------------------------------------
 //Reporte de estadísticas de cuanto tiempo pasa un animal desde que se le da de alta en la aplicación
