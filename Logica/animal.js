@@ -155,7 +155,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     if (responsableId) filter.responsableId = responsableId;
 
     let animalDevuelto = await Animal.find(filter)
-    if (animalDevuelto.length == 0) return res.status(400).json({filter})
+    //if (animalDevuelto.length == 0) return res.status(400).json({filter})
     res.send(animalDevuelto)
 });
 
