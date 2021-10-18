@@ -194,11 +194,11 @@ return (solicitudes)
 router.post('/adopcion', auth,  async function (req, res){
    let userAux = req.user.user
    let esAdoptado = false
-   if(req.body.vacunacionCastracion != undefined) esAdoptado = false
+   if(req.body.vacunacionCastracion != undefined) esAdoptado = true
       
    if (esAdoptado)
    {
-     adopcionFuncion(req,res,userAux)
+     adopcionFuncion(req, res, userAux)
    }
    else
    {

@@ -33,24 +33,7 @@ router.get('/buscar', async function (req, res) {
 
 router.post('/animal', auth, async function (req, res) {
     let userAux = req.user.user
-    let castrado = true
-    if (req.body.castrado == 2) castrado = false
-    let estado = " "
-    switch (req.body.estado) {
-        case 7:
-            estado = "Disponible Adopción";
-            break;
-        case 8:
-            estado = "Disponible Adopción y Provisorio";
-            break;
-        case 9:
-            estado = "Disponible Provisorio";
-            break;
-        default:
-            estado = "Disponible Adopción y Provisorio";
-    }
-
-
+   
     let animal = new Animal({
         tipoMascota: req.body.tipoMascota,
         nombreMascota: req.body.nombreMascota,
@@ -60,7 +43,7 @@ router.post('/animal', auth, async function (req, res) {
         fechaNacimiento: req.body.fechaNacimiento,
         sexo: req.body.sexo,
         raza: req.body.raza,
-        estado: estado,
+        estado: req.body.estado,
         responsableCategoria: req.body.responsableCategoria,
         responsableId: userAux._id,
         castrado: req.body.castrado,
@@ -185,6 +168,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
             }
         }
     }
+    
     let valorMaximoPerro = Math.max.apply(null, perrosFiltrados)
     let ValorMinimoPerro = Math.min.apply(null, perrosFiltrados)
     let valorMaximoGato = Math.max.apply(null, gatosFiltrados)
