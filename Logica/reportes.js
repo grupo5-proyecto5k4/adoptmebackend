@@ -18,9 +18,8 @@ const User = require('../modelos/usuarios.js')
 router.get('/animales/provisorio', auth, async function(req,res, next ){
     let userAux = req.user.user
   
-    if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
+    if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para realizar esta acción'})
      
     let animalesAdoptado = await Animal.find({responsableId: userAux._id, estado: "Adoptado"})
-
-
 })
+

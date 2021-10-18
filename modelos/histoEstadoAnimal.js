@@ -9,5 +9,5 @@ const histoEstadoAnimalSchema  = new mongosee.Schema({
 
 });
 
-const histoEstadoAnimal = mongosee.model('am-histoEstadoAnimal', histoEstadoAnimalSchema);
+const histoEstadoAnimal = mongosee.model('am-histo-estado-animal', histoEstadoAnimalSchema);
 module.exports = histoEstadoAnimal

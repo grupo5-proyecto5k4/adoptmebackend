@@ -85,7 +85,7 @@ res.status(200).json({ _id : result._id})
  /*  Funcion de Provisorio   */
 async function provisorioFuncion(req, res, user, next){
   var objectId = mongosee.Types.ObjectId(req.body.mascotaId); 
-  const mascotas = await Provisorio.find({solicitanteId : user._id, mascotaId: objectId}) 
+  const mascotas = await Provisorio.find({solicitanteId : user._id, mascotaId: objectId, estadoId: estadoInicial}) 
       
    if (mascotas.length != 0) return res.status(400).json({error: "Ya solicitaste el Provisorio de esta mascota"})
 
@@ -135,7 +135,8 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
   
   let desde = solicitudAdopciones.length
   
-  if (solicitudAdopciones.length == undefined) {
+  if (solicitudAdopciones.length == undefined && solicitudAdopciones.estadoId != (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante))
+   {
     desde = 0 
     let animal = await Animal.findById ({_id: solicitudAdopciones.mascotaId})
     if (!animal) return solicitudes
@@ -162,7 +163,7 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
   }
   
   for (let i = 0 ; i < desde ; i ++ ){
-    
+    if(solicitudAdopciones[i].estadoId == (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante)) continue  
     let animal = await Animal.findById ({_id: solicitudAdopciones[i].mascotaId})
     if (!animal) continue
     let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
@@ -172,7 +173,9 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
      var nuevoArreglo = {
                Solicitud: solicitudAdopciones[i],
                Animales: { nombreMascota :animal.nombreMascota,
-                            edad:  edadDias },
+                            edad:  edadDias, 
+                            responsableId: animal.responsableId
+                          },
                Solicitante:{ nombre: usuario.nombres,
                              apellido: usuario.apellidos,
                              email: usuario.correoElectronico,
@@ -190,12 +193,12 @@ return (solicitudes)
 
 router.post('/adopcion', auth,  async function (req, res){
    let userAux = req.user.user
-   //if(req.body.esAdopcion){
-   
-   if (req.body.vacunacionCastracion)
+   let esAdoptado = false
+   if(req.body.vacunacionCastracion != undefined) esAdoptado = false
+      
+   if (esAdoptado)
    {
-    
-      adopcionFuncion(req,res,userAux)
+     adopcionFuncion(req,res,userAux)
    }
    else
    {
@@ -234,6 +237,7 @@ router.get('/buscar/solicitudadopcion/:tipoSolicitud', auth,  async function (re
  
   if (req.params.tipoSolicitud.indexOf('provisorio') ==  0){
     solicitudAdopciones = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id)})
+
     
   }  
  
@@ -257,41 +261,48 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
 
 async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esAdoptado){
   let bloqueado = false
-  
+  let result2 
   let estadoNuevo = undefined
   let solicitud   = await modelo.findById({_id: idSolicitud})  
+ 
 
   
-  if (solicitud.responsableId = usuario._id && esAprobado) estadoNuevo = estadoAproResponsable, bloqueado = true
+  if (solicitud.responsableId == usuario._id && esAprobado) estadoNuevo = estadoAproResponsable, bloqueado = true
 
-  if (solicitud.responsableId = usuario._id && !esAprobado) estadoNuevo = estadoSuspendido
+  if (solicitud.responsableId == usuario._id && !esAprobado) estadoNuevo = estadoSuspendido
   
   
-  if (solicitud.SolicitanteId = usuario._id && esAprobado && solicitud.estadoId == estadoAproResponsable)
-    { 
-      estadoNuevo = "Aprobado"
-      let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
-      modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido)
-        
-    }
-  if (solicitud.SolicitanteId = usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
+  if (solicitud.solicitanteId == usuario._id && esAprobado && solicitud.estadoId == estadoAproResponsable) estadoNuevo = estadoAprobado
+              
+  if (solicitud.solicitanteId == usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
   
+  if(estadoNuevo) {
+      result2 = await modelo.findByIdAndUpdate(solicitud._id, 
+      {estadoId: estadoNuevo,
+         fechaModificacion : new Date(Date.now()).toISOString()},
+      {new : true}
+      
+      )
+      ani = modificarAnimal(solicitud, esAdoptado, estadoNuevo)
+  } 
     
-  let result2 = await modelo.findByIdAndUpdate(solicitud._id, 
-     {estadoId: estadoNuevo,
-        fechaModificacion : new Date(Date.now()).toISOString()},
-     {new : true}
+  
      
-     )
-     
-    /* si es aprobado por el responsables las demas solicitudes deben estar bloqueadas 
-    if (result2.estadoId = estadoAproResponsable ) 
-     { let solicitudes = await tipo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
-       modificarSolicitudBloqueada(solicitudes, tipo, estadoBloqueado)
+  // si es aprobado por el responsables las demas solicitudes deben estar bloqueadas 
+    if (result2.estadoId == estadoAproResponsable) 
+     { let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
+       modificarSolicitudBloqueada(solicitudes, modelo, estadoBloqueado, solicitud)
     }
-    */
-    ani = modificarAnimal(solicitud, esAdoptado, estadoNuevo)
-   
+  
+ // Si el aprobado por el solicitante las demas Solicitudes debe quedar Suspendidas   
+    if (result2.estadoId == estadoAprobado ) 
+     { 
+       let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
+       modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
+     }
+
+ 
+
    return (result2) 
   
 }
@@ -330,22 +341,25 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
         { new: true
         } 
         )
-        let historial = new histoEstadoAnimal({
-          mascotaId : result._id,
-          estadoId :  estadoAntAnimal
-        
-      })
-      await historial.save()
-      console.log("historial", historial)
+        if (estadoNueAnimal != estadoAntAnimal ){
+          let historial = new histoEstadoAnimal({
+            mascotaId : result._id,
+            solicitud: solicitud._id,
+            estadoId :  estadoAntAnimal})
+            await historial.save()
+            
+        }
+     
   }
     return (result)
   
 }
 
 /* Modificacion del Estado de Las Solicitudes */
-async function modificarSolicitudBloqueada(solicitud, modelo, estadoNuevo){
+async function modificarSolicitudBloqueada(solicitud, modelo, estadoNuevo, SolicitudAceptada){
   let desde = solicitud.length
   for (let i = 0; i < desde; i++){
+    if (solicitud[i]._id == SolicitudAceptada._id) continue
     await modelo.findByIdAndUpdate(solicitud[i]._id, 
       {estadoId: estadoNuevo,
        fechaModificacion : new Date(Date.now()).toISOString()},

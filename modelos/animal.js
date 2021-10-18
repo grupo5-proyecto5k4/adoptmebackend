@@ -56,18 +56,9 @@ const animalSchema  = new mongosee.Schema({
 
         
     }, process.env.SECRET_KEY_JWT)
-}
-// var usuarioFiltradoSchema = mongosee.Schema({
-//       usuarioFiltrado: {type: mongosee.Schema.Types.ObjectId, ref: 'usuarioFiltrado'},
-//       barrio: String,
-//       nombres: String,
-// });
-
-// var usuarioFiltrado = mongosee.model('usuarioFiltrado', usuarioFiltradoSchema);    
-// const Animal = mongosee.model('am-animal', animalSchema);
-// module.exports = Animal
-// module.exports = usuarioFiltrado
+};
 
 const Animal = mongosee.model('am-animal', animalSchema);
 module.exports = Animal
+
   
