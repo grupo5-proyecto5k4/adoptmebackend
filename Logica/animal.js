@@ -188,7 +188,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let ValorMinimoPerro = Math.min.apply(null, perrosFiltrados)
     let valorMaximoGato = Math.max.apply(null, gatosFiltrados)
     let ValorMinimoGato = Math.min.apply(null, gatosFiltrados)
-    res.send(valorMaximoPerro) 
+    res.send("llego ok putiiiii") 
 })
 
 module.exports = router;
