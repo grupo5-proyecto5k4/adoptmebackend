@@ -169,16 +169,16 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let animalesAdoptados = await Animal.find({estado : "Adoptado"})
     let gatosFiltrados = []
     for (let i = 0; i < animalesAdoptados.length; i++) {
-        if(animalAdoptado[i].tipoAnimal == 0) //perro
+        if(animalesAdoptados[i].tipoAnimal == 0) //perro
             {
-                var fechaAlta = animalAdoptado[i].fechaAlta
-                var fechaModificacion = animalAdoptado[i].fechaModificacion
+                var fechaAlta = animalesAdoptados[i].fechaAlta
+                var fechaModificacion = animalesAdoptados[i].fechaModificacion
                 var resta = fechaAlta.getTime() - fechaModificacion.getTime()
                 perrosFiltrados.push(resta)
             }
             else{ //gato
-                var fechaAlta = animalAdoptado[i].fechaAlta
-                var fechaModificacion = animalAdoptado[i].fechaModificacion
+                var fechaAlta = animalesAdoptados[i].fechaAlta
+                var fechaModificacion = animalesAdoptados[i].fechaModificacion
                 var resta = fechaAlta.getTime() - fechaModificacion.getTime()
                 gatosFiltrados.push(resta)
             }
