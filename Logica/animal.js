@@ -170,7 +170,7 @@ router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
     console.log(animalesAdoptados)
     let gatosFiltrados = []
     for (let i = 0; i < animalesAdoptados.length; i++) {
-        if(animalesAdoptados[i].tipoAnimal == 0) //perro
+        if(animalesAdoptados[i].tipoMascota == 0) //perro
             {
                 var fechaAlta = animalesAdoptados[i].fechaAlta
                 var fechaModificacion = animalesAdoptados[i].fechaModificacion
