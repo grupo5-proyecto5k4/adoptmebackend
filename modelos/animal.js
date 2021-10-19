@@ -21,6 +21,7 @@ const animalSchema  = new mongosee.Schema({
   conductaPerros: {type: String},
   conductaGatos: {type: String},
   descripcion: {type: String},
+  visible : {type: Boolean},
   Foto:[{ foto: String,
           esPrincipal: Boolean 
          }

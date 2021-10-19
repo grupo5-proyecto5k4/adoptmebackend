@@ -33,7 +33,7 @@ router.get('/buscar', async function (req, res) {
 
 router.post('/animal', auth, async function (req, res) {
     let userAux = req.user.user
-   
+    let esvisible = true 
     let animal = new Animal({
         tipoMascota: req.body.tipoMascota,
         nombreMascota: req.body.nombreMascota,
@@ -51,6 +51,7 @@ router.post('/animal', auth, async function (req, res) {
         conductaPerros: req.body.conductaPerros,
         conductaGatos: req.body.conductaGatos,
         descripcion: req.body.descripcion,
+        visible : esVisible,
         foto: req.body.foto
     })
 

@@ -317,11 +317,11 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
 
 })
 
-router.get('/user/modificacion/centrorescatista', auth, async function(req, res) {
+router.get('/user/modificacion/centrorescatista/:idCentro', auth, async function(req, res) {
     let userAux = req.user.user 
     if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
     
-    let usuario = await User.findById({_id :req.body._id })
+    let usuario = await User.findById({_id :req.params.idCentro})
     if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
     
     
