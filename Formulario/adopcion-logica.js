@@ -147,7 +147,8 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
      var nuevoArreglo = {
                Solicitud: solicitudAdopciones,
                Animales: { nombreMascota :animal.nombreMascota,
-                           edad:  edadDias
+                           edad:  edadDias,
+                           responsableId: animal.responsableId
                           },
                Solicitante:{ nombre: usuario.nombres,
                              apellido: usuario.apellidos,
