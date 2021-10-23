@@ -20,7 +20,7 @@ const estadoAprobado = "Aprobado"
 const estadoAdoptado    = "Adoptado"
 const estadoEnProvisorio= "En Provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
-const estadoDispAdopcion= "Disponible Adopcion" 
+const estadoDispAdopcion= "Disponible Adopción" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
 /*Estados de Solicitud */
 const estadoInicial = 'Abierta'
@@ -253,7 +253,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
  
   let solicitudAdopciones = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
   
-  if (req.params.tipoSolicitud.indexOf('provisorio') == 0){
+  if (req.params.tipoSolicitud.indexOf('Provisorio') == 0){
     solicitudAdopciones = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id)})
   }  
     

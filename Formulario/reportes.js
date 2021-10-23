@@ -13,14 +13,13 @@ const auth = require('../middleware/auth.js')
 const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
-const histoEstadoAnimal= require('../modelos/histoEstadoAnimal.js')
 
 /* estados Animal*/
 const estadoAprobado = "Aprobado"
 const estadoAdoptado    = "Adoptado"
 const estadoEnProvisorio= "En Provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
-const estadoDispAdopcion= "Disponible Adopcion" 
+const estadoDispAdopcion= "Disponible Adopción" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
 /*Estados de Solicitud */
 const estadoInicial = 'Abierta'
@@ -30,26 +29,53 @@ const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
 
 
-router.get('/cantidadAnimalesProvisorio', auth, async function(req, res){
-    let userAux = req.user.user
-    if (userAux.tipoUsuario != 2 ) return res.status(401).json({error: 'No tiene permiso para realizar esta tarea'})
-
-    let animalesAdoptados = await Animal({responsableId: userAux._id, estadoId: estadoAprobado})
+router.get('/animales/provisorio/:ultimoMes', async function(req,res, next ){
+   // let userAux = req.user.user
+  
+    //if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para realizar esta acción'})
+    var num = parseInt(req.params.ultimoMes, 10)
+    var mil = ((num)*24*60*60 *1000)  
+    var f = new Date(Date.now() + mil).toISOString()
+    console.log(f)
+    // contador de total de adoptados que son provisorio
+    var contTotalAdop = 0 
     
-    for(let i; i < animalesAdoptados.length; i ++){
-          
+    // Contado de total que fueron adoptados por la Solicitante que le dio Provisorio
+    var contTotalAdopPro = 0 
+    //falta agregar el responsable:id 
+    let Adoptados = await Adopcion.find({estado: estadoAprobado, fechaAlta: {$gte: f}})
+    for(let i ; i < Adoptados.length ; i ++)
+    { 
+        let provisorios = await Provisorio.find({
+            mascotaId: Adoptados[i].mascotaId,
+            responsableId: Adoptados[i].responsableId,
+            solicitanteId: Adoptados[i].solicitanteId,
+            estadoId: estadoAprobado
+          })
+        if(provisorios.length > 0) {
+            contTotalAdopPro ++
+            contTotalAdop ++
+            continue
+        }    
+       provisorios = await Provisorio.find({
+            mascotaId: Adoptados[i].mascotaId,
+            responsableId: Adoptados[i].responsableId,
+            estadoId: estadoAprobado
+          })
+       
+       if(provisorios.length > 0) contTotalAdop ++
 
     }
-    
 
+    let arreglo = {
+        "TotalAdopcionProvisorio" : contTotalAdop,
+        "TotalProAdopSolicitante" : contTotalAdopPro
+    } 
+
+    res.send(arreglo)
 })
 
-async function buscarProvisorio(animal){
-    let historico = await histoEstadoAnimal.find({mascotaId: animal_id, estadoId: estadoEnProvisorio })
-    if (historico.length != 0) return 
-    historico.forEach(async element => {
-        let solicitud = await Adopcion.find({mascotaId: animal._id})
-        
-    }); 
 
-}
+
+
+module.exports = router;
