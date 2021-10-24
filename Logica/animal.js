@@ -241,31 +241,39 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",
-            "minimo": ValorMinimoPerroCachorro,
-            "promedio": promedioPerroCachorro,
-            "maximo": valorMaximoPerroCachorro
+            "minimo": conversionDias(ValorMinimoPerroCachorro),
+            "promedio": conversionDias(promedioPerroCachorro),
+            "maximo": conversionDias(valorMaximoPerroCachorro)
             },
             {
             "categoria":"perroAdulto",
-            "minimo": ValorMinimoPerroAdulto,
-            "promedio": promedioPerroAdulto,
-            "maximo": valorMaximoPerroAdulto
+            "minimo": conversionDias(ValorMinimoPerroAdulto),
+            "promedio": conversionDias(promedioPerroAdulto),
+            "maximo": conversionDias(valorMaximoPerroAdulto)
             },
             {
             "categoria":"gatoCachorro",
-            "minimo": valorMinimoGatoCachorro,
-            "promedio": promedioGatoCachorro,
-            "maximo": valorMaximoGatoCachorro
+            "minimo": conversionDias(valorMinimoGatoCachorro),
+            "promedio": conversionDias(promedioGatoCachorro),
+            "maximo": conversionDias(valorMaximoGatoCachorro)
             },
             {
             "categoria":"gatoAdulto",
-            "minimo": valorMinimoGatoAdulto,
-            "promedio": promedioGatoAdulto,
-            "maximo": valorMaximoGatoAdulto
+            "minimo": conversionDias(valorMinimoGatoAdulto),
+            "promedio": conversionDias(promedioGatoAdulto),
+            "maximo": conversionDias(valorMaximoGatoAdulto)
             }
         ]
         res.send(reporteFinal) 
 })
+
+function conversionDias (mili)
+{
+    var edadDias = Math.round(mili/(1000*3600*24))
+    return edadDias
+}
+
+
 
 module.exports = router;
 
