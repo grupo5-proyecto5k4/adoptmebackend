@@ -160,7 +160,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
 //---------------------------------------------------------------------------------------------------
 //Reporte de estadísticas de cuanto tiempo pasa un animal desde que se le da de alta en la aplicación
-// hasta que es finalmente adoptado
+// hasta que es finalmente adoptado, EL ESTADO DEL ANIMAL TIENE QUE SER ADOPTADO
 
 //router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
   router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
@@ -224,16 +224,6 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
             }
         }
-    
-    //console.log(perrosFiltrados)
-    console.log(perrosFiltradosAdulto)    
-    console.log(perrosFiltradosCachorro)
-    console.log(gatosFiltradosAdulto)
-    console.log(gatosFiltradosCachorro)
-    
-    
-    
-    
     let valorMaximoPerroAdulto = Math.max.apply(null, perrosFiltradosAdulto)
     let valorMaximoPerroCachorro = Math.max.apply(null, perrosFiltradosCachorro)
     let ValorMinimoPerroAdulto = Math.min.apply(null, perrosFiltradosAdulto)
@@ -249,27 +239,27 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",
-            "minimo": (ValorMinimoPerroCachorro),
-            "promedio": (promedioPerroCachorro),
-            "maximo": (valorMaximoPerroCachorro)
+            "minimo": conversionDias(ValorMinimoPerroCachorro),
+            "promedio": conversionDias(promedioPerroCachorro),
+            "maximo": conversionDias(valorMaximoPerroCachorro)
             },
             {
             "categoria":"perroAdulto",
-            "minimo": (ValorMinimoPerroAdulto),
-            "promedio": (promedioPerroAdulto),
-            "maximo": (valorMaximoPerroAdulto)
+            "minimo": conversionDias(ValorMinimoPerroAdulto),
+            "promedio": conversionDias(promedioPerroAdulto),
+            "maximo": conversionDias(valorMaximoPerroAdulto)
             },
             {
             "categoria":"gatoCachorro",
-            "minimo": (valorMinimoGatoCachorro),
-            "promedio": (promedioGatoCachorro),
-            "maximo": (valorMaximoGatoCachorro)
+            "minimo": conversionDias(valorMinimoGatoCachorro),
+            "promedio": conversionDias(promedioGatoCachorro),
+            "maximo": conversionDias(valorMaximoGatoCachorro)
             },
             {
             "categoria":"gatoAdulto",
-            "minimo": (valorMinimoGatoAdulto),
-            "promedio": (promedioGatoAdulto),
-            "maximo": (valorMaximoGatoAdulto)
+            "minimo": conversionDias(valorMinimoGatoAdulto),
+            "promedio": conversionDias(promedioGatoAdulto),
+            "maximo": conversionDias(valorMaximoGatoAdulto)
             }
         ]
         res.send(reporteFinal) 
@@ -277,12 +267,9 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
 function conversionDias (mili)
 {
-    var diferencia= Math.abs(Date.now() - animalesAdoptados[i].fechaNacimiento)
     var edadDias = Math.round(mili/(1000*3600*24))
     return edadDias
 }
-
-
 
 module.exports = router;
 
