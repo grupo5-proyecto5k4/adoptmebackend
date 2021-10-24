@@ -225,7 +225,15 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
             }
         }
     
-    //console.log(perrosFiltrados)    
+    //console.log(perrosFiltrados)
+    console.log(perrosFiltradosAdulto)    
+    console.log(perrosFiltradosCachorro)
+    console.log(gatosFiltradosAdulto)
+    console.log(gatosFiltradosCachorro)
+    
+    
+    
+    
     let valorMaximoPerroAdulto = Math.max.apply(null, perrosFiltradosAdulto)
     let valorMaximoPerroCachorro = Math.max.apply(null, perrosFiltradosCachorro)
     let ValorMinimoPerroAdulto = Math.min.apply(null, perrosFiltradosAdulto)
