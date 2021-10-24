@@ -180,7 +180,7 @@ router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
     var countPerroAdulto = 0
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
-        var diferencia= Math.abs(Date.now() - animalAdoptados[i].fechaNacimiento)
+        var diferencia= Math.abs(Date.now() - animalesAdoptados[i].fechaNacimiento)
         var edadDias = Math.round(diferencia/(1000*3600*24))
         var fechaAlta = animalesAdoptados[i].fechaAlta
         var fechaModificacion = animalesAdoptados[i].fechaModificacion
