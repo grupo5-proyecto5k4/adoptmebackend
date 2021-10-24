@@ -241,27 +241,27 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",
-            "minimo": conversionDias(ValorMinimoPerroCachorro),
-            "promedio": conversionDias(promedioPerroCachorro),
-            "maximo": conversionDias(valorMaximoPerroCachorro)
+            "minimo": (ValorMinimoPerroCachorro),
+            "promedio": (promedioPerroCachorro),
+            "maximo": (valorMaximoPerroCachorro)
             },
             {
             "categoria":"perroAdulto",
-            "minimo": conversionDias(ValorMinimoPerroAdulto),
-            "promedio": conversionDias(promedioPerroAdulto),
-            "maximo": conversionDias(valorMaximoPerroAdulto)
+            "minimo": (ValorMinimoPerroAdulto),
+            "promedio": (promedioPerroAdulto),
+            "maximo": (valorMaximoPerroAdulto)
             },
             {
             "categoria":"gatoCachorro",
-            "minimo": conversionDias(valorMinimoGatoCachorro),
-            "promedio": conversionDias(promedioGatoCachorro),
-            "maximo": conversionDias(valorMaximoGatoCachorro)
+            "minimo": (valorMinimoGatoCachorro),
+            "promedio": (promedioGatoCachorro),
+            "maximo": (valorMaximoGatoCachorro)
             },
             {
             "categoria":"gatoAdulto",
-            "minimo": conversionDias(valorMinimoGatoAdulto),
-            "promedio": conversionDias(promedioGatoAdulto),
-            "maximo": conversionDias(valorMaximoGatoAdulto)
+            "minimo": (valorMinimoGatoAdulto),
+            "promedio": (promedioGatoAdulto),
+            "maximo": (valorMaximoGatoAdulto)
             }
         ]
         res.send(reporteFinal) 
@@ -269,6 +269,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
 function conversionDias (mili)
 {
+    var diferencia= Math.abs(Date.now() - animalesAdoptados[i].fechaNacimiento)
     var edadDias = Math.round(mili/(1000*3600*24))
     return edadDias
 }
