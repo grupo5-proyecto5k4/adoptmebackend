@@ -176,8 +176,10 @@ router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
     let promedioGatoAdulto = 0
     let promedioGatoCachorro = 0
     let animalesAdoptados = await Animal.find({estado : "Adoptado"})
-    var countGato = 0
+    var countGatoAdulto = 0
+    var countGatoCachorro  = 0
     var countPerroAdulto = 0
+    var countPerroCachorro = 0
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
         var diferencia= Math.abs(Date.now() - animalesAdoptados[i].fechaNacimiento)
