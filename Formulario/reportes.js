@@ -29,32 +29,45 @@ const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
 
 
-router.get('/animales/provisorio/:ultimoMes', async function(req,res, next ){
-   // let userAux = req.user.user
+router.get('/animales/provisorio/:ultimoMes', auth,  async function(req,res, next ){
+    let userAux = req.user.user
   
-    //if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para realizar esta acción'})
+    if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para realizar esta acción'})
     var num = parseInt(req.params.ultimoMes, 10)
     var mil = ((num)*24*60*60 *1000)  
     var f = new Date(Date.now() + mil).toISOString()
-    console.log(f)
-    // contador de total de adoptados que son provisorio
-    var contTotalAdop = 0 
     
+    // contador de total de adoptados que son provisorio
+    var contTotalAdopPerro = 0
+    var contTotalAdopGato = 0 
+    let contTotalAdopPro
     // Contado de total que fueron adoptados por la Solicitante que le dio Provisorio
-    var contTotalAdopPro = 0 
+    var contTotalAdopProPerro = 0 
+    var contTotalAdopProGato = 0
     //falta agregar el responsable:id 
     let Adoptados = await Adopcion.find({estado: estadoAprobado, fechaAlta: {$gte: f}})
     for(let i ; i < Adoptados.length ; i ++)
     { 
+        let esPerro = false
+        let ani = await Animal.findOne({_id: Adoptados[i].mascotaId})  
+        if (ani.tipoMascota == 0) esPerro = true
+
         let provisorios = await Provisorio.find({
             mascotaId: Adoptados[i].mascotaId,
             responsableId: Adoptados[i].responsableId,
             solicitanteId: Adoptados[i].solicitanteId,
             estadoId: estadoAprobado
           })
+        if(provisorios.length > 0 && esPerro) {
+            contTotalAdopProPerro ++
+            contTotalAdopPerro ++
+            contTotalAdopPro ++ 
+            continue
+        }
         if(provisorios.length > 0) {
+            contTotalAdopProGato ++
+            contTotalAdopGato ++
             contTotalAdopPro ++
-            contTotalAdop ++
             continue
         }    
        provisorios = await Provisorio.find({
@@ -63,13 +76,23 @@ router.get('/animales/provisorio/:ultimoMes', async function(req,res, next ){
             estadoId: estadoAprobado
           })
        
-       if(provisorios.length > 0) contTotalAdop ++
-
+       if(provisorios.length > 0 && esPerro) {
+           contTotalAdopPerro ++ 
+           contTotalAdopPro ++ 
+           continue 
+       }
+       if(provisorios.length > 0) {
+           contTotalAdopGato ++
+           contTotalAdopPro ++
+       } 
     }
+    
 
     let arreglo = {
-        "TotalAdopcionProvisorio" : contTotalAdop,
-        "TotalProAdopSolicitante" : contTotalAdopPro
+        "AdopcionconProvisorioGato" : contTotalAdopGato,
+        "AdopcionconProvisorioPerro" : contTotalAdopPerro,
+        "TotalAdopcionProvisorio" : contTotalAdopPro
+    
     } 
 
     res.send(arreglo)
