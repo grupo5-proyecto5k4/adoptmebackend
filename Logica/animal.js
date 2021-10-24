@@ -163,38 +163,102 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 // hasta que es finalmente adoptado
 
 router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
-    let perrosFiltrados = []
-    let gatosFiltrados = []
+    let perrosFiltradosAdulto = []
+    let perrosFiltradosCachorro = []
+    let gatosFiltradosAdulto = []
+    let gatosFiltradosCachorro = []
+    let acumuladorRestaPerroAdulto = 0
+    let acumuladorRestaPerroCachorro = 0
+    let acumuladorRestaGatoAdulto = 0
+    let acumuladorRestaGatoCachorro = 0
+    let promedioPerroAdulto = 0
+    let promedioPerroCachorro = 0
+    let promedioGatoAdulto = 0
+    let promedioGatoCachorro = 0
     let animalesAdoptados = await Animal.find({estado : "Adoptado"})
+    var countGato = 0
+    var countPerroAdulto = 0
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
+        var diferencia= Math.abs(Date.now() - animalAdoptados[i].fechaNacimiento)
+        var edadDias = Math.round(diferencia/(1000*3600*24))
+        var fechaAlta = animalesAdoptados[i].fechaAlta
+        var fechaModificacion = animalesAdoptados[i].fechaModificacion
+        var resta = fechaModificacion - fechaAlta
         if(animalesAdoptados[i].tipoMascota == 0) //perro
-            {
-                var fechaAlta = animalesAdoptados[i].fechaAlta
-                var fechaModificacion = animalesAdoptados[i].fechaModificacion
-                var resta = fechaModificacion - fechaAlta 
-                perrosFiltrados.push(resta)
+        {
+            if(edadDias > 365) //adulto
+                {
+                    acumuladorRestaPerroAdulto += resta
+                    countPerroAdulto ++
+                    perrosFiltradosAdulto.push(resta)
+                }
+                else
+                { 
+                    acumuladorRestaPerroCachorro += resta 
+                    countPerroCachorro ++
+                    perrosFiltradosCachorro.push(resta)
+                }
+
             }
             else{ //gato
-                var fechaAlta = animalesAdoptados[i].fechaAlta
-                var fechaModificacion = animalesAdoptados[i].fechaModificacion
-                var resta = fechaModificacion - fechaAlta
-                gatosFiltrados.push(resta)
+
+                if(edadDias > 365) //adulto
+                {
+                    acumuladorRestaGatoAdulto += resta
+                    countGatoAdulto ++
+                    gatosFiltradosAdulto.push(resta)
+                }
+                else
+                { 
+                    acumuladorRestaGatoCachorro += resta 
+                    countGatoCachorro ++
+                    gatosFiltradosCachorro.push(resta)
+                }
+
             }
         }
     
-    console.log(perrosFiltrados)    
-    let valorMaximoPerro = Math.max.apply(null, perrosFiltrados)
-    let ValorMinimoPerro = Math.min.apply(null, perrosFiltrados)
-    let valorMaximoGato = Math.max.apply(null, gatosFiltrados)
-    let valorMinimoGato = Math.min.apply(null, gatosFiltrados)
-    var reporteFinal = { 
-        valorMaxPerro : valorMaximoPerro,
-        valorMinPerro : ValorMinimoPerro,
-        valorMaxGato : valorMaximoGato,
-        valorMinGato : valorMinimoGato
-    }
-    res.send(reporteFinal) 
+    //console.log(perrosFiltrados)    
+    let valorMaximoPerroAdulto = Math.max.apply(null, perrosFiltradosAdulto)
+    let valorMaximoPerroCachorro = Math.max.apply(null, perrosFiltradosCachorro)
+    let ValorMinimoPerroAdulto = Math.min.apply(null, perrosFiltradosAdulto)
+    let ValorMinimoPerroCachorro = Math.min.apply(null, perrosFiltradosCachorro)
+    let valorMaximoGatoAdulto = Math.max.apply(null, gatosFiltradosAdulto)
+    let valorMaximoGatoCachorro = Math.max.apply(null, gatosFiltradosCachorro)
+    let valorMinimoGatoAdulto = Math.min.apply(null, gatosFiltradosAdulto)
+    let valorMinimoGatoCachorro = Math.min.apply(null, gatosFiltradosCachorro)
+    promedioPerroAdulto = acumuladorRestaPerroAdulto/countPerroAdulto
+    promedioPerroCachorro = acumuladorRestaPerroAdulto/countPerroCachorro
+    promedioGatoAdulto = acumuladorRestaGatoAdulto/countGatoAdulto
+    promedioGatoCachorro = acumuladorRestaGatoCachorro/countGatoCachorro
+    var reporteFinal =  [
+            {
+            "categoria":"perroCachorro",
+            "minimo": ValorMinimoPerroCachorro,
+            "promedio": promedioPerroCachorro,
+            "maximo": valorMaximoPerroCachorro
+            },
+            {
+            "categoria":"perroAdulto",
+            "minimo": ValorMinimoPerroAdulto,
+            "promedio": promedioPerroAdulto,
+            "maximo": valorMaximoPerroAdulto
+            },
+            {
+            "categoria":"gatoCachorro",
+            "minimo": valorMinimoGatoCachorro,
+            "promedio": promedioGatoCachorro,
+            "maximo": valorMaximoGatoCachorro
+            },
+            {
+            "categoria":"gatoAdulto",
+            "minimo": valorMinimoGatoAdulto,
+            "promedio": promedioGatoAdulto,
+            "maximo": valorMaximoGatoAdulto
+            }
+        ]
+        res.send(reporteFinal) 
 })
 
 module.exports = router;
