@@ -223,18 +223,22 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 
             }
         }
-    let valorMaximoPerroAdulto = Math.max.apply(null, perrosFiltradosAdulto)
-    let valorMaximoPerroCachorro = Math.max.apply(null, perrosFiltradosCachorro)
-    let ValorMinimoPerroAdulto = Math.min.apply(null, perrosFiltradosAdulto)
-    let ValorMinimoPerroCachorro = Math.min.apply(null, perrosFiltradosCachorro)
-    let valorMaximoGatoAdulto = Math.max.apply(null, gatosFiltradosAdulto)
-    let valorMaximoGatoCachorro = Math.max.apply(null, gatosFiltradosCachorro)
-    let valorMinimoGatoAdulto = Math.min.apply(null, gatosFiltradosAdulto)
-    let valorMinimoGatoCachorro = Math.min.apply(null, gatosFiltradosCachorro)
-    promedioPerroAdulto = acumuladorRestaPerroAdulto/countPerroAdulto
-    promedioPerroCachorro = acumuladorRestaPerroAdulto/countPerroCachorro
-    promedioGatoAdulto = acumuladorRestaGatoAdulto/countGatoAdulto
-    promedioGatoCachorro = acumuladorRestaGatoCachorro/countGatoCachorro
+
+       
+    let valorMaximoPerroAdulto = Math.max.apply(0, perrosFiltradosAdulto)
+    let valorMaximoPerroCachorro = Math.max.apply(0, perrosFiltradosCachorro)
+    let ValorMinimoPerroAdulto = Math.min.apply(0, perrosFiltradosAdulto)
+    let ValorMinimoPerroCachorro = Math.min.apply(0, perrosFiltradosCachorro)
+    let valorMaximoGatoAdulto = Math.max.apply(0, gatosFiltradosAdulto)
+    let valorMaximoGatoCachorro = Math.max.apply(0, gatosFiltradosCachorro)
+    let valorMinimoGatoAdulto = Math.min.apply(0, gatosFiltradosAdulto)
+    let valorMinimoGatoCachorro = Math.min.apply(0, gatosFiltradosCachorro)
+    
+    if(countPerroAdulto != 0) promedioPerroAdulto = acumuladorRestaPerroAdulto/countPerroAdulto
+    if(countPerroCachorro != 0) promedioPerroCachorro = acumuladorRestaPerroAdulto/countPerroCachorro
+    if(countGatoAdulto != 0) promedioGatoAdulto = acumuladorRestaGatoAdulto/countGatoAdulto
+    if(countGatoCachorro != 0) promedioGatoCachorro = acumuladorRestaGatoCachorro/countGatoCachorro
+    
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",
