@@ -162,10 +162,9 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 //Reporte de estadísticas de cuanto tiempo pasa un animal desde que se le da de alta en la aplicación
 // hasta que es finalmente adoptado, EL ESTADO DEL ANIMAL TIENE QUE SER ADOPTADO
 
-//router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
-  router.get('/reportes/reporteTiempoAdopcion', async (req, res) => {
-    //let userAux = req.user.user
-    //if(userAux.tipoUsuario != 2)return res.status(402).json({"Error: no tiene permisos suficientes para esta acción"})
+router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
+    let userAux = req.user.user
+    if(userAux.tipoUsuario != 2)return res.status(402).json({Error: "No tiene permisos suficientes para esta acción"})
     let perrosFiltradosAdulto = []
     let perrosFiltradosCachorro = []
     let gatosFiltradosAdulto = []
@@ -178,8 +177,7 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
     let promedioPerroCachorro = 0
     let promedioGatoAdulto = 0
     let promedioGatoCachorro = 0
-    //let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id})
-    let animalesAdoptados = await Animal.find({estado : "Adoptado"})
+    let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id})
     var countGatoAdulto = 0
     var countGatoCachorro  = 0
     var countPerroAdulto = 0
