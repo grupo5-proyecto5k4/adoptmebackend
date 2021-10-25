@@ -223,16 +223,15 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 
             }
         }
-
-       
-    let valorMaximoPerroAdulto = estaVacio(Math.max.apply(0, perrosFiltradosAdulto))
-    let valorMaximoPerroCachorro = estaVacio(Math.max.apply(0, perrosFiltradosCachorro))
-    let ValorMinimoPerroAdulto = estaVacio(Math.min.apply(0, perrosFiltradosAdulto))
-    let ValorMinimoPerroCachorro = estaVacio(Math.min.apply(0, perrosFiltradosCachorro))
-    let valorMaximoGatoAdulto = estaVacio(Math.max.apply(0, gatosFiltradosAdulto))
-    let valorMaximoGatoCachorro = estaVacio(Math.max.apply(0, gatosFiltradosCachorro))
-    let valorMinimoGatoAdulto = estaVacio(Math.min.apply(0, gatosFiltradosAdulto))
-    let valorMinimoGatoCachorro = estaVacio(Math.min.apply(0, gatosFiltradosCachorro))
+        
+    let valorMaximoPerroAdulto = Math.max.apply(0, estaVacio(perrosFiltradosAdulto))
+    let valorMaximoPerroCachorro = Math.max.apply(0, estaVacio(perrosFiltradosCachorro))
+    let ValorMinimoPerroAdulto = Math.min.apply(0, estaVacio(perrosFiltradosAdulto))
+    let ValorMinimoPerroCachorro = Math.min.apply(0, estaVacio(perrosFiltradosCachorro))
+    let valorMaximoGatoAdulto = Math.max.apply(0, estaVacio(gatosFiltradosAdulto))
+    let valorMaximoGatoCachorro = Math.max.apply(0, estaVacio(gatosFiltradosCachorro))
+    let valorMinimoGatoAdulto = Math.min.apply(0, estaVacio(gatosFiltradosAdulto))
+    let valorMinimoGatoCachorro = Math.min.apply(0, estaVacio(gatosFiltradosCachorro))
     
     if(countPerroAdulto != 0) promedioPerroAdulto = acumuladorRestaPerroAdulto/countPerroAdulto
     if(countPerroCachorro != 0) promedioPerroCachorro = acumuladorRestaPerroAdulto/countPerroCachorro
@@ -276,7 +275,7 @@ function conversionDias (mili)
 
 function estaVacio (variable)
 {
-    if(variable == null) return 0
+    if(variable.length == 0) return 0
     return variable
 
 }
