@@ -275,7 +275,8 @@ function conversionDias (mili)
 
 function estaVacio (variable)
 {
-    if(variable.length == 0) return 0
+    var arreglo = [0]
+    if(variable.length == 0) return arreglo
     return variable
 
 }
