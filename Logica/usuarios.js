@@ -335,9 +335,9 @@ router.get('/donaciones/centroRescatistas', async function(req,res){
     let centro = 2
     let donativos = await User.find({
         tipoUsuario: centro, 
-        banco : {$nin : [undefined, null]},
-        cbu   : {$nin : [undefined, null]},
-        alias : {$nin : [undefined, null]}
+        banco : {$nin : [undefined, null, "" ]},
+        cbu   : {$nin : [undefined, null, ""]},
+        alias : {$nin : [undefined, null, ""]}
 
     
     })

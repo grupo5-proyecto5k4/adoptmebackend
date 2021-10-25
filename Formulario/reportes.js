@@ -29,13 +29,18 @@ const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
 
 
-router.get('/animales/provisorio/:ultimoMes', auth,  async function(req,res, next ){
+router.get('/animales/provisorio', auth,  async function(req,res, next ){
     let userAux = req.user.user
   
     if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para realizar esta acción'})
-    var num = parseInt(req.params.ultimoMes, 10)
-    var mil = ((num)*24*60*60 *1000)  
-    var f = new Date(Date.now() + mil).toISOString()
+  //  var num = parseInt(req.params.ultimoMes, 10)
+   
+  //  var mil = ((num)*24*60*60 *1000)  
+  //  var f = new Date(Date.now() + mil).toISOString()
+    
+    // ver formato de fecha 
+    var desde = (req.query.fechaDesde)
+    var hasta = req.query.fechaHasta
     
     // contador de total de adoptados que son provisorio
     var contTotalAdopPerro = 0
@@ -45,7 +50,8 @@ router.get('/animales/provisorio/:ultimoMes', auth,  async function(req,res, nex
     var contTotalAdopProPerro = 0 
     var contTotalAdopProGato = 0
     //falta agregar el responsable:id 
-    let Adoptados = await Adopcion.find({estado: estadoAprobado, fechaAlta: {$gte: f}})
+  
+    let Adoptados = await Adopcion.find({estado: estadoAprobado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
     for(let i ; i < Adoptados.length ; i ++)
     { 
         let esPerro = false
@@ -73,6 +79,7 @@ router.get('/animales/provisorio/:ultimoMes', auth,  async function(req,res, nex
        provisorios = await Provisorio.find({
             mascotaId: Adoptados[i].mascotaId,
             responsableId: Adoptados[i].responsableId,
+            solicitanteId: {$ne : Adoptados[i].solicitanteId},
             estadoId: estadoAprobado
           })
        
