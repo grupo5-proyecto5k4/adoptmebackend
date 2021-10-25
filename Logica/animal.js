@@ -177,8 +177,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let promedioPerroCachorro = 0
     let promedioGatoAdulto = 0
     let promedioGatoCachorro = 0
-    //let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id})
-    let animalesAdoptados = await Animal.find({estado : "Adoptado"})
+    let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id})
     var countGatoAdulto = 0
     var countGatoCachorro  = 0
     var countPerroAdulto = 0
@@ -280,8 +279,6 @@ function estaVacio (variable)
     return variable
 
 }
-
-
 
 module.exports = router;
 
