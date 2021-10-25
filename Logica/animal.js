@@ -177,7 +177,8 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let promedioPerroCachorro = 0
     let promedioGatoAdulto = 0
     let promedioGatoCachorro = 0
-    let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id})
+    //let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id})
+    let animalesAdoptados = await Animal.find({estado : "Adoptado"})
     var countGatoAdulto = 0
     var countGatoCachorro  = 0
     var countPerroAdulto = 0
@@ -266,7 +267,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 function conversionDias (mili)
 {
     var edadDias = Math.round(mili/(1000*3600*24))
-    return edadDias
+    return parseInt(edadDias, 10)
 }
 
 module.exports = router;
