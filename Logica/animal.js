@@ -266,7 +266,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 function conversionDias (mili)
 {
     var edadDias = Math.round(mili/(1000*3600*24))
-    return parseInt(edadDias, 10)
+    return edadDias
 }
 
 module.exports = router;
