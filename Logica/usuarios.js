@@ -128,10 +128,14 @@ router.post('/registro', [
          tipoUsuarios = 2
          estado = await Estado.findOne({nombre: "Pendiente"})
      }
-    
+     let nombre = req.body.nombres
+     let apellido = req.body.apellidos
+     if(req.body.nombres != undefined)nombre=(req.body.nombres).toUpperCase()
+     if(req.body.apellidos != undefined)apellido=(req.body.apellidos).toUpperCase()
+
      user = new User({
-        nombres: req.body.nombres,
-        apellidos:req.body.apellidos,
+        nombres: nombre,
+        apellidos: apellido,
         dni:req.body.dni,
         fechaNacimiento:req.body.fechaNacimiento,
         Direccion:req.body.Direccion, 

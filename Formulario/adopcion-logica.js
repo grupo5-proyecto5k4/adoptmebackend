@@ -18,7 +18,7 @@ const histoEstadoAnimal= require('../modelos/histoEstadoAnimal.js')
 /* estados Animal*/
 const estadoAprobado = "Aprobado"
 const estadoAdoptado    = "Adoptado"
-const estadoEnProvisorio= "En Provisorio"
+const estadoEnProvisorio= "En provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
 const estadoDispAdopcion= "Disponible Adopción" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
