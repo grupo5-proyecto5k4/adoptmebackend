@@ -280,6 +280,22 @@ function estaVacio (variable)
 
 }
 
+//Modificar datos de la mascota(no en adopcion ni en provisorio), castrado y vacunas
+router.put('/user/modificarMascota', auth, async function(req, res) {
+    let userAux = req.user.user
+    let n = await User.findById({_id : userAux._id})
+        let p = req.body
+    let val_user = User
+    if(n.estado)
+    if(n.nombres != p.nombres && p.nombres) n.nombres = p.nombres
+    if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = p.apellidos
+
+
+
+
+
+
+
 module.exports = router;
 
 
