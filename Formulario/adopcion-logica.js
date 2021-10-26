@@ -325,7 +325,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
             if(!esAdoptado) estadoNueAnimal = estadoEnProvisorio;
             break;
          case estAdopcionProvisorio  : 
-            if(!esAdoptado) estadoNueAnimal = estadoDispAdopcion;
+            if(!esAdoptado) estadoNueAnimal = estadoEnProvisorio;
             break;
          default: 
             estadoNueAnimal = undefined;
@@ -387,6 +387,9 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   modificarSolicitud ( modelo , userAux, esAprobado, req.params.idSolicitud, esAdoptado).then(val => res.send(val))
 
 })
+// agregar un comentario cuando rechaza un solicitud por parte del Solicitante
+// pasa a false el campo esvisible  cuando 
 
+// update 
 
 module.exports = router;

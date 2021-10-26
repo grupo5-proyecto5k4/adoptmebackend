@@ -94,7 +94,22 @@ router.get('/animales/provisorio', auth,  async function(req,res, next ){
        } 
     }
     
-
+  // perro adulto - cachorro  igual para gatos 
+  /* var jsonMascotas = [{
+    "tipoMascota":"0",
+    "perrosCachorrosAdoptadosPorSuProvisorio":4,
+    "perrosAdultosAdoptadosPorSuProvisorio":10,
+    "perrosCachorrosAdoptadosPorOtro":5,
+    "perrosAdultosAdoptadosPorOtro":5,
+    "totalPerrosAdoptados":24
+    },
+    {
+      "tipoMascota":"1",
+      "gatosCachorrosAdoptadosPorSuProvisorio":15,
+      "gatosAdultosAdoptadosPorSuProvisorio":12,
+      "gatosCachorrosAdoptadosPorOtro":8,
+      "gatosAdultosAdoptadosPorOtro":2
+ */
     let arreglo = {
         "AdopcionconProvisorioGato" : contTotalAdopGato,
         "AdopcionconProvisorioPerro" : contTotalAdopPerro,
