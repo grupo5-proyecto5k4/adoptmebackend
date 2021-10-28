@@ -31,31 +31,39 @@ const estadoBloqueado = "Bloqueado"
 
 router.get('/animales/provisorio', auth,  async function(req,res, next ){
     let userAux = req.user.user
-  
-    if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'No tiene autorizacion para realizar esta acción'})
-  //  var num = parseInt(req.params.ultimoMes, 10)
    
-  //  var mil = ((num)*24*60*60 *1000)  
-  //  var f = new Date(Date.now() + mil).toISOString()
+      
+    var desde = formato(req.query.fechaDesde)
+    var hasta = formato(req.query.fechaHasta)
+   
+    // contador de Perros 
+      var perrosCaAdopPorSuProvisorio = 0,  perrosAdAdopPorSuProvisorio = 0
+      var perrosCaAdopPorOtro = 0 , perrosAdAdopPorOtro = 0 
+      
+    // Contadores de Gatos 
+      var gatosCaAdopPorSuProvisorio = 0, gatosAdAdopPorSuProvisorio = 0
+      var gatosCaAdopPorOtro = 0 , gatosAdAdopPorOtro = 0
+
+    // contador total 
+    var totalPerrosAdoptados = 0 , totalGatosAdoptados = 0    
     
-    // ver formato de fecha 
-    var desde = (req.query.fechaDesde)
-    var hasta = req.query.fechaHasta
+   
+    var Adoptados = await Adopcion.find({estadoId: estadoAprobado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
     
-    // contador de total de adoptados que son provisorio
-    var contTotalAdopPerro = 0
-    var contTotalAdopGato = 0 
-    let contTotalAdopPro
-    // Contado de total que fueron adoptados por la Solicitante que le dio Provisorio
-    var contTotalAdopProPerro = 0 
-    var contTotalAdopProGato = 0
-    //falta agregar el responsable:id 
-  
-    let Adoptados = await Adopcion.find({estado: estadoAprobado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
-    for(let i ; i < Adoptados.length ; i ++)
+    var ciclos = 0 
+    if (Adoptados.length != undefined) ciclos = Adoptados.length
+    for(let i = 0 ; i < ciclos ; i ++)
     { 
-        let esPerro = false
+       
+      let esPerro = false , esCachorro = false
+        
+
         let ani = await Animal.findOne({_id: Adoptados[i].mascotaId})  
+        var diferencia= Math.abs(Date.now() - ani.fechaNacimiento)
+        var edadDias = Math.round(diferencia/(1000*3600*24))
+        
+        if (edadDias < 366) esCachorro = true 
+
         if (ani.tipoMascota == 0) esPerro = true
 
         let provisorios = await Provisorio.find({
@@ -64,17 +72,25 @@ router.get('/animales/provisorio', auth,  async function(req,res, next ){
             solicitanteId: Adoptados[i].solicitanteId,
             estadoId: estadoAprobado
           })
-        if(provisorios.length > 0 && esPerro) {
-            contTotalAdopProPerro ++
-            contTotalAdopPerro ++
-            contTotalAdopPro ++ 
-            continue
+        if(provisorios != undefined && esPerro) {
+           if(esCachorro){
+              perrosCaAdopPorSuProvisorio ++    
+           }
+          else{
+            perrosAdAdopPorSuProvisorio ++
+          } 
+          continue
         }
-        if(provisorios.length > 0) {
-            contTotalAdopProGato ++
-            contTotalAdopGato ++
-            contTotalAdopPro ++
-            continue
+
+        if(provisorios.length != undefined) {
+          if(esCachorro){
+            gatosCaAdopPorSuProvisorio ++    
+          }
+          else{
+            gatosAdAdopPorSuProvisorio ++
+           } 
+          continue
+          
         }    
        provisorios = await Provisorio.find({
             mascotaId: Adoptados[i].mascotaId,
@@ -83,43 +99,62 @@ router.get('/animales/provisorio', auth,  async function(req,res, next ){
             estadoId: estadoAprobado
           })
        
-       if(provisorios.length > 0 && esPerro) {
-           contTotalAdopPerro ++ 
-           contTotalAdopPro ++ 
-           continue 
+       if(provisorios != undefined && esPerro) {
+          if(esCachorro){
+            perrosCaAdopPorOtro ++    
+          }
+          else{
+            perrosAdAdopPorOtro ++
+          } 
+          continue
        }
-       if(provisorios.length > 0) {
-           contTotalAdopGato ++
-           contTotalAdopPro ++
-       } 
-    }
-    
-  // perro adulto - cachorro  igual para gatos 
-  /* var jsonMascotas = [{
-    "tipoMascota":"0",
-    "perrosCachorrosAdoptadosPorSuProvisorio":4,
-    "perrosAdultosAdoptadosPorSuProvisorio":10,
-    "perrosCachorrosAdoptadosPorOtro":5,
-    "perrosAdultosAdoptadosPorOtro":5,
-    "totalPerrosAdoptados":24
-    },
-    {
-      "tipoMascota":"1",
-      "gatosCachorrosAdoptadosPorSuProvisorio":15,
-      "gatosAdultosAdoptadosPorSuProvisorio":12,
-      "gatosCachorrosAdoptadosPorOtro":8,
-      "gatosAdultosAdoptadosPorOtro":2
- */
-    let arreglo = {
-        "AdopcionconProvisorioGato" : contTotalAdopGato,
-        "AdopcionconProvisorioPerro" : contTotalAdopPerro,
-        "TotalAdopcionProvisorio" : contTotalAdopPro
-    
-    } 
 
+       if(provisorios.length != undefined) {
+        if(esCachorro){
+          gatosCaAdopPorOtro ++    
+        }
+        else{
+          gatosAdAdopPorOtro ++
+        } 
+       }
+    }
+    totalPerrosAdoptados = perrosCaAdopPorSuProvisorio + perrosAdAdopPorSuProvisorio + perrosCaAdopPorOtro + perrosAdAdopPorOtro
+    totalGatosAdoptados = gatosCaAdopPorSuProvisorio + gatosAdAdopPorSuProvisorio + gatosCaAdopPorOtro + gatosAdAdopPorOtro
+   
+    let arreglo = [{
+      tipoMascota:"0",
+      perrosCachorrosAdoptadosPorSuProvisorio: perrosCaAdopPorSuProvisorio,
+      perrosAdultosAdoptadosPorSuProvisorio:perrosAdAdopPorSuProvisorio,
+      perrosCachorrosAdoptadosPorOtro:perrosCaAdopPorOtro,
+      perrosAdultosAdoptadosPorOtro:perrosAdAdopPorOtro,
+      totalPerrosAdoptados:totalPerrosAdoptados
+      },
+      {
+        tipoMascota:"1",
+        gatosCachorrosAdoptadosPorSuProvisorio:gatosCaAdopPorSuProvisorio,
+        gatosAdultosAdoptadosPorSuProvisorio:gatosAdAdopPorSuProvisorio,
+        gatosCachorrosAdoptadosPorOtro:gatosCaAdopPorOtro,
+        gatosAdultosAdoptadosPorOtro:gatosAdAdopPorOtro,
+        totalGatosAdoptados:totalGatosAdoptados
+      }
+    ]
     res.send(arreglo)
 })
 
+
+function formato(fecha){
+  var fec = "" ,
+  fec = fecha
+  let anio = "" , mes = "" , dia = "", x = 0, y = fec.length
+  while( x < y) {
+    if(x < 4) anio =  anio + fec.charAt(x)
+    if(x > 3 && x < 6) mes = mes + fec.charAt(x)
+    if(x > 5) dia = dia + fec.charAt(x)
+    x++
+  }
+ 
+  return new Date(Date.UTC(anio, mes - 1, dia, 0, 0, 0))
+}
 
 
 
