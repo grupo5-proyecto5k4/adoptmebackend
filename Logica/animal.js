@@ -15,7 +15,7 @@ const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
 const Usuario = require('../modelos/usuarios.js')
 const Provisorio = require('../Formulario/provisorio.js')
-
+const Adopcion = require('../Formulario/adopcion.js')
 //estado del animal y de la solicitud de provisorio
 const estadoEnProvisorio= "En Provisorio"
 const estadoInicial = 'Abierta'
@@ -303,7 +303,7 @@ function estaVacio (variable)
 //     if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = p.apellidos
 
 //------------------------------------
-
+//Modelos: Provisorio, Adopción
 router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
     let userAux = req.user.user
     let barrioNew = req.query.barrio
@@ -311,7 +311,7 @@ router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
     if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
     let solicitudProvisorio = await modelo.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
     const filter = {}
-    const { estado, sexo, tamañoFinal, tipoMascota, responsableId } = req.query;
+    const {sexo, tamañoFinal, tipoMascota} = req.query;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
     if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
