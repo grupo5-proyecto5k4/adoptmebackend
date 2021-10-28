@@ -14,6 +14,18 @@ const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
 const Usuario = require('../modelos/usuarios.js')
+const Provisorio = require('../Formulario/provisorio.js')
+
+//estado del animal y de la solicitud de provisorio
+const estadoEnProvisorio= "En Provisorio"
+const estadoInicial = 'Abierta'
+const estadoAproResponsable = "Aprobado Por Responsable" 
+const estadoSuspendido = "Suspendido"
+const estadoSuspSolicitante="Suspendido por Solicitante"
+const estadoBloqueado = "Bloqueado"
+const estadoAprobado = "Aprobado"
+const estadoAproResponsable = "Aprobado Por Responsable" 
+//
 
 cloudinary.config({
     cloud_name: process.env.cloudname,
@@ -281,14 +293,63 @@ function estaVacio (variable)
 }
 
 //Modificar datos de la mascota(no en adopcion ni en provisorio), castrado y vacunas
-router.put('/user/modificarMascota', auth, async function(req, res) {
+// router.put('/user/modificarMascota', auth, async function(req, res) {
+//     let userAux = req.user.user
+//     let n = await User.findById({_id : userAux._id})
+//         let p = req.body
+//     let val_user = User
+//     if(n.estado)
+//     if(n.nombres != p.nombres && p.nombres) n.nombres = p.nombres
+//     if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = p.apellidos
+
+//------------------------------------
+
+router.get('/buscar/provisorioConfirmado', auth,  async function (req , res) {
     let userAux = req.user.user
-    let n = await User.findById({_id : userAux._id})
-        let p = req.body
-    let val_user = User
-    if(n.estado)
-    if(n.nombres != p.nombres && p.nombres) n.nombres = p.nombres
-    if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = p.apellidos
+    let barrioNew = req.query.barrio
+    if(userAux.tipoUsuario != 2)return res.status(404).json({error: "No tiene permisos, es solo para centros rescatistas"})
+    let solicitudProvisorio = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
+    const filter = {}
+    const { estado, sexo, tamañoFinal, tipoMascota, responsableId } = req.query;
+    if (sexo) filter.sexo = sexo;
+    if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
+    if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
+     
+    filtrarProvisorio(solicitudProvisorio, filter, barrioNew).then(val => res.send(val))
+
+})
+
+/* Funcion para traer solicitudes*/ 
+async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
+    let animales = []  
+    let desde = solicitudAdopciones.length
+    if (solicitudAdopciones.length == undefined)
+     {
+      let filterProv = filter
+      filterProv._id = solicitudAdopciones.mascotaId
+      desde = 0 
+      let animal = await Animal.find (filterProv)
+      if (!animal) return animales
+      let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
+      if (!usuario) return animales
+      if (usuario.Direccion.barrio != barrioNew && barrioNew) return animales
+      return animal
+    }
+    
+    for (let i = 0 ; i < desde ; i ++ ){
+        let filterProv = filter
+        filterProv._id = solicitudAdopciones[i].mascotaId
+        desde = 0 
+        let animal = await Animal.find (filterProv)
+        if (!animal) continue
+        let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
+        if (!usuario) continue
+        if (usuario.Direccion.barrio != barrioNew && barrioNew) continue
+        animales.push(animal)
+    }
+  return (animales)
+  }
+
 
 
 
@@ -301,4 +362,4 @@ module.exports = router;
 
 
 
-
+}
