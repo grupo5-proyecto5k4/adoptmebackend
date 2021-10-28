@@ -304,11 +304,12 @@ function estaVacio (variable)
 
 //------------------------------------
 
-router.get('/buscar/provisorioConfirmado', auth,  async function (req , res) {
+router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
     let userAux = req.user.user
     let barrioNew = req.query.barrio
-    if(userAux.tipoUsuario != 2)return res.status(404).json({error: "No tiene permisos, es solo para centros rescatistas"})
-    let solicitudProvisorio = await Provisorio.find({responsableId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
+    let modelo = req.query.modelo
+    if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
+    let solicitudProvisorio = await modelo.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
     const filter = {}
     const { estado, sexo, tamañoFinal, tipoMascota, responsableId } = req.query;
     if (sexo) filter.sexo = sexo;
