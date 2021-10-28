@@ -24,7 +24,7 @@ const estadoSuspendido = "Suspendido"
 const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
 const estadoAprobado = "Aprobado"
-const estadoAproResponsable = "Aprobado Por Responsable" 
+
 //
 
 cloudinary.config({
@@ -352,15 +352,8 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
   }
 
 
-
-
-
-
-
-
 module.exports = router;
 
 
 
 
-}
