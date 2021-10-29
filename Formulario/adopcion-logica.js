@@ -315,10 +315,13 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
   
 
   let animal = await Animal.findById(solicitud.mascotaId)
-  if (estadoNuevo != estadoAprobado ) return animal
+  if (estadoNuevo == estadoAproResponsable) return actualizarAnimal(animal, animal.estado, false)
+  if (estadoNuevo == estadoSuspSolicitante) return actualizarAnimal(animal, animal.estado, true)
+  if (estadoNuevo != estadoAprobado) return animal
+  
 
   let estadoAntAnimal = animal.estado
-
+  let esVisible = false
   
   switch(animal.estado)
   {      case estadoDisProvisorio : 
@@ -335,25 +338,33 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
    if (esAdoptado) estadoNueAnimal = estadoAdoptado
    let  result
    if (estadoNueAnimal) 
-    {  result = await Animal.findByIdAndUpdate(solicitud.mascotaId, 
-        { estado: estadoNueAnimal,
-          fechaModificacion : new Date(Date.now()).toISOString()
-        }, 
-        { new: true
-        } 
-        )
-        if (estadoNueAnimal != estadoAntAnimal ){
-          let historial = new histoEstadoAnimal({
-            mascotaId : result._id,
-            solicitud: solicitud._id,
-            estadoId :  estadoAntAnimal})
-            await historial.save()
-            
-        }
-     
+    {  
+     result = actualizarAnimal(animal,estadoNueAnimal,esVisible)
   }
     return (result)
   
+}
+
+async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
+  let estadoAntAnimal = animal.estado
+  let modificado
+  modificado = await Animal.findByIdAndUpdate(animal.mascotaId, 
+    { estado: estadoNueAnimal,
+      visible : esVisible,
+      fechaModificacion : new Date(Date.now()).toISOString()
+    }, 
+    { new: true
+    } 
+    )
+    if (estadoNueAnimal != estadoAntAnimal ){
+      let historial = new histoEstadoAnimal({
+        mascotaId : result._id,
+        solicitud: solicitud._id,
+        estadoId :  estadoAntAnimal})
+        await historial.save()
+        
+    }
+  return modificado
 }
 
 /* Modificacion del Estado de Las Solicitudes */
