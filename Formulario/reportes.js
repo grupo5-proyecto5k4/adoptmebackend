@@ -122,14 +122,16 @@ router.get('/animales/provisorio', auth,  async function(req,res, next ){
     totalGatosAdoptados = gatosCaAdopPorSuProvisorio + gatosAdAdopPorSuProvisorio + gatosCaAdopPorOtro + gatosAdAdopPorOtro
    
     let arreglo = [{
+      Perro : {
       tipoMascota:"0",
       perrosCachorrosAdoptadosPorSuProvisorio: perrosCaAdopPorSuProvisorio,
       perrosAdultosAdoptadosPorSuProvisorio:perrosAdAdopPorSuProvisorio,
       perrosCachorrosAdoptadosPorOtro:perrosCaAdopPorOtro,
       perrosAdultosAdoptadosPorOtro:perrosAdAdopPorOtro,
       totalPerrosAdoptados:totalPerrosAdoptados
-      },
-      {
+      }
+    },
+     { Gato : {
         tipoMascota:"1",
         gatosCachorrosAdoptadosPorSuProvisorio:gatosCaAdopPorSuProvisorio,
         gatosAdultosAdoptadosPorSuProvisorio:gatosAdAdopPorSuProvisorio,
@@ -137,6 +139,7 @@ router.get('/animales/provisorio', auth,  async function(req,res, next ){
         gatosAdultosAdoptadosPorOtro:gatosAdAdopPorOtro,
         totalGatosAdoptados:totalGatosAdoptados
       }
+    } 
     ]
     res.send(arreglo)
 })
