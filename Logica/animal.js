@@ -65,9 +65,10 @@ router.post('/animal', auth, async function (req, res) {
 });
 
 // filtrar mascotas segun su estado
+// agregar que sea visible 
 router.get('/animal/:estados', async (req, res) => {
     let nueva = req.params.estados.replace(/_/g, " ")
-    let animal = await Animal.find({ estado: nueva })
+    let animal = await Animal.find({ estado: nueva, visible: true})
     res.send(animal)
 });
 
@@ -100,11 +101,15 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
     const filter2 = {}
     let filtroDevuelto = []
     const { estado, sexo, tamañoFinal, tipoMascota } = req.query;
-
+     
+    
     if (estado) filter2.estado = estado;
     if (sexo) filter2.sexo = sexo;
     if (tamañoFinal) filter2.tamañoFinal = tamañoFinal;
     if (tipoMascota) filter2.tipoMascota = Number(tipoMascota);
+    //agregamos los visibles 
+    filter2.visible = true
+
     console.log(filter2);
     let animalDevuelto = await Animal.find(filter2)
     console.log(animalDevuelto)
