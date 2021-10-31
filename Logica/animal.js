@@ -176,6 +176,8 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
 router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let userAux = req.user.user
+    var desde = formato(req.query.fechaDesde)
+    var hasta = formato(req.query.fechaHasta)
     if(userAux.tipoUsuario != 2)return res.status(402).json({Error: "No tiene permisos suficientes para esta acción"})
     let perrosFiltradosAdulto = []
     let perrosFiltradosCachorro = []
@@ -189,11 +191,12 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let promedioPerroCachorro = 0
     let promedioGatoAdulto = 0
     let promedioGatoCachorro = 0
-    let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id})
+    let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id, fechaModificacion: {$gte: desde, $lte: hasta}})
     var countGatoAdulto = 0
     var countGatoCachorro  = 0
     var countPerroAdulto = 0
     var countPerroCachorro = 0
+
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
         var diferencia= Math.abs(Date.now() - animalesAdoptados[i].fechaNacimiento)
@@ -277,6 +280,20 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
         ]
         res.send(reporteFinal) 
 })
+
+function formato(fecha){
+    var fec = "" ,
+    fec = fecha
+    let anio = "" , mes = "" , dia = "", x = 0, y = fec.length
+    while( x < y) {
+      if(x < 4) anio =  anio + fec.charAt(x)
+      if(x > 3 && x < 6) mes = mes + fec.charAt(x)
+      if(x > 5) dia = dia + fec.charAt(x)
+      x++
+    }
+   
+    return new Date(Date.UTC(anio, mes - 1, dia, 0, 0, 0))
+  }
 
 function conversionDias (mili)
 {
