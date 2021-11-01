@@ -337,6 +337,7 @@ router.put('/user/modificarMascota', auth, async function(req, res) {
         const result = await vac.save()
     }
 }
+})
 
 
 
