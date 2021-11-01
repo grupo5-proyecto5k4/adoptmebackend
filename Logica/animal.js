@@ -18,6 +18,7 @@ const Provisorio = require('../Formulario/provisorio.js')
 const Adopcion = require('../Formulario/adopcion.js')
 //estado del animal y de la solicitud de provisorio
 const estadoEnProvisorio= "En Provisorio"
+const estadoAdoptado= "Adoptado"
 const estadoInicial = 'Abierta'
 const estadoAproResponsable = "Aprobado Por Responsable" 
 const estadoSuspendido = "Suspendido"
@@ -191,7 +192,10 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let promedioPerroCachorro = 0
     let promedioGatoAdulto = 0
     let promedioGatoCachorro = 0
+    console.log("fechaDesde", desde)
+    console.log("fechaHasta", hasta)
     let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id, fechaModificacion: {$gte: desde, $lte: hasta}})
+    console.log(animalesAdoptados)
     var countGatoAdulto = 0
     var countGatoCachorro  = 0
     var countPerroAdulto = 0
@@ -310,14 +314,32 @@ function estaVacio (variable)
 }
 
 //Modificar datos de la mascota(no en adopcion ni en provisorio), castrado y vacunas
-// router.put('/user/modificarMascota', auth, async function(req, res) {
-//     let userAux = req.user.user
-//     let n = await User.findById({_id : userAux._id})
-//         let p = req.body
-//     let val_user = User
-//     if(n.estado)
-//     if(n.nombres != p.nombres && p.nombres) n.nombres = p.nombres
-//     if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = p.apellidos
+router.put('/user/modificarMascota', auth, async function(req, res) {
+    let userAux = req.user.user
+    let animalNew = await Animal.findById({_id : req.body.id_Animal})
+    let castradoNew = req.body.castrado
+    let vacunasNew = req.body.nombreVacuna
+    let fechaAplicacionNew = req.body.fechaAplicacion
+
+    if(animalNew.estado == (estadoAdoptado || estadoEnProvisorio)) return res.status(400).json({error: "Estado incorrecto"})
+    
+    if(animalNew.castrado != castradoNew && castradoNew) {
+        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{castrado: castradoNew, fechaModificacion: new Date(Date.now()).toISOString()}, {new: true})
+    }
+    if(vacunasNew && fechaAplicacionNew){
+        let vacunaExistente = await Vacuna.find({nombreVacuna: vacunasNew, fechaAplicacion: fechaAplicacionNew})
+        if(vacunaExistente.length == undefined){
+            let vac = new Vacuna({
+            nombreVacuna : element.nombreVacuna,
+            fechaAplicacion: element.fechaAplicacion,
+            id_Animal: element.id_Animal
+        })
+        const result = await vac.save()
+    }
+}
+
+
+
 
 //------------------------------------
 //Modelos: Provisorio, Adopción
@@ -367,7 +389,7 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
     }
   return (animales)
   }
-
+//Fin reporte solicitudes confirmadas de apoción
 
 module.exports = router;
 
