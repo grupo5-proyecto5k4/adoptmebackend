@@ -16,6 +16,7 @@ const Vacuna = require('../modelos/vacuna.js')
 const Usuario = require('../modelos/usuarios.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const Adopcion = require('../Formulario/adopcion.js')
+
 //estado del animal y de la solicitud de provisorio
 const estadoEnProvisorio= "En Provisorio"
 const estadoAdoptado= "Adoptado"
@@ -345,12 +346,11 @@ router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
     let userAux = req.user.user
     let barrioNew = req.query.barrio
     var modelo = req.query.modelo
-    if(modelo == "Provisorio") modelo="Provisorio"
-    if(modelo == "Adopcion") modelo="Adopcion"
-    console.log(modelo)
-
+    let solicitudProvisorio
+    if(modelo == "Provisorio")solicitudProvisorio = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
+    if(modelo == "Adopcion")solicitudProvisorio = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
+    
     //if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
-    let solicitudProvisorio = await modelo.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
     const filter = {}
     const {sexo, tamañoFinal, tipoMascota} = req.query;
     if (sexo) filter.sexo = sexo;
