@@ -372,7 +372,7 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
       desde = 0 
       let animal = await Animal.find (filterProv)
       if (!animal) return animales
-      let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
+      let usuario = await Usuario.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
       if (!usuario) return animales
       if (usuario.Direccion.barrio != barrioNew && barrioNew) return animales
       return animal
@@ -384,7 +384,7 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
         desde = 0 
         let animal = await Animal.find (filterProv)
         if (!animal) continue
-        let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
+        let usuario = await Usuario.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
         if (!usuario) continue
         if (usuario.Direccion.barrio != barrioNew && barrioNew) continue
         animales.push(animal)
