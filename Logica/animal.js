@@ -389,7 +389,7 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
         if (usuario.Direccion.barrio != barrioNew && barrioNew) continue
         animales.push(animal)
     }
-  return (animales)
+  return (animales[0])
   }
 //Fin reporte solicitudes confirmadas de apoción
 
