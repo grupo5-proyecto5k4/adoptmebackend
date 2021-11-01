@@ -192,10 +192,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let promedioPerroCachorro = 0
     let promedioGatoAdulto = 0
     let promedioGatoCachorro = 0
-    console.log("fechaDesde", desde)
-    console.log("fechaHasta", hasta)
     let animalesAdoptados = await Animal.find({estado : "Adoptado", responsableId : userAux._id, fechaModificacion: {$gte: desde, $lte: hasta}})
-    console.log(animalesAdoptados)
     var countGatoAdulto = 0
     var countGatoCachorro  = 0
     var countPerroAdulto = 0
@@ -347,8 +344,12 @@ router.put('/user/modificarMascota', auth, async function(req, res) {
 router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
     let userAux = req.user.user
     let barrioNew = req.query.barrio
-    let modelo = req.query.modelo
-    if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
+    var modelo = req.query.modelo
+    if(modelo == "Provisorio") modelo="Provisorio"
+    if(modelo == "Adopcion") modelo="Adopcion"
+
+
+    //if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
     let solicitudProvisorio = await modelo.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
     const filter = {}
     const {sexo, tamañoFinal, tipoMascota} = req.query;
