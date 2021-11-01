@@ -347,7 +347,7 @@ router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
     var modelo = req.query.modelo
     if(modelo == "Provisorio") modelo="Provisorio"
     if(modelo == "Adopcion") modelo="Adopcion"
-
+    console.log(modelo)
 
     //if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
     let solicitudProvisorio = await modelo.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
