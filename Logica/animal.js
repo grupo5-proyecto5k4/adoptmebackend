@@ -194,7 +194,9 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let promedioGatoCachorro = 0
     console.log("fechaDesde", desde)
     console.log("fechaHasta", hasta)
-    let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id, fechaModificacion: {$gte: desde, $lte: hasta}})
+    //let animalesAdoptados = await Animal.find({estado : "Adoptado", ResponsableId : userAux._id, fechaModificacion: {$gte: desde, $lte: hasta}})
+    let animalesAdoptados = await Animal.find({estado : "Adoptado", fechaModificacion: {$gte: desde, $lte: hasta}})
+
     console.log(animalesAdoptados)
     var countGatoAdulto = 0
     var countGatoCachorro  = 0
