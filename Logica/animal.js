@@ -14,6 +14,20 @@ const Estados = require('../modelos/estados.js')
 const { schema } = require('../modelos/estados.js')
 const Vacuna = require('../modelos/vacuna.js')
 const Usuario = require('../modelos/usuarios.js')
+const Provisorio = require('../Formulario/provisorio.js')
+const Adopcion = require('../Formulario/adopcion.js')
+
+//estado del animal y de la solicitud de provisorio
+const estadoEnProvisorio= "En Provisorio"
+const estadoAdoptado= "Adoptado"
+const estadoInicial = 'Abierta'
+const estadoAproResponsable = "Aprobado Por Responsable" 
+const estadoSuspendido = "Suspendido"
+const estadoSuspSolicitante="Suspendido por Solicitante"
+const estadoBloqueado = "Bloqueado"
+const estadoAprobado = "Aprobado"
+
+//
 
 cloudinary.config({
     cloud_name: process.env.cloudname,
@@ -149,41 +163,223 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
 //---------------------------------------------------------------------------------------------------
 //Reporte de estadísticas de cuanto tiempo pasa un animal desde que se le da de alta en la aplicación
-// hasta que es finalmente adoptado
+// hasta que es finalmente adoptado, EL ESTADO DEL ANIMAL TIENE QUE SER ADOPTADO
 
 router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let userAux = req.user.user
-    if(userAux.tipoUsuario != 2) return res.status(400).json({error: 'Esta función es solo para centros rescatistas'})
-    let perrosFiltrados = []
-    let gatosFiltrados = []
-    for (let i = 0; i < Animal.length; i++) {
-        if(Animal[i].estado == "Adoptado")
+    var desde = formato(req.query.fechaDesde)
+    var hasta = formato(req.query.fechaHasta)
+    if(userAux.tipoUsuario != 2)return res.status(402).json({Error: "No tiene permisos suficientes para esta acción"})
+    let perrosFiltradosAdulto = []
+    let perrosFiltradosCachorro = []
+    let gatosFiltradosAdulto = []
+    let gatosFiltradosCachorro = []
+    let acumuladorRestaPerroAdulto = 0
+    let acumuladorRestaPerroCachorro = 0
+    let acumuladorRestaGatoAdulto = 0
+    let acumuladorRestaGatoCachorro = 0
+    let promedioPerroAdulto = 0
+    let promedioPerroCachorro = 0
+    let promedioGatoAdulto = 0
+    let promedioGatoCachorro = 0
+    let animalesAdoptados = await Animal.find({estado : "Adoptado", responsableId : userAux._id, fechaModificacion: {$gte: desde, $lte: hasta}})
+    var countGatoAdulto = 0
+    var countGatoCachorro  = 0
+    var countPerroAdulto = 0
+    var countPerroCachorro = 0
+
+    
+    for (let i = 0; i < animalesAdoptados.length; i++) {
+        var diferencia= Math.abs(Date.now() - animalesAdoptados[i].fechaNacimiento)
+        var edadDias = Math.round(diferencia/(1000*3600*24))
+        var fechaAlta = animalesAdoptados[i].fechaAlta
+        var fechaModificacion = animalesAdoptados[i].fechaModificacion
+        var resta = fechaModificacion - fechaAlta
+        if(animalesAdoptados[i].tipoMascota == 0) //perro
         {
-            if(Animal[i].tipoAnimal == 0) //perro
-            {
-                var fechaAlta = Animal[i].fechaAlta
-                var fechaModificacion = Animal[i].fechaModificacion
-                var resta = fechaAlta.getTime() - fechaModificacion.getTime()
-                perrosFiltrados.push(resta)
+            if(edadDias > 365) //adulto
+                {
+                    acumuladorRestaPerroAdulto += resta
+                    countPerroAdulto ++
+                    perrosFiltradosAdulto.push(resta)
+                }
+                else
+                { 
+                    acumuladorRestaPerroCachorro += resta 
+                    countPerroCachorro ++
+                    perrosFiltradosCachorro.push(resta)
+                }
+
             }
             else{ //gato
-                var fechaAlta = Animal[i].fechaAlta
-                var fechaModificacion = Animal[i].fechaModificacion
-                var resta = fechaAlta.getTime() - fechaModificacion.getTime()
-                gatosFiltrados.push(resta)
+
+                if(edadDias > 365) //adulto
+                {
+                    acumuladorRestaGatoAdulto += resta
+                    countGatoAdulto ++
+                    gatosFiltradosAdulto.push(resta)
+                }
+                else
+                { 
+                    acumuladorRestaGatoCachorro += resta 
+                    countGatoCachorro ++
+                    gatosFiltradosCachorro.push(resta)
+                }
+
             }
         }
-    }
+        
+    let valorMaximoPerroAdulto = Math.max.apply(0, estaVacio(perrosFiltradosAdulto))
+    let valorMaximoPerroCachorro = Math.max.apply(0, estaVacio(perrosFiltradosCachorro))
+    let ValorMinimoPerroAdulto = Math.min.apply(0, estaVacio(perrosFiltradosAdulto))
+    let ValorMinimoPerroCachorro = Math.min.apply(0, estaVacio(perrosFiltradosCachorro))
+    let valorMaximoGatoAdulto = Math.max.apply(0, estaVacio(gatosFiltradosAdulto))
+    let valorMaximoGatoCachorro = Math.max.apply(0, estaVacio(gatosFiltradosCachorro))
+    let valorMinimoGatoAdulto = Math.min.apply(0, estaVacio(gatosFiltradosAdulto))
+    let valorMinimoGatoCachorro = Math.min.apply(0, estaVacio(gatosFiltradosCachorro))
     
-    let valorMaximoPerro = Math.max.apply(null, perrosFiltrados)
-    let ValorMinimoPerro = Math.min.apply(null, perrosFiltrados)
-    let valorMaximoGato = Math.max.apply(null, gatosFiltrados)
-    let ValorMinimoGato = Math.min.apply(null, gatosFiltrados)
-    res.send(valorMaximoPerro)
+    if(countPerroAdulto != 0) promedioPerroAdulto = acumuladorRestaPerroAdulto/countPerroAdulto
+    if(countPerroCachorro != 0) promedioPerroCachorro = acumuladorRestaPerroAdulto/countPerroCachorro
+    if(countGatoAdulto != 0) promedioGatoAdulto = acumuladorRestaGatoAdulto/countGatoAdulto
+    if(countGatoCachorro != 0) promedioGatoCachorro = acumuladorRestaGatoCachorro/countGatoCachorro
+    
+    var reporteFinal =  [
+            {
+            "categoria":"perroCachorro",
+            "minimo": conversionDias(ValorMinimoPerroCachorro),
+            "promedio": conversionDias(promedioPerroCachorro),
+            "maximo": conversionDias(valorMaximoPerroCachorro)
+            },
+            {
+            "categoria":"perroAdulto",
+            "minimo": conversionDias(ValorMinimoPerroAdulto),
+            "promedio": conversionDias(promedioPerroAdulto),
+            "maximo": conversionDias(valorMaximoPerroAdulto)
+            },
+            {
+            "categoria":"gatoCachorro",
+            "minimo": conversionDias(valorMinimoGatoCachorro),
+            "promedio": conversionDias(promedioGatoCachorro),
+            "maximo": conversionDias(valorMaximoGatoCachorro)
+            },
+            {
+            "categoria":"gatoAdulto",
+            "minimo": conversionDias(valorMinimoGatoAdulto),
+            "promedio": conversionDias(promedioGatoAdulto),
+            "maximo": conversionDias(valorMaximoGatoAdulto)
+            }
+        ]
+        res.send(reporteFinal) 
 })
 
-module.exports = router;
+function formato(fecha){
+    var fec = "" ,
+    fec = fecha
+    let anio = "" , mes = "" , dia = "", x = 0, y = fec.length
+    while( x < y) {
+      if(x < 4) anio =  anio + fec.charAt(x)
+      if(x > 3 && x < 6) mes = mes + fec.charAt(x)
+      if(x > 5) dia = dia + fec.charAt(x)
+      x++
+    }
+   
+    return new Date(Date.UTC(anio, mes - 1, dia, 0, 0, 0))
+  }
 
+function conversionDias (mili)
+{
+    var edadDias = Math.round(mili/(1000*3600*24))
+    return parseInt(edadDias, 10)
+}
+
+function estaVacio (variable)
+{
+    var arreglo = [0]
+    if(variable.length == 0) return arreglo
+    return variable
+
+}
+
+//Modificar datos de la mascota(no en adopcion ni en provisorio), castrado y vacunas
+router.put('/user/modificarMascota', auth, async function(req, res) {
+    let userAux = req.user.user
+    let animalNew = await Animal.findById({_id : req.body.id_Animal})
+    let castradoNew = req.body.castrado
+    let vacunasNew = req.body.nombreVacuna
+    let fechaAplicacionNew = req.body.fechaAplicacion
+
+    if(animalNew.estado == (estadoAdoptado || estadoEnProvisorio)) return res.status(400).json({error: "Estado incorrecto"})
+    
+    if(animalNew.castrado != castradoNew && castradoNew) {
+        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{castrado: castradoNew, fechaModificacion: new Date(Date.now()).toISOString()}, {new: true})
+    }
+    if(vacunasNew && fechaAplicacionNew){
+        let vacunaExistente = await Vacuna.find({nombreVacuna: vacunasNew, fechaAplicacion: fechaAplicacionNew})
+        if(vacunaExistente.length == undefined){
+            let vac = new Vacuna({
+            nombreVacuna : element.nombreVacuna,
+            fechaAplicacion: element.fechaAplicacion,
+            id_Animal: element.id_Animal
+        })
+        const result = await vac.save()
+    }
+}
+})
+
+//------------------------------------
+//Modelos: Provisorio, Adopción
+router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
+    let userAux = req.user.user
+    let barrioNew = req.query.barrio
+    var modelo = req.query.modelo
+    let solicitudProvisorio
+    if(modelo == "Provisorio")solicitudProvisorio = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
+    if(modelo == "Adopcion")solicitudProvisorio = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
+    
+    //if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
+    const filter = {}
+    const {sexo, tamañoFinal, tipoMascota} = req.query;
+    if (sexo) filter.sexo = sexo;
+    if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
+    if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
+     
+    filtrarProvisorio(solicitudProvisorio, filter, barrioNew).then(val => res.send(val))
+
+})
+
+/* Funcion para traer solicitudes*/ 
+async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
+    let animales = []  
+    let desde = solicitudAdopciones.length
+    if (solicitudAdopciones.length == undefined)
+     {
+      let filterProv = filter
+      filterProv._id = solicitudAdopciones.mascotaId
+      desde = 0 
+      let animal = await Animal.find (filterProv)
+      if (!animal) return animales
+      let usuario = await Usuario.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
+      if (!usuario) return animales
+      if (usuario.Direccion.barrio != barrioNew && barrioNew) return animales
+      return animal
+    }
+    
+    for (let i = 0 ; i < desde ; i ++ ){
+        let filterProv = filter
+        filterProv._id = solicitudAdopciones[i].mascotaId
+        desde = 0 
+        let animal = await Animal.find (filterProv)
+        if (!animal) continue
+        let usuario = await Usuario.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
+        if (!usuario) continue
+        if (usuario.Direccion.barrio != barrioNew && barrioNew) continue
+        animales.push(animal)
+    }
+  return (animales[0])
+  }
+//Fin reporte solicitudes confirmadas de apoción
+
+module.exports = router;
 
 
 

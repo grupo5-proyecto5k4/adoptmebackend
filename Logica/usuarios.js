@@ -277,7 +277,7 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     if(n.facebook != p.facebook && p.facebook) n.facebook = p.facebook
     if(n.numeroContacto != p.numeroContacto && p.numeroContacto) n.numeroContacto=p.numeroContacto
     
-    const salt = await bcrypt.genSalt(10)
+    const salt = await bcrypt.genSalt(10) //para desencriptar la contraseña
     
     if(p.contrasenia) 
     {
@@ -285,8 +285,8 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
         if (!validaContrasenia) n.contrasenia = await bcrypt.hash(p.contrasenia, salt)
          
     }    
-    n.fechaModificacion = new Date(Date.now()).toISOString()
-    let result = await User.findByIdAndUpdate(n._id, n, {new: true} )
+    n.fechaModificacion = new Date(Date.now()).toISOString() //grabar la fecha actual
+    let result = await User.findByIdAndUpdate(n._id, n, {new: true} ) //aca se actualiza el usuario
     
     if ( !result) return  res.status(400).json({mensaje:'no se pudo realizar la actualizacion'})
 
