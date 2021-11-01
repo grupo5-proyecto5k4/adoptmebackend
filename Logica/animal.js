@@ -337,9 +337,6 @@ router.put('/user/modificarMascota', auth, async function(req, res) {
 }
 })
 
-
-
-
 //------------------------------------
 //Modelos: Provisorio, Adopción
 router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
