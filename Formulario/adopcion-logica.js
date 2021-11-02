@@ -260,7 +260,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
-async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esAdoptado){
+async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esAdoptado, observacion, fechaFinProvisor){
   let bloqueado = false
   let result2 
   let estadoNuevo = undefined
@@ -280,10 +280,22 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
   if(estadoNuevo) {
       result2 = await modelo.findByIdAndUpdate(solicitud._id, 
       {estadoId: estadoNuevo,
-         fechaModificacion : new Date(Date.now()).toISOString()},
+       observacionCancelacion : observacion, 
+       fechaModificacion : new Date(Date.now()).toISOString()},
       {new : true}
       
       )
+      if(modelo == Provisorio){
+        result2 = await modelo.findByIdAndUpdate(solicitud._id, 
+          {estadoId: estadoNuevo,
+           fechaFinProvisor: fechaFinProvisor,
+           observacionCancelacion : observacion, 
+           fechaModificacion : new Date(Date.now()).toISOString()},
+          {new : true}
+          
+          )
+         
+      }
       ani = modificarAnimal(solicitud, esAdoptado, estadoNuevo)
   } 
     
@@ -394,8 +406,9 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
 
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
   if (!Solicitud) modelo = Adopcion, esAdoptado = true
-     
-  modificarSolicitud ( modelo , userAux, esAprobado, req.params.idSolicitud, esAdoptado).then(val => res.send(val))
+  var fechaModificacion =  req.body.fechaFinProvisor
+  var observacion = req.body.observacion
+  modificarSolicitud(modelo , userAux, esAprobado, req.params.idSolicitud, esAdoptado, observacion, fechaFinProvisor).then(val => res.send(val))
 
 })
 // agregar un comentario cuando rechaza un solicitud por parte del Solicitante

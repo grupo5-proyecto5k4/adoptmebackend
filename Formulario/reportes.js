@@ -29,7 +29,7 @@ const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
 
 
-router.get('/animales/provisorio', auth,  async function(req,res, next ){
+router.get('/animales/provisorio', auth,  async function(req, res, next ){
     let userAux = req.user.user
    
       
@@ -56,7 +56,7 @@ router.get('/animales/provisorio', auth,  async function(req,res, next ){
     { 
        
       let esPerro = false , esCachorro = false
-        
+                 
 
         let ani = await Animal.findOne({_id: Adoptados[i].mascotaId})  
         var diferencia= Math.abs(Date.now() - ani.fechaNacimiento)
