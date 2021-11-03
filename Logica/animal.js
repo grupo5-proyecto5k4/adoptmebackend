@@ -37,10 +37,8 @@ cloudinary.config({
 
 
 //Buscar un animal por un determinado id
-router.get('/buscar', async function (req, res) {
-    console.log('llega')
-
-    const animal = await Animal.find()
+router.get('/buscar/:id', async function (req, res) {
+    const animal = await Animal.find({_id : req.params.id})
     console.log(animal)
     res.send(animal)
 })
