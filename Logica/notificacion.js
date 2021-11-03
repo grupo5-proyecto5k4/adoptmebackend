@@ -8,7 +8,6 @@ const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/notificacion.js')
 const auth = require('../middleware/auth.js')
 
-
 router.post('/notificacion', auth,  async function(req, res) { 
     let notificacion = new Notificacion({
         tipoNotificacion: req.body.tipoNotificacion,
@@ -61,7 +60,5 @@ router.put('/notificacion/:id_notificacion', auth, async(req, res)=> {
      if(!notificacion) return res.status(404).json({error: 'No se ha encontrado la notificacion indicada'})  
      else res.status(200).send();
 });
-
-
 
 module.exports = router;
