@@ -128,10 +128,14 @@ router.post('/registro', [
          tipoUsuarios = 2
          estado = await Estado.findOne({nombre: "Pendiente"})
      }
-    
+     let nombre = req.body.nombres
+     let apellido = req.body.apellidos
+     if(req.body.nombres != undefined)nombre=(req.body.nombres).toUpperCase()
+     if(req.body.apellidos != undefined)apellido=(req.body.apellidos).toUpperCase()
+
      user = new User({
-        nombres: req.body.nombres,
-        apellidos:req.body.apellidos,
+        nombres: nombre,
+        apellidos: apellido,
         dni:req.body.dni,
         fechaNacimiento:req.body.fechaNacimiento,
         Direccion:req.body.Direccion, 
@@ -273,7 +277,7 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     if(n.facebook != p.facebook && p.facebook) n.facebook = p.facebook
     if(n.numeroContacto != p.numeroContacto && p.numeroContacto) n.numeroContacto=p.numeroContacto
     
-    const salt = await bcrypt.genSalt(10)
+    const salt = await bcrypt.genSalt(10) //para desencriptar la contraseña
     
     if(p.contrasenia) 
     {
@@ -281,8 +285,8 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
         if (!validaContrasenia) n.contrasenia = await bcrypt.hash(p.contrasenia, salt)
          
     }    
-    n.fechaModificacion = new Date(Date.now()).toISOString()
-    let result = await User.findByIdAndUpdate(n._id, n, {new: true} )
+    n.fechaModificacion = new Date(Date.now()).toISOString() //grabar la fecha actual
+    let result = await User.findByIdAndUpdate(n._id, n, {new: true} ) //aca se actualiza el usuario
     
     if ( !result) return  res.status(400).json({mensaje:'no se pudo realizar la actualizacion'})
 

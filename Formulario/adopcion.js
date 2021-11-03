@@ -73,6 +73,9 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
       type: Number,
       required: true
     },
+    cadaCuanto:{
+      type: Number      
+    },
     vivienda : {
       type: Number,
       required: true
@@ -119,7 +122,11 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
       type: String
     },
 
-    responsableId: ObjectId
+    responsableId: ObjectId,
+
+    observacionCancelacion: {
+      type: String
+    }
 
   });
     

@@ -18,7 +18,7 @@ const histoEstadoAnimal= require('../modelos/histoEstadoAnimal.js')
 /* estados Animal*/
 const estadoAprobado = "Aprobado"
 const estadoAdoptado    = "Adoptado"
-const estadoEnProvisorio= "En Provisorio"
+const estadoEnProvisorio= "En provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
 const estadoDispAdopcion= "Disponible Adopción" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
@@ -260,7 +260,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
-async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esAdoptado){
+async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esAdoptado, observacion, fechaFinProvisor){
   let bloqueado = false
   let result2 
   let estadoNuevo = undefined
@@ -280,10 +280,22 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
   if(estadoNuevo) {
       result2 = await modelo.findByIdAndUpdate(solicitud._id, 
       {estadoId: estadoNuevo,
-         fechaModificacion : new Date(Date.now()).toISOString()},
+       observacionCancelacion : observacion, 
+       fechaModificacion : new Date(Date.now()).toISOString()},
       {new : true}
       
       )
+      if(modelo == Provisorio){
+        result2 = await modelo.findByIdAndUpdate(solicitud._id, 
+          {estadoId: estadoNuevo,
+           fechaFinProvisor: fechaFinProvisor,
+           observacionCancelacion : observacion, 
+           fechaModificacion : new Date(Date.now()).toISOString()},
+          {new : true}
+          
+          )
+         
+      }
       ani = modificarAnimal(solicitud, esAdoptado, estadoNuevo)
   } 
     
@@ -315,17 +327,20 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
   
 
   let animal = await Animal.findById(solicitud.mascotaId)
-  if (estadoNuevo != estadoAprobado ) return animal
+  if (estadoNuevo == estadoAproResponsable) return actualizarAnimal(animal, animal.estado, false)
+  if (estadoNuevo == estadoSuspSolicitante) return actualizarAnimal(animal, animal.estado, true)
+  if (estadoNuevo != estadoAprobado) return animal
+  
 
   let estadoAntAnimal = animal.estado
-
+  let esVisible = false
   
   switch(animal.estado)
   {      case estadoDisProvisorio : 
             if(!esAdoptado) estadoNueAnimal = estadoEnProvisorio;
             break;
          case estAdopcionProvisorio  : 
-            if(!esAdoptado) estadoNueAnimal = estadoDispAdopcion;
+            if(!esAdoptado) estadoNueAnimal = estadoEnProvisorio;
             break;
          default: 
             estadoNueAnimal = undefined;
@@ -335,25 +350,33 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
    if (esAdoptado) estadoNueAnimal = estadoAdoptado
    let  result
    if (estadoNueAnimal) 
-    {  result = await Animal.findByIdAndUpdate(solicitud.mascotaId, 
-        { estado: estadoNueAnimal,
-          fechaModificacion : new Date(Date.now()).toISOString()
-        }, 
-        { new: true
-        } 
-        )
-        if (estadoNueAnimal != estadoAntAnimal ){
-          let historial = new histoEstadoAnimal({
-            mascotaId : result._id,
-            solicitud: solicitud._id,
-            estadoId :  estadoAntAnimal})
-            await historial.save()
-            
-        }
-     
+    {  
+     result = actualizarAnimal(animal,estadoNueAnimal,esVisible)
   }
     return (result)
   
+}
+
+async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
+  let estadoAntAnimal = animal.estado
+  let modificado
+  modificado = await Animal.findByIdAndUpdate(animal.mascotaId, 
+    { estado: estadoNueAnimal,
+      visible : esVisible,
+      fechaModificacion : new Date(Date.now()).toISOString()
+    }, 
+    { new: true
+    } 
+    )
+    if (estadoNueAnimal != estadoAntAnimal ){
+      let historial = new histoEstadoAnimal({
+        mascotaId : result._id,
+        solicitud: solicitud._id,
+        estadoId :  estadoAntAnimal})
+        await historial.save()
+        
+    }
+  return modificado
 }
 
 /* Modificacion del Estado de Las Solicitudes */
@@ -383,10 +406,14 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
 
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
   if (!Solicitud) modelo = Adopcion, esAdoptado = true
-     
-  modificarSolicitud ( modelo , userAux, esAprobado, req.params.idSolicitud, esAdoptado).then(val => res.send(val))
+  var fechaFinProvisor =  req.body.fechaFinProvisor
+  var observacion = req.body.observacion
+  modificarSolicitud(modelo , userAux, esAprobado, req.params.idSolicitud, esAdoptado, observacion, fechaFinProvisor).then(val => res.send(val))
 
 })
+// agregar un comentario cuando rechaza un solicitud por parte del Solicitante
+// pasa a false el campo esvisible  cuando 
 
+// update 
 
 module.exports = router;
