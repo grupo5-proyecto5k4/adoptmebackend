@@ -348,6 +348,7 @@ router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
 })
 
 /* Funcion para traer solicitudes*/ 
+
 async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
     let animales = []  
     let desde = solicitudAdopciones.length

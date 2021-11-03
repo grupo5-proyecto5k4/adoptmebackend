@@ -406,7 +406,7 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
 
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
   if (!Solicitud) modelo = Adopcion, esAdoptado = true
-  var fechaModificacion =  req.body.fechaFinProvisor
+  var fechaFinProvisor =  req.body.fechaFinProvisor
   var observacion = req.body.observacion
   modificarSolicitud(modelo , userAux, esAprobado, req.params.idSolicitud, esAdoptado, observacion, fechaFinProvisor).then(val => res.send(val))
 
