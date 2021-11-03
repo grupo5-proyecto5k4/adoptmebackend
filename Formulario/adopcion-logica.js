@@ -260,13 +260,12 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
-async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esAdoptado, observacion, fechaFinProvisor){
+async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisor){
   let bloqueado = false
-  let result2 
+  var result2 
   let estadoNuevo = undefined
-  let solicitud   = await modelo.findById({_id: idSolicitud})  
- 
 
+  
   
   if (solicitud.responsableId == usuario._id && esAprobado) estadoNuevo = estadoAproResponsable, bloqueado = true
 
@@ -297,13 +296,13 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
          
       }
       ani = modificarAnimal(solicitud, esAdoptado, estadoNuevo)
-  } 
+   
     
   
      
   // si es aprobado por el responsables las demas solicitudes deben estar bloqueadas 
     if (result2.estadoId == estadoAproResponsable) 
-     { let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
+     { let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estadoId: estadoInicial })
        modificarSolicitudBloqueada(solicitudes, modelo, estadoBloqueado, solicitud)
     }
   
@@ -314,7 +313,7 @@ async function modificarSolicitud( modelo, usuario, esAprobado, idSolicitud, esA
        modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
      }
 
- 
+    }
 
    return (result2) 
   
@@ -397,18 +396,23 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   let userAux = req.user.user
   let esAprobado  = false
   let esAdoptado  = false
-  let modelo = Provisorio 
+  let modelo = Provisorio
   
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
-  
+  console.log(userAux._id)
   if(req.params.estado.indexOf('Aprobado') ==  0) esAprobado  = true 
 
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
-  if (!Solicitud) modelo = Adopcion, esAdoptado = true
-  var fechaFinProvisor =  req.body.fechaFinProvisor
-  var observacion = req.body.observacion
-  modificarSolicitud(modelo , userAux, esAprobado, req.params.idSolicitud, esAdoptado, observacion, fechaFinProvisor).then(val => res.send(val))
+  if (!Solicitud) {
+    Solicitud = await Adopcion.findById({_id:req.params.idSolicitud}), 
+    esAdoptado = true
+    modelo = Adopcion
+  }
+  let fechaFinProvisor =  req.body.fechaFinProvisor
+  let observacion = req.body.observacion
+  let idSolicitud = req.params.idSolicitud
+  modificarSolicitud(modelo, userAux, esAprobado,Solicitud , esAdoptado, observacion, fechaFinProvisor).then(val => res.send(val))
 
 })
 // agregar un comentario cuando rechaza un solicitud por parte del Solicitante
