@@ -36,7 +36,7 @@ async function buscarSeguimientosANotificar() {
 
         let fecha = await formatearFecha(fecha_seguimiento_buscada)
         //Llamar a la función que notifique
-        notificar('Próximo seguimiento a realizar', animal.nombreMascota+' tiene un seguimiento agendado para el día ' + fecha, 'mascota', animal._id, animal.responsableId)
+        notificar('Próximo seguimiento a realizar', animal.nombreMascota+' tiene un seguimiento agendado para el día ' + fecha, 'Mascota', animal._id, animal.responsableId)
     }
 }
 
