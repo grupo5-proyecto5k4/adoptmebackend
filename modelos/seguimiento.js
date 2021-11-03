@@ -5,13 +5,13 @@ const mongosee = require('mongoose')
 const seguimientoSchema  = new mongosee.Schema({
   SolicitudId: {
       type: ObjectId,
-      required: true     
+      required: true,   
     },
   estadoId: {
       type: String,
       required: true 
     },
-  cadaCuanto: {type: String},  
+  cadaCuanto: {type: Number},  //expresado en días
   fechaCreacion: {type: Date, default: Date.now},
   fechaModificacion:{type: Date, default: Date.now},
   Visita: [], 

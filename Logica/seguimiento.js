@@ -4,7 +4,7 @@ const express = require('express')
 const Foto = require('../modelos/foto.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
-const {check, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const { schema, eventNames } = require('../modelos/foto.js');
 const Adopcion = require('../Formulario/adopcion.js')
 const auth = require('../middleware/auth.js')
@@ -28,19 +28,19 @@ router.post('/crearSeguimiento', auth, async function (req, res){
   
     let seguimiento = await Seguimiento.find({SolicitudId:req.body_id})
     let estado = "Iniciado"
-    if (seguimiento.length == 0 ) return res.status(401).json({error: "el seguimiento ya existe"})
+    if (seguimiento.length != 0) return res.status(401).json({ error: "el seguimiento ya existe" })
     seguimiento = new Seguimiento({
-        SolicitudId: req.body._Id,
-        estadoId:estado,
-        cadaCuanto:req.body.cadaCuanto,
-     })
-     const result = await Seguimiento.save()
-     if(!result) return res.status(401).json({error: "No se grabo correctamente"})
+        SolicitudId: req.body._id,
+        estadoId: estado,
+        cadaCuanto: req.body.cadaCuanto,
+    })
+    const result = await seguimiento.save()
+    if (!result) return res.status(401).json({ error: "No se grabo correctamente" })
 
-     res.send(result)
+    res.send(result)
 })
 
-router.put('/modificarSeguimiento', auth, async function (req, res){
+router.put('/modificarSeguimiento', auth, async function (req, res) {
     let userAux = req.user.user
     let seg = await Seguimiento.findById({_id: req.body.seguimientoId})
     var visita = seg.Visita
@@ -69,11 +69,12 @@ router.put('/modificarSeguimiento', auth, async function (req, res){
             }, 
             {new: true}
 
-            )
+        )
     }
 
 
 })
+
 
 //finalizar proceso de Seguimiento 
 
