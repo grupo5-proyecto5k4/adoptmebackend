@@ -260,7 +260,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
-async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisor){
+async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisor, cadaCuanto){
   let bloqueado = false
   var result2 
   let estadoNuevo = undefined
@@ -279,7 +279,8 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   if(estadoNuevo) {
       result2 = await modelo.findByIdAndUpdate(solicitud._id, 
       {estadoId: estadoNuevo,
-       observacionCancelacion : observacion, 
+       observacionCancelacion : observacion,
+       cadaCuanto: cadaCuanto,  
        fechaModificacion : new Date(Date.now()).toISOString()},
       {new : true}
       
@@ -400,7 +401,7 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
-  console.log(userAux._id)
+  
   if(req.params.estado.indexOf('Aprobado') ==  0) esAprobado  = true 
 
   let Solicitud = await Provisorio.findById({_id:req.params.idSolicitud})
@@ -409,15 +410,28 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
     esAdoptado = true
     modelo = Adopcion
   }
-  let fechaFinProvisor =  req.body.fechaFinProvisor
-  let observacion = req.body.observacion
-  let idSolicitud = req.params.idSolicitud
-  modificarSolicitud(modelo, userAux, esAprobado,Solicitud , esAdoptado, observacion, fechaFinProvisor).then(val => res.send(val))
+  var fechaFinProvisor =  req.body.fechaFinProvisor
+  var observacion = req.body.observacion
+  var cadaCuanto = req.body.cadaCuanto
+ 
+  modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisor, cadaCuanto).then(val => res.send(val))
 
 })
 // agregar un comentario cuando rechaza un solicitud por parte del Solicitante
 // pasa a false el campo esvisible  cuando 
 
 // update 
+
+// historial de Mascota
+router.get('/historialProvisorio/:idMascota', auth, async function(req, res, next){
+  let userAux = req.user.user
+   
+  if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
+  
+  let historial = await Provisorio.find({mascotaId:mongosee.Types.ObjectId (req.params.idMascota), estadoId: estadoAprobado}).sort({fechaModificacion: -1})
+  
+  res.send(historial)
+})
+
 
 module.exports = router;

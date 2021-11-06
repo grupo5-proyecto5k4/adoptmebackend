@@ -51,30 +51,34 @@ const { ObjectId } = require('mongodb');
      type: Number,
      required: true
    },  
- vivienda : {
+  cadaCuanto:{
+    type: Number      
+  },
+  vivienda : {
      type: Number,
      required: true
    },
 
- permiso: {
+  permiso: {
      type: Number,
      required: true
    },
- tiempoTenencia :{
+  tiempoTenencia :{
    type: Number,
    required: true
    },
- espacioAbierto: {
+  espacioAbierto: {
      type: Number,
      required: true
    },
- descripcionCercamiento: {type: String},
+  descripcionCercamiento: {type: String},
    
- tiempoSuficiente :{
-   type: Number,
-   required: true
+  tiempoSuficiente :{
+    type: Number,
+    required: true
    },
- Direccion:{
+   
+   Direccion:{
      calle: {type: String},
      numero: {type: Number}, 
      referencia: {type: String},
@@ -107,8 +111,16 @@ const { ObjectId } = require('mongodb');
      default: Date.now
  }, 
     
- solicitanteId : ObjectId
-  
+ solicitanteId : ObjectId,
+  //fecha fin para saber cuanto dura el provisorio
+
+  fechaFinProvisorio:{
+    type: Date    
+  },
+ 
+  observacionCancelacion: {
+    type: String
+  }
 
   });
     
