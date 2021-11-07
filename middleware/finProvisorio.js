@@ -23,9 +23,11 @@ const estadoDisProvisorio= "Disponible Provisorio"
 const estadoDispAdopcion= "Disponible Adopción" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio"
 
-cron.schedule('0 8 * * *', async function(){
-    console.log("llego aca")
-    var f = new Date(Date.now()).toISOString()
+
+
+cron.schedule('*/1 * * * *', async function(){
+    var f = new Date(Date.now()).toISOString() 
+    console.log (f)
     var f1 = f.split('T')
     var fecha = new Date (f1[0]) 
     var solicitudes = await Provisorio.find({estadoId: estadoAprobado, fechaFinProvisorio:{$gte: fecha}})

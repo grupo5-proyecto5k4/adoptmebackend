@@ -23,11 +23,14 @@ cloudinary.config({
 })
 
 
+const estadoIniciadoSeg = "Iniciado" 
+const estadoCerradoSeg = "Cerrado"
+
 
 router.post('/crearSeguimiento', auth, async function (req, res){
   
     let seguimiento = await Seguimiento.find({SolicitudId:req.body._id})
-    let estado = "Iniciado"
+    let estado = estadoIniciadoSeg
     if (seguimiento.length != 0) return res.status(401).json({ error: "el seguimiento ya existe" })
     seguimiento = new Seguimiento({
         SolicitudId: req.body._id,
@@ -104,7 +107,7 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     let solAdo = await Adopcion.find({mascotaId: req.params.id_Animal}) 
     if (solAdo.length != undefined){
        for(let i = 0; i < solAdo.length; i ++){
-         var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id})
+         var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id, estadoId: estadoIniciadoSeg})
          if(seg != undefined ||seg != null  ) seguimiento.push(seg)
 
 
@@ -112,19 +115,19 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     
     }
     if (solAdo) {
-        var seg = await Seguimiento.findOne({SolicitudId : solAdo._id})
+        var seg = await Seguimiento.findOne({SolicitudId : solAdo._id, estadoIniciadoSeg})
          if(seg != undefined ||seg != null  ) seguimiento.push(seg)
     }   
     let solPro = await Provisorio.find({mascotaId: req.params.id_Animal})
     if (solPro.length != undefined){
         for(let i = 0; i < solPro.length; i ++){
-            var seg = await Seguimiento.findOne({SolicitudId : solPro[i]._id})
+            var seg = await Seguimiento.findOne({SolicitudId : solPro[i]._id, estadoId : estadoIniciadoSeg})
             if(seg != undefined ||seg != null  ) seguimiento.push(seg)
         }
      
      }
      if (solPro) {
-        var seg = await Seguimiento.findOne({SolicitudId : solPro._id})
+        var seg = await Seguimiento.findOne({SolicitudId : solPro._id, estadoIniciadoSeg})
         if(seg != undefined ||seg != null  ) seguimiento.push(seg)
      }
      

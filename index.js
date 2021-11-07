@@ -11,10 +11,12 @@ const recomendacion = require('./Logica/recomendacion.js')
 const notificacion = require('./Logica/notificacion.js')
 const adopcion  = require('./Formulario/adopcion-logica.js')
 const seguimiento = require('./Logica/seguimiento.js')
+const barrio = require('./Logica/barrio.js')
 const reporte = require('./Formulario/reportes.js')
 require('./Logica/cron.js')
 require('./middleware/finProvisorio.js')
 
+const dia = 1*3*60*60*1000
 
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
 app.use(express.urlencoded({extended:  false}))
@@ -39,12 +41,13 @@ app.use('/', user, estados)
 app.use('/estados/', estados)
 app.use('/animales/', animal)
 app.use('/fotos/', foto)
-app.use('/vacunas/', vacuna)
+app.use('/vacunas/', vacuna )
 app.use('/', recomendacion)
-app.use('/', notificacion)
+app.use('/', notificacion )
 app.use('/formulario/', adopcion)
 app.use('/seguimiento/', seguimiento)
 app.use('/reporte/', reporte)
+app.use('/barrios/', barrio)
 
 
 
