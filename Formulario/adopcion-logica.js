@@ -346,10 +346,10 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
    }
 
    if (esAdoptado) estadoNueAnimal = estadoAdoptado
-   let  result
+   let  result = {}
    if (estadoNueAnimal) 
     {  
-     result = actualizarAnimal(animal,estadoNueAnimal,esVisible)
+     actualizarAnimal(animal,estadoNueAnimal,esVisible)
   }
     return (result)
   
@@ -357,7 +357,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
 
 async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
   let estadoAntAnimal = animal.estado
-  let modificado
+  
   modificado = await Animal.findByIdAndUpdate(animal.mascotaId, 
     { estado: estadoNueAnimal,
       visible : esVisible,
@@ -374,7 +374,7 @@ async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
         await historial.save()
         
     }
-  return modificado
+  
 }
 
 /* Modificacion del Estado de Las Solicitudes */
