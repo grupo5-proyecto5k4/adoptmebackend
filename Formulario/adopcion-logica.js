@@ -346,7 +346,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
    }
 
    if (esAdoptado) estadoNueAnimal = estadoAdoptado
-   l
+   
    if (estadoNueAnimal) 
     {  
      actualizarAnimal(animal,estadoNueAnimal,esVisible)
