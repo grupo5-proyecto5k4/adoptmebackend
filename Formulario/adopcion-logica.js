@@ -258,7 +258,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
 })
 
 async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisor, cadaCuanto){
-  let bloqueado = false
+  
   var result2 
   let estadoNuevo = undefined
 
@@ -320,7 +320,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
 
 /* Modificacion del Estado del  Animales*/
 async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
-  
+  console.log(solicitud)
   let estadoNueAnimal = undefined
   
 
