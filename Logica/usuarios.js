@@ -240,12 +240,14 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
     let userAux = req.user.user 
    
     const filter = {}
-    const {nombres, apellidos}= req.query;
+    const {nombres, apellidos, estado}= req.query;
     
 
-    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+   if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
   
-  
+    let estados = await Estado.findOne({nombre : estado}) 
+   
+    if (!estados) return res.send([])
     
     if (nombres) filter.nombres = nombres
     if (apellidos) filter.apellidos = apellidos
