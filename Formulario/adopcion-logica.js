@@ -274,6 +274,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   if (solicitud.solicitanteId == usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
   
   if(estadoNuevo) {
+      esAdoptado = true 
       result2 = await modelo.findByIdAndUpdate(solicitud._id, 
       {estadoId: estadoNuevo,
        observacionCancelacion : observacion,
@@ -430,6 +431,16 @@ router.get('/historialProvisorio/:idMascota', auth, async function(req, res, nex
   res.send(historial)
 })
 
+// fin de Provisorio Manual  por mal seguimiento 
+router.get('/historialProvisorio/:idMascota', auth, async function(req, res, next){
+  let userAux = req.user.user
+   
+  if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
+  
+  let historial = await Provisorio.find({mascotaId:mongosee.Types.ObjectId (req.params.idMascota)}).sort({fechaModificacion: -1})
+  
+  res.send(historial)
+})
 
 
 
