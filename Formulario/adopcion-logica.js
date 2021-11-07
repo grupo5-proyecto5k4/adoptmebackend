@@ -367,7 +367,9 @@ async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
     { new: true
     } 
     )
-    if (estadoNueAnimal != estadoAntAnimal ){
+   console.log("antes", estadoNueAnimal)
+   console.log("antes despues", estadoAntAnimal)
+   if (estadoNueAnimal != estadoAntAnimal ){
       let historial = new histoEstadoAnimal({
         mascotaId : modificado._id,
         solicitud: solicitud._id,
