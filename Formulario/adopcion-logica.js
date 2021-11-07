@@ -284,6 +284,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       
       )
       if(modelo == Provisorio){
+        esAdoptado = false
         result2 = await modelo.findByIdAndUpdate(solicitud._id, 
           {estadoId: estadoNuevo,
            fechaFinProvisor: fechaFinProvisor,
@@ -322,12 +323,12 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
 async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
   console.log(solicitud)
   let estadoNueAnimal = undefined
-  
+  var fin = false
 
   let animal = await Animal.findById({_id : solicitud.mascotaId})
-  if (estadoNuevo == estadoAproResponsable) return actualizarAnimal(animal, animal.estado, false)
-  if (estadoNuevo == estadoSuspSolicitante) return actualizarAnimal(animal, animal.estado, true)
-  if (estadoNuevo != estadoAprobado) return animal
+  if (estadoNuevo == estadoAproResponsable) actualizarAnimal(animal, animal.estado, false)
+  if (estadoNuevo == estadoSuspSolicitante) actualizarAnimal(animal, animal.estado, true)
+  if (estadoNuevo != estadoAprobado) fin = true
   
 
   let estadoAntAnimal = animal.estado
@@ -347,7 +348,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
 
    if (esAdoptado) estadoNueAnimal = estadoAdoptado
    
-   if (estadoNueAnimal) 
+   if (estadoNueAnimal || !fin ) 
     {  
      actualizarAnimal(animal,estadoNueAnimal,esVisible)
   }
