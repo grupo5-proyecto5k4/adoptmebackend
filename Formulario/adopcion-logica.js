@@ -294,7 +294,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
           )
          
       }
-      ani = modificarAnimal(solicitud, esAdoptado, estadoNuevo)
+    modificarAnimal(solicitud, esAdoptado, estadoNuevo)
    
     
   
@@ -346,19 +346,19 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
    }
 
    if (esAdoptado) estadoNueAnimal = estadoAdoptado
-   let  result = {}
+   l
    if (estadoNueAnimal) 
     {  
      actualizarAnimal(animal,estadoNueAnimal,esVisible)
   }
-    return (result)
+  
   
 }
 
 async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
   let estadoAntAnimal = animal.estado
   
-  modificado = await Animal.findByIdAndUpdate(animal.mascotaId, 
+  modificado = await Animal.findByIdAndUpdate(animal._id, 
     { estado: estadoNueAnimal,
       visible : esVisible,
       fechaModificacion : ahora.ahora()
@@ -368,7 +368,7 @@ async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
     )
     if (estadoNueAnimal != estadoAntAnimal ){
       let historial = new histoEstadoAnimal({
-        mascotaId : result._id,
+        mascotaId : modificado._id,
         solicitud: solicitud._id,
         estadoId :  estadoAntAnimal})
         await historial.save()
