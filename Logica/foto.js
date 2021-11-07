@@ -9,6 +9,7 @@ const { schema, eventNames } = require('../modelos/foto.js')
 var cloudinary = require('cloudinary')
 const fs = require('fs-extra')
 const Animal = require('../modelos/animal.js')
+const ahora = require('../fecha.js')
 //
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -66,7 +67,7 @@ router.post('/imagen/add', async (req,res) => {
         
         let animal = await Animal.findByIdAndUpdate({_id :aniCod},
         { Foto: F,
-            fechaModificacion: new Date(Date.now()).toISOString()      
+            fechaModificacion: ahora.ahora()      
         },
         {new: true 
         })

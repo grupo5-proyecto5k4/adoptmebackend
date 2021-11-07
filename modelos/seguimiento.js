@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
+const ahora = require('../fecha.js')
 
 const seguimientoSchema  = new mongosee.Schema({
   SolicitudId: {
@@ -12,10 +13,10 @@ const seguimientoSchema  = new mongosee.Schema({
       required: true 
     },
   cadaCuanto: {type: Number},  //expresado en días
-  fechaCreacion: {type: Date, default: Date.now},
-  fechaModificacion:{type: Date, default: Date.now},
+  fechaCreacion: {type: Date, default: ahora.ahora()},
+  fechaModificacion:{type: Date, default: ahora.ahora()},
   Visita: [], 
-  fecha: {type: Date, default: Date.now}  
+  fecha: {type: Date, default: ahora.ahora()}  
 });
 
 const Seguimiento = mongosee.model('am-seguimiento', seguimientoSchema);

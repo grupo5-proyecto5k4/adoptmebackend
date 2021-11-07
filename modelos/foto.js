@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const mongosee = require('mongoose');
+const ahora = require('../fecha.js')
 
 const fotoSchema = new mongosee.Schema({
     titulo: {type: String},

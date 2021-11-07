@@ -7,6 +7,7 @@ const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/recomendacion.js')
 const auth = require('../middleware/auth.js')
+const ahora = require('../fecha.js')
 
 
 router.post('/recomendacion', auth,  async function(req, res) { 
@@ -70,10 +71,10 @@ router.put('/recomendaciones/:id_recomendacion', auth, async(req, res)=> {
      
     if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para esta accion'})
    
-    //new Date(Date.now()).toISOString()
+   
      let recomendacion = await Recomendacion.findByIdAndUpdate(req.params.id_recomendacion,
         { idEstado: req.body.idEstado,
-          fechaModificacion: new Date(Date.now()).toISOString()
+          fechaModificacion: ahora.ahora()
         }, {
             new: true
         })

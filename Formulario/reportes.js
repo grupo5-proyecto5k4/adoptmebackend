@@ -13,6 +13,7 @@ const auth = require('../middleware/auth.js')
 const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
+const ahora = require('../fecha.js')
 
 /* estados Animal*/
 const estadoAprobado = "Aprobado"
@@ -59,7 +60,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
                  
 
         let ani = await Animal.findOne({_id: Adoptados[i].mascotaId})  
-        var diferencia= Math.abs(Date.now() - ani.fechaNacimiento)
+        var diferencia= Math.abs(ahora.ahora() - ani.fechaNacimiento)
         var edadDias = Math.round(diferencia/(1000*3600*24))
         
         if (edadDias < 366) esCachorro = true 

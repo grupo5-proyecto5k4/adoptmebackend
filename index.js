@@ -15,8 +15,10 @@ const barrio = require('./Logica/barrio.js')
 const reporte = require('./Formulario/reportes.js')
 require('./Logica/cron.js')
 require('./middleware/finProvisorio.js')
+const ahora = require('./fecha.js')
 
-const dia = 1*3*60*60*1000
+console.log(ahora.ahora())
+
 
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
 app.use(express.urlencoded({extended:  false}))

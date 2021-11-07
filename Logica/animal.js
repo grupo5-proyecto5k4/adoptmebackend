@@ -16,6 +16,7 @@ const Vacuna = require('../modelos/vacuna.js')
 const Usuario = require('../modelos/usuarios.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const Adopcion = require('../Formulario/adopcion.js')
+const ahora = require('../fecha.js')
 
 //estado del animal y de la solicitud de provisorio
 const estadoEnProvisorio= "En Provisorio"
@@ -188,7 +189,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
-        var diferencia= Math.abs(Date.now() - animalesAdoptados[i].fechaNacimiento)
+        var diferencia= Math.abs(ahora.ahora() - animalesAdoptados[i].fechaNacimiento)
         var edadDias = Math.round(diferencia/(1000*3600*24))
         var fechaAlta = animalesAdoptados[i].fechaAlta
         var fechaModificacion = animalesAdoptados[i].fechaModificacion
@@ -309,7 +310,7 @@ router.put('/user/modificarMascota', auth, async function(req, res) {
     if(animalNew.estado == (estadoAdoptado || estadoEnProvisorio)) return res.status(400).json({error: "Estado incorrecto"})
     
     if(animalNew.castrado != castradoNew && castradoNew) {
-        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{castrado: castradoNew, fechaModificacion: new Date(Date.now()).toISOString()}, {new: true})
+        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{castrado: castradoNew, fechaModificacion: ahora.ahora()}, {new: true})
     }
     if(vacunasNew && fechaAplicacionNew){
         let vacunaExistente = await Vacuna.find({nombreVacuna: vacunasNew, fechaAplicacion: fechaAplicacionNew})

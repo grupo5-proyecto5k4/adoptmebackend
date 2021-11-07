@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 const { ObjectId } = require('mongodb')
 //const {Schema, model} = require("mongoose")
+const ahora = require('../fecha.js')
 
 const userSchema  = new mongosee.Schema({
   nombres: {
@@ -32,8 +33,8 @@ const userSchema  = new mongosee.Schema({
    tipoUsuario: {type: Number},
    numeroContacto: { type: Number },
    idEstado:{type: Number },
-   fechaCreacion: {type: Date, default: Date.now},
-   fechaModificacion:{type: Date, default: Date.now},
+   fechaCreacion: {type: Date, default: ahora.ahora()},
+   fechaModificacion:{type: Date, default: ahora.ahora()},
    banco: { type: String},
    cbu: {type:String},
    alias : { type: String} 

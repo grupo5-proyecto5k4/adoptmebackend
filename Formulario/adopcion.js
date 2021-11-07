@@ -9,6 +9,7 @@ const { schema, eventNames } = require('../modelos/foto.js');
 const cloudinary = require('cloudinary')
 const fs = require('fs-extra')
 const { ObjectId } = require('mongodb');
+const ahora = require('../fecha.js')
 
 /*
  datos de la adopcion 
@@ -108,14 +109,14 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
 
     fechaCreacion:{
       type: Date, 
-      default: Date.now
+      default: ahora.ahora()
     },
     
     mascotaId : ObjectId,
 
     fechaModificacion:{
       type: Date, 
-      default: Date.now
+      default: ahora.ahora()
     },
 
     estadoId: {

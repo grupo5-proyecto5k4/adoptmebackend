@@ -9,9 +9,10 @@ const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/usuarios.js')
 const auth = require('../middleware/auth.js')
+const ahora = require('../fecha.js')
 
 router.use(function timelog(req, res, next){
-    console.log('Time:', Date.now());
+    console.log('Time:',ahora.ahora());
     next()
 }); 
 
@@ -314,10 +315,9 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
      
     if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
    
-    //new Date(Date.now()).toISOString()
-     let user = await User.findByIdAndUpdate(req.params.id_centro,
+         let user = await User.findByIdAndUpdate(req.params.id_centro,
         { idEstado: req.body.idEstado,
-          fechaModificacion: new Date(Date.now()).toISOString()
+          fechaModificacion: ahora.ahora()
 
         }, {
             new: true
@@ -367,7 +367,7 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
         if (!validaContrasenia) n.contrasenia = await bcrypt.hash(p.contrasenia, salt)
          
     }    
-    n.fechaModificacion = new Date(Date.now()).toISOString() //grabar la fecha actual
+    n.fechaModificacion = ahora.ahora() //grabar la fecha actual
     let result = await User.findByIdAndUpdate(n._id, n, {new: true} ) //aca se actualiza el usuario
     
     if ( !result) return  res.status(400).json({mensaje:'no se pudo realizar la actualizacion'})
@@ -393,7 +393,7 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
         {banco : (req.body.banco).toUpperCase(),
          cbu   : req.body.cbu,
          alias : (req.body.alias).toUpperCase(),   
-         fechaModificacion : new Date(Date.now()).toISOString()
+         fechaModificacion : ahora.ahora()
         },
         { new : true}
         )

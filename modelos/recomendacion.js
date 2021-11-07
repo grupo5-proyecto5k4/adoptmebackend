@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
+const ahora = require('../fecha.js')
 
 const recomendacionSchema = new mongosee.Schema({
     tipoRecomendacion: {
@@ -10,8 +11,8 @@ const recomendacionSchema = new mongosee.Schema({
         type: String,
         required: true,
     },
-    fechaAlta: { type: Date, default: Date.now },
-    fechaModificacion: { type: Date, default: Date.now },
+    fechaAlta: { type: Date, default: ahora.ahora()},
+    fechaModificacion: { type: Date, default: ahora.ahora() },
     calle: {
         type: String,
         required: true

@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 const { ObjectId } = require('mongodb')
+const ahora = require('../fecha.js')
 
 const estadoSchema  = new mongosee.Schema({
   id_estado: {type: Number},
   nombre: {type: String},
-  fechaCreacion: {type: Date, default: Date.now},
-  fechaModificacion:{type: Date, default: Date.now}
+  fechaCreacion: {type: Date, default: ahora.ahora()},
+  fechaModificacion:{type: Date, default: ahora.ahora()}
 });
   
 /* id_estado puede ser: 

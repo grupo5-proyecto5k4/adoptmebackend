@@ -4,6 +4,7 @@ const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const Seguimiento = require('../modelos/seguimiento.js')
 const Notificacion = require('../modelos/notificacion.js')
+const ahora = require('../fecha.js')
 
 
 cron.schedule('0 0 6 * * *', function(){

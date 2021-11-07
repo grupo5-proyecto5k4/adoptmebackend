@@ -6,6 +6,8 @@ const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
 const histoEstadoAnimal= require('../modelos/histoEstadoAnimal.js')
 const cron = require('node-cron')
+const ahora = require('../fecha.js')
+
 
 const estadoInicial = 'Abierta'
 const estadoAproResponsable = "Aprobado Por Responsable" 
@@ -26,7 +28,7 @@ const estAdopcionProvisorio = "Disponible Adopción y Provisorio"
 
 
 cron.schedule('*/1 * * * *', async function(){
-    var f = new Date(Date.now()).toISOString() 
+    var f = new Date(ahora.ahora).toISOString() 
     console.log (f)
     var f1 = f.split('T')
     var fecha = new Date (f1[0]) 

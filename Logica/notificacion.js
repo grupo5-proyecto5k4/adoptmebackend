@@ -7,6 +7,7 @@ const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const { schema } = require('../modelos/notificacion.js')
 const auth = require('../middleware/auth.js')
+const ahora = require('../fecha.js')
 
 router.post('/notificacion', auth,  async function(req, res) { 
     let notificacion = new Notificacion({
@@ -48,11 +49,10 @@ router.get('/notificaciones', auth, async(req, res)=>{
 });
 
 router.put('/notificacion/:id_notificacion', auth, async(req, res)=> {
-    //new Date(Date.now()).toISOString()
-     let notificacion = await Notificacion.findByIdAndUpdate(req.params.id_notificacion,
+    let notificacion = await Notificacion.findByIdAndUpdate(req.params.id_notificacion,
         
         { leida: req.body.leida,
-          fechaModificacion: new Date(Date.now()).toISOString()
+          fechaModificacion: ahora.ahora()
         }, {
             new: true
         })

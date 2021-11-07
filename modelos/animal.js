@@ -1,16 +1,17 @@
 const { ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
+const ahora = require('../fecha.js')
 //const {Schema, model} = require("mongoose")
 
 /* agregar un campo de esVisible*/
 const animalSchema  = new mongosee.Schema({
   tipoMascota: {type: Number},
   nombreMascota: {type: String},
-  fechaAlta: {type: Date, default: Date.now},
-  fechaModificacion:{type: Date, default: Date.now},
+  fechaAlta: {type: Date, default: ahora.ahora()},
+  fechaModificacion:{type: Date, default: ahora.ahora()},
   tamañoFinal: {type: String},
-  fechaNacimiento: {type: Date, default: Date.now},
+  fechaNacimiento: {type: Date, default: ahora.ahora()},
   sexo: {type: String},
   raza: {type: String},
   estado: {type: String},

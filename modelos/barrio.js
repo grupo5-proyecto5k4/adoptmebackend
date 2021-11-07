@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken')
 const mongosee = require('mongoose')
 const { ObjectId } = require('mongodb')
+const ahora = require('../fecha.js')
 
 const barrioSchema  = new mongosee.Schema({
   nombre: {type: String},
-  fechaCreacion: {type: Date, default: Date.now},
-  fechaModificacion:{type: Date, default: Date.now}
+  fechaCreacion: {type: Date, default: ahora.ahora()},
+  fechaModificacion:{type: Date, default: ahora.ahora()}
 });
   
 

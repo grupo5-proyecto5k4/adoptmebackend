@@ -60,7 +60,7 @@ router.put('/modificarSeguimiento', auth, async function (req, res) {
    } 
    let f = {descripcion : req.body.descripcion, 
             imagines:foto,
-            fecha : new Date(Date.now()).toISOString()         
+            fecha : ahora.ahora()       
 
 }
     
@@ -98,7 +98,7 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     })
 })   
   
-   //finalizar proceso de Seguimiento  
+   //consultar proceso de Seguimiento  
  router.get('/consultaEstado/:id_Animal', auth, async function(req, res){
     let userAux = req.user.user
     var seguimiento = []

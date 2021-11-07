@@ -14,6 +14,7 @@ const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
 const histoEstadoAnimal= require('../modelos/histoEstadoAnimal.js')
+const ahora = require('../fecha.js')
 
 /* estados Animal*/
 const estadoAdoptado    = "Adoptado"
@@ -73,9 +74,7 @@ async function adopcionFuncion(req, res, user, next){
 const result = await adopcion.save() 
   
 
-// const result2 = await Animal.findByIdAndUpdate(objectId, { estado: "Adoptado",
-//   fechaModificacion: new Date(Date.now()).toISOString()
-// })
+
 
 if (!result)  res.status(400).json ({error: "Oop! hubo un error con la adopcion"})
 res.status(200).json({ _id : result._id}) 
@@ -120,9 +119,7 @@ async function provisorioFuncion(req, res, user, next){
 const result = await provisorio.save() 
   
 
-// const result2 = await Animal.findByIdAndUpdate(objectId, { estado: "Adoptado",
-//   fechaModificacion: new Date(Date.now()).toISOString()
-// })
+
 
 if (!result)  res.status(400).json ({error: "Oop! hubo un error con el provisorio"})
 res.status(200).json({ _id : result._id}) 
@@ -142,7 +139,7 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
     if (!animal) return solicitudes
     let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
     if (!usuario) return solicitudes
-     var diferencia= Math.abs(Date.now() - animal.fechaNacimiento)
+     var diferencia= Math.abs(ahora.ahora() - animal.fechaNacimiento)
      var edadDias = Math.round(diferencia/(1000*3600*24))
      var nuevoArreglo = {
                Solicitud: solicitudAdopciones,
@@ -169,7 +166,7 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
     if (!animal) continue
     let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
     if (!usuario) continue
-     var diferencia= Math.abs(Date.now() - animal.fechaNacimiento)
+     var diferencia= Math.abs(ahora.ahora() - animal.fechaNacimiento)
      var edadDias = Math.round(diferencia/(1000*3600*24))
      var nuevoArreglo = {
                Solicitud: solicitudAdopciones[i],
@@ -281,7 +278,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       {estadoId: estadoNuevo,
        observacionCancelacion : observacion,
        cadaCuanto: cadaCuanto,  
-       fechaModificacion : new Date(Date.now()).toISOString()},
+       fechaModificacion : ahora.ahora()},
       {new : true}
       
       )
@@ -290,7 +287,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
           {estadoId: estadoNuevo,
            fechaFinProvisor: fechaFinProvisor,
            observacionCancelacion : observacion, 
-           fechaModificacion : new Date(Date.now()).toISOString()},
+           fechaModificacion : ahora.ahora()},
           {new : true}
           
           )
@@ -363,7 +360,7 @@ async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
   modificado = await Animal.findByIdAndUpdate(animal.mascotaId, 
     { estado: estadoNueAnimal,
       visible : esVisible,
-      fechaModificacion : new Date(Date.now()).toISOString()
+      fechaModificacion : ahora.ahora()
     }, 
     { new: true
     } 
@@ -386,7 +383,7 @@ async function modificarSolicitudBloqueada(solicitud, modelo, estadoNuevo, Solic
     if (solicitud[i]._id == SolicitudAceptada._id) continue
     await modelo.findByIdAndUpdate(solicitud[i]._id, 
       {estadoId: estadoNuevo,
-       fechaModificacion : new Date(Date.now()).toISOString()},
+       fechaModificacion : ahora.ahora()},
       {new : true}
     )
   }

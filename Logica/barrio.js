@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const {check, validationResult } = require('express-validator');
 const Barrio = require('../modelos/barrio.js')
+const ahora = require('../fecha.js')
 
 // router.use(function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
