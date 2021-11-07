@@ -5,7 +5,7 @@ const Foto = require('../modelos/foto.js')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const { check, validationResult } = require('express-validator');
-const { schema, eventNames } = require('../modelos/foto.js');
+const { schema, eventNames, find } = require('../modelos/foto.js');
 const Adopcion = require('../Formulario/adopcion.js')
 const auth = require('../middleware/auth.js')
 const Animal = require('../modelos/animal.js')
@@ -26,7 +26,7 @@ cloudinary.config({
 
 router.post('/crearSeguimiento', auth, async function (req, res){
   
-    let seguimiento = await Seguimiento.find({SolicitudId:req.body_id})
+    let seguimiento = await Seguimiento.find({SolicitudId:req.body._id})
     let estado = "Iniciado"
     if (seguimiento.length != 0) return res.status(401).json({ error: "el seguimiento ya existe" })
     seguimiento = new Seguimiento({
@@ -93,10 +93,45 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     {
         new: true 
     })
-     
+})   
+  
+   //finalizar proceso de Seguimiento  
+ router.get('/consultaEstado/:id_Animal', auth, async function(req, res){
+    let userAux = req.user.user
+    var seguimiento = []
+    if(userAux.tipoUsuario == 0) return res.status(404).json({error:"No tiene permiso para esta acción"})   
     
+    let solAdo = await Adopcion.find({mascotaId: req.params.id_Animal}) 
+    if (solAdo.length != undefined){
+       for(let i = 0; i < solAdo.length; i ++){
+         var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id})
+         if(seg != undefined ||seg != null  ) seguimiento.push(seg)
 
+
+       }
+    
+    }
+    if (solAdo) {
+        var seg = await Seguimiento.findOne({SolicitudId : solAdo._id})
+         if(seg != undefined ||seg != null  ) seguimiento.push(seg)
+    }   
+    let solPro = await Provisorio.find({mascotaId: req.params.id_Animal})
+    if (solPro.length != undefined){
+        for(let i = 0; i < solPro.length; i ++){
+            var seg = await Seguimiento.findOne({SolicitudId : solPro[i]._id})
+            if(seg != undefined ||seg != null  ) seguimiento.push(seg)
+        }
+     
+     }
+     if (solPro) {
+        var seg = await Seguimiento.findOne({SolicitudId : solPro._id})
+        if(seg != undefined ||seg != null  ) seguimiento.push(seg)
+     }
+     
+    res.send(seguimiento)
 })
+
+
 
 
 module.exports = router;

@@ -428,7 +428,7 @@ router.get('/historialProvisorio/:idMascota', auth, async function(req, res, nex
    
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   
-  let historial = await Provisorio.find({mascotaId:mongosee.Types.ObjectId (req.params.idMascota), estadoId: estadoAprobado}).sort({fechaModificacion: -1})
+  let historial = await histoEstadoAnimal.find({mascotaId:mongosee.Types.ObjectId (req.params.idMascota)}).sort({fechaModificacion: -1})
   
   res.send(historial)
 })
