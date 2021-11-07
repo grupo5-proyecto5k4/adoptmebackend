@@ -205,6 +205,55 @@ router.get('/centros/:estados', auth, async(req, res)=>{
         res.send(users)
 });
 
+// filtro de Centros en estado Pendiente por nombre y/o barrio
+router.get('/centrosFiltro/filtroBarrioNombres', auth, async(req, res)=>{
+    let userAux = req.user.user 
+   
+    const filter = {}
+    const {nombres, barrio}= req.query;
+    
+
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    let estados = await Estado.findOne({nombre : "Pendiente"}) 
+   
+    if (!estados) return res.status(404).json({error: 'El estado es invalido'})
+    
+    if (nombres) filter.nombres = nombres
+    if (barrio) filter.barrio = barrio
+    filter.tipoUsuario = 2
+    filter.idEstado = estados.id_estado
+
+    let users = await User.find(filter)
+    
+    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+    
+    res.send(users)
+});
+
+// filtro de Usuario  por nombre y/o Apellido 
+router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
+    let userAux = req.user.user 
+   
+    const filter = {}
+    const {nombres, apellidos}= req.query;
+    
+
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+  
+  
+    
+    if (nombres) filter.nombres = nombres
+    if (apellidos) filter.apellidos = apellidos
+    filter.tipoUsuario = 1
+ 
+
+    let users = await User.find(filter)
+    
+    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+    
+    res.send(users)
+});
+
 //trae todos los estados, tanto si son particulares o centros rescatistas
 router.get('/usuarios/:estados', auth, async(req, res)=>{
     let userAux = req.user.user 

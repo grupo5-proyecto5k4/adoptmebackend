@@ -159,7 +159,7 @@ function formato(fecha){
 
 router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
   let userAux = req.user.user
-  //if(userAux.tipoUsuario != 0 ) return res.status(401).json({error : "no tiene permiso para esta accion" })
+  if(userAux.tipoUsuario != 0 ) return res.status(401).json({error : "no tiene permiso para esta accion" })
   
   var desde = formato(req.query.fechaDesde)
   var hasta = formato(req.query.fechaHasta)
