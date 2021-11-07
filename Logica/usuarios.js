@@ -230,7 +230,7 @@ router.get('/centrosFiltro/filtroBarrioNombres', auth, async(req, res)=>{
    
     let users = await User.find(f)
      
-    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+    if(users.length == 0) users = []
     
     res.send(users)
 });
@@ -254,7 +254,7 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
 
     let users = await User.find(filter)
     
-    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+    if(users.length == 0) users = []
     
     res.send(users)
 });
@@ -282,7 +282,7 @@ router.get('/centrosParaDonar/filtroDonar', auth, async(req, res)=>{
 
     let users = await User.find(f)
     
-    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+    if(users.length == 0) users = []
     
     res.send(users)
 });
