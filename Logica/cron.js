@@ -5,6 +5,7 @@ const Provisorio = require('../Formulario/provisorio.js')
 const Seguimiento = require('../modelos/seguimiento.js')
 const Notificacion = require('../modelos/notificacion.js')
 
+
 cron.schedule('0 0 6 * * *', function(){
     buscarSeguimientosANotificar();
 })

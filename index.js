@@ -13,6 +13,8 @@ const adopcion  = require('./Formulario/adopcion-logica.js')
 const seguimiento = require('./Logica/seguimiento.js')
 const reporte = require('./Formulario/reportes.js')
 require('./Logica/cron.js')
+require('./middleware/finProvisorio.js')
+
 
 //app.use(multer({storage}.single('imagen'))) //tiene que tener el nombre imagen en el form del front
 app.use(express.urlencoded({extended:  false}))

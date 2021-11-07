@@ -157,5 +157,68 @@ function formato(fecha){
 }
 
 
+router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
+  let userAux = req.user.user
+  //if(userAux.tipoUsuario != 0 ) return res.status(401).json({error : "no tiene permiso para esta accion" })
+  
+  var desde = formato(req.query.fechaDesde)
+  var hasta = formato(req.query.fechaHasta)
+
+  var promedioAdopcion = 0.0, promedioProvisorio = 0.0
+  var tiempoTotalAdopcion = 0 ,  maximoTiempoAdopcion = 0 , minimoTiempoAdopcion = 0
+  var tiempoTotalProvisorio = 0 ,  maximoTiempoProvisorio = 0 , minimoTiempoProvisorio = 0
+  let totalSolicitudAdopcion = 0, totalSolicitudProvisorio
+  
+  var solicitudAdopcion = await Adopcion.find({estadoId: estadoAprobado, fechaModificacion: {$gte: desde, $lte: hasta}})
+
+  totalSolicitudAdopcion= solicitudAdopcion.length
+   
+   for (let i = 0 ; i < solicitudAdopcion.length ; i ++ ){ 
+    var diferencia= Math.abs(solicitudAdopcion[i].fechaModificacion - solicitudAdopcion[i].fechaCreacion)
+    var edadDias = Math.round(diferencia/(1000*3600*24))
+    tiempoTotalAdopcion += edadDias
+    if (maximoTiempoAdopcion < edadDias) maximoTiempoAdopcion = edadDias
+    if (minimoTiempoAdopcion > edadDias || minimoTiempoAdopcion == 0) minimoTiempoAdopcion =  edadDias
+
+   }
+   promedioAdopcion =  tiempoTotalAdopcion / totalSolicitudAdopcion
+
+   // Provisorio
+   var solicitudProvisorio = await Provisorio.find({estadoId: estadoAprobado, fechaModificacion: {$gte: desde, $lte: hasta}})
+
+   totalSolicitudProvisorio = solicitudProvisorio.length
+   
+   for (let i = 0 ; i < solicitudProvisorio.length ; i ++ ){ 
+    var diferencia= Math.abs(solicitudProvisorio[i].fechaModificacion - solicitudProvisorio[i].fechaCreacion)
+    var edadDias = Math.round(diferencia/(1000*3600*24))
+    console.log(edadDias)
+    tiempoTotalProvisorio += edadDias
+    if (maximoTiempoProvisorio < edadDias) maximoTiempoProvisorio = edadDias
+    if (minimoTiempoProvisorio > edadDias || minimoTiempoProvisorio == 0) minimoTiempoProvisorio =  edadDias
+
+   }
+
+   promedioProvisorio =  tiempoTotalProvisorio / totalSolicitudProvisorio
+
+   Arreglo = [{
+     MaximoTiempoAdopcion   : maximoTiempoAdopcion ,
+     PromedioTiempoAdopcion : promedioAdopcion ,
+     MinimoTiempoAdopcion   : minimoTiempoAdopcion 
+
+   },
+   {
+    maximoTiempoProvisorio   : maximoTiempoProvisorio ,
+    PromedioTiempoProvisorio : promedioProvisorio ,
+    MinimoTiempoProvisorio   : minimoTiempoProvisorio
+
+  }
+
+  ]
+   res.send(Arreglo)
+})
+
+
+
+
 
 module.exports = router;

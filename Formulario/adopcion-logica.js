@@ -16,7 +16,6 @@ const User = require('../modelos/usuarios.js')
 const histoEstadoAnimal= require('../modelos/histoEstadoAnimal.js')
 
 /* estados Animal*/
-const estadoAprobado = "Aprobado"
 const estadoAdoptado    = "Adoptado"
 const estadoEnProvisorio= "En provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
@@ -28,6 +27,7 @@ const estadoAproResponsable = "Aprobado Por Responsable"
 const estadoSuspendido = "Suspendido"
 const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
+const estadoAprobado = "Aprobado"
 
 
 
@@ -432,6 +432,9 @@ router.get('/historialProvisorio/:idMascota', auth, async function(req, res, nex
   
   res.send(historial)
 })
+
+
+
 
 
 module.exports = router;
