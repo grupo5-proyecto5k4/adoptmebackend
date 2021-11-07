@@ -209,22 +209,26 @@ router.get('/centros/:estados', auth, async(req, res)=>{
 router.get('/centrosFiltro/filtroBarrioNombres', auth, async(req, res)=>{
     let userAux = req.user.user 
    
-    const filter = {}
+    var filter = "{"
+    
     const {nombres, barrio}= req.query;
-    
+       
 
-    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
-    let estados = await Estado.findOne({nombre : "Pendiente"}) 
+     if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+      let estados = await Estado.findOne({nombre : "Pendiente"}) 
    
-    if (!estados) return res.status(404).json({error: 'El estado es invalido'})
+     if (!estados) return res.status(404).json({error: 'El estado es invalido'})
     
-    if (nombres) filter.nombres = nombres
-    if (barrio) filter.barrio = barrio
-    filter.tipoUsuario = 2
-    filter.idEstado = estados.id_estado
-
-    let users = await User.find(filter)
-    
+    if (nombres) filter += '"nombres": "' + nombres + '", '
+    if (barrio) filter +=  '"Direccion.barrio": "' + barrio + '", '
+    filter += '"tipoUsuario" : 2, '
+    filter += '"idEstado" : ' + estados.id_estado
+    filter += "}" 
+        
+    var  f = JSON.parse(filter)
+   
+    let users = await User.find(f)
+     
     if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
     
     res.send(users)
@@ -253,6 +257,35 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
     
     res.send(users)
 });
+
+// filtro de centro Rescatista para donar
+router.get('/centrosParaDonar/filtroDonar', auth, async(req, res)=>{
+    let userAux = req.user.user 
+   
+    var filter = "{"    
+    const {nombres, barrio}= req.query;
+    
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    
+
+    if (nombres) filter += '"nombres": "' + nombres + '", '
+    if (barrio) filter +=  '"Direccion.barrio": "' + barrio + '", '
+    filter += '"tipoUsuario" : 2 '
+    filter += "}" 
+        
+    var  f = JSON.parse(filter)
+    
+    f.banco = {$nin : [undefined, null, "" ]}
+    f.cbu   = {$nin : [undefined, null, ""]}
+    f.alias = {$nin : [undefined, null, ""]}
+
+    let users = await User.find(f)
+    
+    if(users.length == 0) return res.status(404).json({error: 'No hemos encontrado un Centro Rescatista en ese estado'})
+    
+    res.send(users)
+});
+
 
 //trae todos los estados, tanto si son particulares o centros rescatistas
 router.get('/usuarios/:estados', auth, async(req, res)=>{
