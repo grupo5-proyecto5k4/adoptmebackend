@@ -29,6 +29,7 @@ const estadoSuspendido = "Suspendido"
 const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
 const estadoAprobado = "Aprobado"
+const estadoFinalizado = "Finalizado"
 
 
 
@@ -351,7 +352,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
    if (estadoNueAnimal || !fin ) 
     {  
      actualizarAnimal(animal,estadoNueAnimal,esVisible)
-  }
+    }
   
   
 }
@@ -371,7 +372,7 @@ async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
    console.log("antes despues", estadoAntAnimal)
    if (estadoNueAnimal != estadoAntAnimal ){
       let historial = new histoEstadoAnimal({
-        mascotaId : modificado._id,
+        mascotaId : animal._id,
         solicitud: solicitud._id,
         estadoId :  estadoAntAnimal})
         await historial.save()
@@ -435,13 +436,25 @@ router.get('/historialProvisorio/:idMascota', auth, async function(req, res, nex
 })
 
 // fin de Provisorio Manual  por mal seguimiento 
-router.get('/historialProvisorio/:idMascota', auth, async function(req, res, next){
+router.put('/finProvisorio/:idSolicitud', auth, async function(req, res, next){
   let userAux = req.user.user
    
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   
-  let historial = await Provisorio.find({mascotaId:mongosee.Types.ObjectId (req.params.idMascota)}).sort({fechaModificacion: -1})
+  let provi = await Provisorio.findByIdAndUpdate(mongosee.Types.ObjectId(req.params.idSolicitud),
+  {
+    observacionCancelacion : req.body.observacion,
+    fechaModificacion : ahora.ahora(),
+    estadoId : estadoFinalizado
+
+  },
+  {
+    new: true
+  }
+    
+  )
   
+
   res.send(historial)
 })
 
