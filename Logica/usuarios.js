@@ -251,9 +251,9 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
         if (!estados) return res.send([])
         filter.idEstado = estados.id_estado
     }
-    if (nombres) filter.nombres = nombres
+    if (nombres) filter.nombres = '/' + nombres + '/'
     if (apellidos) filter.apellidos = apellidos
-    filter.tipoUsuario = 1
+   // filter.tipoUsuario = 1
  
 
     let users = await User.find(filter)
