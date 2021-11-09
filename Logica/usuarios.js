@@ -220,15 +220,17 @@ router.get('/centrosFiltro/filtroBarrioNombres', auth, async(req, res)=>{
       let estados = await Estado.findOne({nombre : "Pendiente"}) 
    
      if (!estados) return res.status(404).json({error: 'El estado es invalido'})
-    
-    if (nombres) filter += '"nombres": "' + nombres + '", '
+
     if (barrio) filter +=  '"Direccion.barrio": "' + barrio + '", '
     filter += '"tipoUsuario" : 2, '
     filter += '"idEstado" : ' + estados.id_estado
     filter += "}" 
-        
-    var  f = JSON.parse(filter)
-   
+    
+
+    var f = JSON.parse(filter)
+    
+    if (nombres) f.nombres = { $regex: '.*' + nombres + '.*' }
+    
     let users = await User.find(f)
      
     if(users.length == 0) users = []
