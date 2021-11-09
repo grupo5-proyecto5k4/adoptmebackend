@@ -39,7 +39,7 @@ cloudinary.config({
 
 //Buscar un animal por un determinado id
 router.get('/buscar/:id', async function (req, res) {
-    const animal = await Animal.find({_id : req.params.id})
+    const animal = await Animal.findById({_id : req.params.id})
     console.log(animal)
     res.send(animal)
 })
@@ -325,55 +325,63 @@ router.put('/user/modificarMascota', auth, async function(req, res) {
 }
 })
 
+
+
+
+
 //------------------------------------
 //Modelos: Provisorio, Adopción
-router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
-    let userAux = req.user.user
-    let barrioNew = req.query.barrio
-    var modelo = req.query.modelo
-    let solicitudProvisorio
-    if(modelo.indexOf('Provisorio') == 0 )solicitudProvisorio = await Provisorio.find({solicitanteId :userAux._id, estadoId : estadoAprobado})
-    if(modelo.indexOf('Adopcion') == 0 )solicitudProvisorio = await Adopcion.find({solicitanteId :userAux._id, estadoId : estadoAprobado})
+router.get('/encontrar/solicitudConfirmada', auth,  async function (req , res) {
+   let userAux = req.user.user
+   let barrioNew = req.query.barrio
+   var modelo = req.query.modelo
+   let solicitudProvisorio
+   
+    if(modelo.indexOf('Provisorio') == 0 )solicitudProvisorio = await Provisorio.find({solicitanteId : userAux._id, estadoId : estadoAprobado})
+    if(modelo.indexOf('Adopcion') == 0 ) solicitudProvisorio = await Adopcion.find({solicitanteId :userAux._id, estadoId : estadoAprobado})
     
-    //if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
+    if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
     const filter = {}
     const {sexo, tamañoFinal, tipoMascota} = req.query;
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
     if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
-     
-    filtrarProvisorio(solicitudProvisorio, filter, barrioNew).then(val => res.send(val))
+   console.log("llego aca 1")
+   
+   filtrarProvisorio(solicitudProvisorio, filter, barrioNew, userAux).then(val => res.send(val))
 
 })
 
 /* Funcion para traer solicitudes*/ 
 
-async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
+async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew, usuario) {
+    
     let animales = []  
     let desde = solicitudAdopciones.length
-    if (solicitudAdopciones.length == undefined)
+    if (solicitudAdopciones.length == undefined )
      {
       let filterProv = filter
-      filterProv._id = solicitudAdopciones.mascotaId
+      console.log(filterProv)
+      filterProv._id = mongosee.Types.ObjectId(solicitudAdopciones.mascotaId)
+      console.log(filterProv)
       desde = 0 
       let animal = await Animal.find(filterProv)
       if (!animal) return animales
-      let usuario = await Usuario.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
-      if (!usuario) return animales
-      if (usuario.Direccion.barrio != barrioNew && barrioNew) return animales
-      return animal
+      if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) return animales
+      animales.push(animal)
     }
     
     for (let i = 0 ; i < desde ; i ++ ){
+       
         let filterProv = filter
         filterProv._id = solicitudAdopciones[i].mascotaId
-        desde = 0 
-        let animal = await Animal.find (filterProv)
+        let animal = await Animal.findById(filterProv)
+        console.log("entro al for", animal)
         if (!animal) continue
-        let usuario = await Usuario.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
-        if (!usuario) continue
-        if (usuario.Direccion.barrio != barrioNew && barrioNew) continue
+        console.log("animales")
+        if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) continue
         animales.push(animal)
+        
     }
   return (animales)
   }
