@@ -254,7 +254,7 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
     if (nombres) filter.nombres = '/' + nombres + '/'
     if (apellidos) filter.apellidos = apellidos
    // filter.tipoUsuario = 1
- 
+    console.log(filter)
 
     let users = await User.find(filter)
     
