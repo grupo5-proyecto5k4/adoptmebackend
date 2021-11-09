@@ -191,6 +191,7 @@ router.options('/centros/:id_centro', async function(req, res)  {
 })
 
 
+
 router.get('/centros/:estados', auth, async(req, res)=>{
         let userAux = req.user.user 
         
@@ -251,7 +252,7 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
         if (!estados) return res.send([])
         filter.idEstado = estados.id_estado
     }
-    if (nombres) filter.nombres = '/' + nombres + '/'
+    if (nombres) filter.nombres = { $regex: '.*' + nombres + '.*' }
     if (apellidos) filter.apellidos = apellidos
    // filter.tipoUsuario = 1
     console.log(filter)
