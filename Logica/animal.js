@@ -332,8 +332,8 @@ router.get('/buscar/solicitudConfirmada', auth,  async function (req , res) {
     let barrioNew = req.query.barrio
     var modelo = req.query.modelo
     let solicitudProvisorio
-    if(modelo == "Provisorio")solicitudProvisorio = await Provisorio.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
-    if(modelo == "Adopcion")solicitudProvisorio = await Adopcion.find({solicitanteId : mongosee.Types.ObjectId(userAux._id), estadoId : estadoAprobado})
+    if(modelo.indexOf('Provisorio') == 0 )solicitudProvisorio = await Provisorio.find({solicitanteId :userAux._id, estadoId : estadoAprobado})
+    if(modelo.indexOf('Adopcion') == 0 )solicitudProvisorio = await Adopcion.find({solicitanteId :userAux._id, estadoId : estadoAprobado})
     
     //if(userAux.tipoUsuario != 1)return res.status(404).json({error: "No tiene permisos"})
     const filter = {}
@@ -356,7 +356,7 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
       let filterProv = filter
       filterProv._id = solicitudAdopciones.mascotaId
       desde = 0 
-      let animal = await Animal.find (filterProv)
+      let animal = await Animal.find(filterProv)
       if (!animal) return animales
       let usuario = await Usuario.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones.solicitanteId)})
       if (!usuario) return animales
@@ -375,7 +375,7 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew) {
         if (usuario.Direccion.barrio != barrioNew && barrioNew) continue
         animales.push(animal)
     }
-  return (animales[0])
+  return (animales)
   }
 //Fin reporte solicitudes confirmadas de apoción
 
