@@ -23,6 +23,21 @@ cloudinary.config({
 })
 
 
+/* estados Animal*/
+const estadoAdoptado    = "Adoptado"
+const estadoEnProvisorio= "En provisorio"
+const estadoDisProvisorio= "Disponible Provisorio"
+const estadoDispAdopcion= "Disponible Adopción" 
+const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
+/*Estados de Solicitud */
+const estadoInicial = 'Abierta'
+const estadoAproResponsable = "Aprobado Por Responsable" 
+const estadoSuspendido = "Suspendido"
+const estadoSuspSolicitante="Suspendido por Solicitante"
+const estadoBloqueado = "Bloqueado"
+const estadoAprobado = "Aprobado"
+const estadoFinalizado = "Finalizado"
+
 const estadoIniciadoSeg = "Iniciado" 
 const estadoCerradoSeg = "Cerrado"
 
@@ -89,7 +104,7 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     if(!result) return res.status(404).json({error: "No encontramos los datos de la mascota"})
 
     result = await Seguimiento.findByIdAndUpdate(result._id, {
-        estadoId : "Cerrada",
+        estadoId : estadoCerradoSeg,
         fechaModificacion : new Date(Date.now()).toISOString()
 
     },
@@ -104,7 +119,7 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     var seguimiento = []
     if(userAux.tipoUsuario == 0) return res.status(404).json({error:"No tiene permiso para esta acción"})   
     
-    let solAdo = await Adopcion.find({mascotaId: req.params.id_Animal}) 
+    let solAdo = await Adopcion.find({mascotaId: req.params.id_Animal, estadoId: estadoAprobado}) 
     if (solAdo.length != undefined){
        for(let i = 0; i < solAdo.length; i ++){
          var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id, estadoId: estadoIniciadoSeg})

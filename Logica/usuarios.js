@@ -267,15 +267,12 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
 });
 
 // filtro de centro Rescatista para donar
-router.get('/centrosParaDonar/filtroDonar', auth, async(req, res)=>{
-    let userAux = req.user.user 
-   
+router.get('/centrosParaDonar/filtroDonar', async(req, res)=>{
+     
     var filter = "{"    
     const {nombres, barrio}= req.query;
     
-    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
-    
-
+   
     if (nombres) filter += '"nombres": "' + nombres + '", '
     if (barrio) filter +=  '"Direccion.barrio": "' + barrio + '", '
     filter += '"tipoUsuario" : 2 '

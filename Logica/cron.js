@@ -4,12 +4,14 @@ const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const Seguimiento = require('../modelos/seguimiento.js')
 const Notificacion = require('../modelos/notificacion.js')
-const ahora = require('../fecha.js')
+const ahora = require('../fecha.js');
+const { now } = require('mongoose');
+const estadoAprobado = "Aprobado"
 
-
-cron.schedule('0 0 6 * * *', function(){
+ cron.schedule('0 0 6 * * *', function(){
     buscarSeguimientosANotificar();
-})
+       buscarFinProvisorioANotificar()
+ })
 
 async function buscarSeguimientosANotificar() {
     const fecha_seguimiento_buscada = new Date();
@@ -50,6 +52,16 @@ async function formatearFecha(entrada) {
     return revdate;
 }
 
+async function formatearFechaProvisorio(entrada) {
+    
+    var date1 = new Date(entrada).toISOString()
+    var [date, date2] = date1.split('T')
+    console.log(date)
+    var [yyyy, mm, dd] = date.split("-");
+    var revdate = `${dd}/${mm}/${yyyy}`;
+    return revdate;
+}
+
 async function notificar(titulo, texto, objetoAMostrar, objetoId, remitente){
 
     let notificacion = new Notificacion({
@@ -61,4 +73,19 @@ async function notificar(titulo, texto, objetoAMostrar, objetoId, remitente){
  })
     
  await notificacion.save()
+}
+
+
+async function buscarFinProvisorioANotificar() {
+    var dia = ahora.sumar(48)
+    let fecha = await formatearFechaProvisorio(dia)
+    let solicitudProvisorio = await Provisorio.find({fechaFinProvisorio :  {$gte: ahora.ahora() , $lte: dia}, estadoId: estadoAprobado })
+    var desde = solicitudProvisorio.length
+ 
+    for (let i = 0;i < desde ; i++) {
+         
+       let animal = await Animal.findById({_id: solicitudProvisorio[i].mascotaId}) 
+       notificar('Finalizacion de Provisorio', 'El provisorio de la Mascota ' + animal.nombreMascota + ' concluira el día ' + fecha, 'Mascota', animal._id, solicitudProvisorio[i].solicitanteId)
+    }
+
 }
