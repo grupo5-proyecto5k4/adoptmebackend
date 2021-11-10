@@ -27,12 +27,12 @@ const estAdopcionProvisorio = "Disponible Adopción y Provisorio"
 
 
 
-cron.schedule('*/1 * * * *', async function(){
+cron.schedule('* * 8 * * *', async function(){
     var f = new Date(ahora.ahora()).toISOString() 
     console.log (f)
     var f1 = f.split('T')
     var fecha = new Date (f1[0]) 
-    var solicitudes = await Provisorio.find({estadoId: estadoAprobado, fechaFinProvisorio:{$gte: fecha}})
+    var solicitudes = await Provisorio.find({estadoId: estadoAprobado, fechaFinProvisorio:{$lte: fecha}})
    
     let desde = solicitudes.length  
     if (solicitudes.length == undefined){
