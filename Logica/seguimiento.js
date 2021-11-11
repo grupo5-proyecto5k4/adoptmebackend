@@ -64,7 +64,7 @@ router.post('/crearVisita/:id_Seguimiento', auth, async function (req, res) {
 
    // crear un registro nuevo de visitas 
    let visitasNew = new Visita({
-    SeguimientoId: seg._id,
+    SeguimientoId: req.params.id_Seguimiento,
     descripcionVisita: req.body.descripcionVisita
     
    })
