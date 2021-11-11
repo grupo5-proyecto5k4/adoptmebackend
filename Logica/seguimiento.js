@@ -69,7 +69,21 @@ router.post('/crearVisita/:id_Seguimiento', auth, async function (req, res) {
     
    })
 
-   let NV = await visitasNew.save()   
+  let NV = await visitasNew.save()   
+
+  let seg = await Seguimiento.findById(visita.SeguimientoId) 
+  let v = seg.Visita
+  v.push(NV)
+
+  await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
+    {
+     Visita : v,   
+     fechaModificacion:new Date(Date.now()).toISOString()
+    }, 
+    {new: true}
+
+ )
+
    
   res.status(201).json({ id_Animal: NV._id })
     
@@ -110,20 +124,33 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
     modVisita = await Visita.findById({_id: aniCod})   
  
    // modificamos el seguimiento
-   let seg = await Seguimiento.findById(modVisita.SeguimientoId) 
-   v = seg.Visita
-   v.push(modVisita)
-   await Seguimiento.findByIdAndUpdate(modVisita.SeguimientoId, 
-    {
-     Visita : v,   
-     fechaModificacion:new Date(Date.now()).toISOString()
-    }, 
-    {new: true}
-
- )
+   actualizarSeg(modVisita)
+   
     res.send(modVisita)
 })
 
+async function actualizarSeg(visita){
+    let seg = await Seguimiento.findById(visita.SeguimientoId) 
+    let v = seg.Visita
+    for(i=0; i < v.length; i ++){
+       if(v[i]._id == visita._id){
+        v[i].visitaFotos = visita.visitaFotos
+        await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
+            {
+             Visita : v,   
+             fechaModificacion:new Date(Date.now()).toISOString()
+            }, 
+            {new: true}
+        
+         )
+
+
+       }
+
+    }
+
+
+}
 
 //finalizar proceso de Seguimiento 
 
