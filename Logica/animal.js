@@ -248,6 +248,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
             "minimo": conversionDias(ValorMinimoPerroCachorro),
             "promedio": conversionDias(promedioPerroCachorro),
             "maximo": conversionDias(valorMaximoPerroCachorro)
+            
             },
             {
             "categoria":"perroAdulto",

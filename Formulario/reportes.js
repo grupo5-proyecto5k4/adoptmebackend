@@ -158,6 +158,7 @@ function formato(fecha){
 }
 
 
+
 router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
   let userAux = req.user.user
   if(userAux.tipoUsuario != 0 ) return res.status(401).json({error : "no tiene permiso para esta accion" })
@@ -172,7 +173,7 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
   
   var solicitudAdopcion = await Adopcion.find({estadoId: estadoAprobado, fechaModificacion: {$gte: desde, $lte: hasta}})
 
-  totalSolicitudAdopcion= solicitudAdopcion.length
+  totalSolicitudAdopcion = solicitudAdopcion.length
    
    for (let i = 0 ; i < solicitudAdopcion.length ; i ++ ){ 
     var diferencia= Math.abs(solicitudAdopcion[i].fechaModificacion - solicitudAdopcion[i].fechaCreacion)
@@ -182,7 +183,7 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
     if (minimoTiempoAdopcion > edadDias || minimoTiempoAdopcion == 0) minimoTiempoAdopcion =  edadDias
 
    }
-   promedioAdopcion =  tiempoTotalAdopcion / totalSolicitudAdopcion
+   if(totalSolicitudAdopcion !=0 )promedioAdopcion =  tiempoTotalAdopcion / totalSolicitudAdopcion
 
    // Provisorio
    var solicitudProvisorio = await Provisorio.find({estadoId: estadoAprobado, fechaModificacion: {$gte: desde, $lte: hasta}})
@@ -192,26 +193,27 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
    for (let i = 0 ; i < solicitudProvisorio.length ; i ++ ){ 
     var diferencia= Math.abs(solicitudProvisorio[i].fechaModificacion - solicitudProvisorio[i].fechaCreacion)
     var edadDias = Math.round(diferencia/(1000*3600*24))
-    console.log(edadDias)
+    
     tiempoTotalProvisorio += edadDias
     if (maximoTiempoProvisorio < edadDias) maximoTiempoProvisorio = edadDias
     if (minimoTiempoProvisorio > edadDias || minimoTiempoProvisorio == 0) minimoTiempoProvisorio =  edadDias
 
    }
 
-   promedioProvisorio =  tiempoTotalProvisorio / totalSolicitudProvisorio
+  if(totalSolicitudProvisorio != 0) promedioProvisorio =  tiempoTotalProvisorio / totalSolicitudProvisorio
 
    Arreglo = [{
      MaximoTiempoAdopcion   : maximoTiempoAdopcion ,
-     PromedioTiempoAdopcion : promedioAdopcion ,
-     MinimoTiempoAdopcion   : minimoTiempoAdopcion 
+     PromedioTiempoAdopcion : Math.round(promedioAdopcion) ,
+     MinimoTiempoAdopcion   : ahora.redondear(minimoTiempoAdopcion),
+     cantidadTotalAdopcion  : totalSolicitudAdopcion
 
    },
    {
     maximoTiempoProvisorio   : maximoTiempoProvisorio ,
-    PromedioTiempoProvisorio : promedioProvisorio ,
-    MinimoTiempoProvisorio   : minimoTiempoProvisorio
-
+    PromedioTiempoProvisorio : Math.round(promedioProvisorio) ,
+    MinimoTiempoProvisorio   : ahora.redondear(minimoTiempoProvisorio),
+    cantidadTotalProvisorio  : totalSolicitudProvisorio
   }
 
   ]
