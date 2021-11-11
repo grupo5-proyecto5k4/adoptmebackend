@@ -85,7 +85,7 @@ router.post('/crearVisita/:id_Seguimiento', auth, async function (req, res) {
  )
 
    
-  res.status(201).json({ id_Animal: NV._id })
+  res.status(200).json({ id_Animal: NV._id })
     
 })
 
