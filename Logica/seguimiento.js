@@ -12,6 +12,7 @@ const Animal = require('../modelos/animal.js')
 const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
 const Seguimiento = require('../modelos/seguimiento.js')
+const Visita = require('../modelos/visita.js')
 const cloudinary = require('cloudinary')
 const fs = require('fs-extra')
 
@@ -58,39 +59,47 @@ router.post('/crearSeguimiento', auth, async function (req, res){
     res.send(result)
 })
 
-router.put('/modificarSeguimiento', auth, async function (req, res) {
+router.put('/modificarSeguimiento/:id_Seguimiento', auth, async function (req, res) {
     let userAux = req.user.user
-    let seg = await Seguimiento.findById({_id: req.body.seguimientoId})
-    var visita = seg.Visita
-    var foto = [] 
-    if (!req.files) res.status(400).json({error: 'Error, no llegamos'})
     
+    var visita = []
+    
+    let seg = await Seguimiento.findById({_id : req.params.id_Seguimiento})
+   
     let result2
     let numero = 0 
-    
-   for(let i = 0; i < req.files.length ; i ++ ){
+ //  if (req.files.length != undefined) numero = req.files.length
+
+   for(let i = 0; i < numero ; i ++ ){
         result2 = await cloudinary.v2.uploader.upload(req.files[i].path)
         let reg = { imagenURL : result2.url}
-        foto.push(reg)
+        visita.push(reg)
+        await fs.unlink(req.files[i].path)
    } 
-   let f = {descripcion : req.body.descripcion, 
-            imagines:foto,
-            fecha : ahora.ahora()       
+   
+  var v = seg.Visita 
+   
 
-}
+   // crear un registro nuevo de visitas 
+   let visitasNew = new Visita({
+    SeguimientoId: seg._id,
+    descripcionVisita: req.body.descripcionVisita ,
+    visitaFotos: visita
+   })
+
+   let NV =await visitasNew.save()   
+   
+   // modificamos el seguimiento 
+    v.push(NV)
+   await Seguimiento.findByIdAndUpdate(seg._id, 
+    {
+     Visita : v,   
+     fechaModificacion:new Date(Date.now()).toISOString()
+    }, 
+    {new: true}
+
+ )
     
- visita.push(f)
-    if (seg){
-        await Seguimiento.findByIdAndUpdate(seg._Id, 
-            {Visita: visita,
-             fechaModificacion:new Date(Date.now()).toISOString()
-            }, 
-            {new: true}
-
-        )
-    }
-
-
 })
 
 
