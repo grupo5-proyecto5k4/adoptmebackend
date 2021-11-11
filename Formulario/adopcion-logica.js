@@ -275,7 +275,6 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   if (solicitud.solicitanteId == usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
   
   if(estadoNuevo) {
-      console.log("estado nuevo", estadoNuevo)
       if ( modelo == Adopcion){
       esAdoptado = true 
       result2 = await Adopcion.findByIdAndUpdate(solicitud._id, 
@@ -310,7 +309,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   
  // Si el aprobado por el solicitante las demas Solicitudes debe quedar Suspendidas   
     if (result2.estadoId == estadoAprobado ) 
-     { 
+     {        
        let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
        modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
        agregarSeguimiento(solicitud._id, cadaCuanto)
@@ -326,18 +325,17 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
 
 // agregar seguimiento
 async function agregarSeguimiento(solicitud_Id, paramCadaCuanto){
-
-  let seguimiento = await Seguimiento.find({SolicitudId:solicitud_Id})
   let estado = estadoIniciadoSeg
-  if (!seguimiento) {
-    seguimiento = new Seguimiento({
-        SolicitudId: (solicitud_Id),
+
+  let seguimiento = new Seguimiento({
+        SolicitudId: solicitud_Id,
         estadoId: estado,
         cadaCuanto: paramCadaCuanto,
     })
-    const result = await seguimiento.save()
+    let result = await seguimiento.save()
+   
   }
-}
+
 
 /* Modificacion del Estado del  Animales*/
 async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
@@ -387,12 +385,10 @@ async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
     { new: true
     } 
     )
-   console.log("antes", estadoNueAnimal)
-   console.log("antes despues", estadoAntAnimal)
+   
    if (estadoNueAnimal != estadoAntAnimal ){
       let historial = new histoEstadoAnimal({
         mascotaId : animal._id,
-        solicitud: solicitud._id,
         estadoId :  estadoAntAnimal})
         await historial.save()
         
