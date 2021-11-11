@@ -318,8 +318,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
     }
 
    return (result2) 
-
-   
+  
   
 }
 

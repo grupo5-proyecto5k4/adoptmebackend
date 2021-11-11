@@ -113,7 +113,7 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
     {new: true}
 
  )
-    
+    res.send(modVisita)
 })
 
 
