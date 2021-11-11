@@ -82,10 +82,10 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
     var visita = []
     
     let aniCod = req.body.id_Animal 
-   
- //  if (req.files.length != undefined) numero = req.files.length
+    let numero = 0
+    if (req.files.length != undefined) numero = req.files.length
 
-   for(let i = 0; i < numero ; i ++ ){
+   for(let i = 0; i < 5 ; i ++ ){
         result2 = await cloudinary.v2.uploader.upload(req.files[i].path)
         let reg = { imagenURL : result2.url}
         visita.push(reg)
