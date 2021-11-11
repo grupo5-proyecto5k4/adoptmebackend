@@ -31,12 +31,12 @@ router.options('/notificacion/:id_notificacion', async function(req, res)  {
    
 })
 
-res.sendStatus(200).json({mensaje: 'notificacion creada correctamente'}) //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
+res.status(200).json({mensaje: 'notificacion creada correctamente'}) //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
 });
 
 router.get('/notificaciones', auth, async(req, res)=>{
     let userAux = req.user.user 
-    
+    let notificaciones
     if (userAux.tipoUsuario == 0){
         notificaciones = await Notificacion.find({tipoNotificacion : "usuarioAdmin"}).sort({fechaCreacion: -1})
     }
