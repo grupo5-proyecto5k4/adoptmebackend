@@ -71,11 +71,11 @@ router.post('/crearVisita/:id_Seguimiento', auth, async function (req, res) {
 
   let NV = await visitasNew.save()   
 
-  let seg = await Seguimiento.findById(visita.SeguimientoId) 
+  let seg = await Seguimiento.findById(NV.SeguimientoId) 
   let v = seg.Visita
   v.push(NV)
 
-  await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
+  await Seguimiento.findByIdAndUpdate(NV.SeguimientoId, 
     {
      Visita : v,   
      fechaModificacion:new Date(Date.now()).toISOString()
