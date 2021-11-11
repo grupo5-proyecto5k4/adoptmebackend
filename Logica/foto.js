@@ -56,8 +56,7 @@ router.post('/imagen/add', async (req,res) => {
 
         if (!resultado) res.status(400).json({error: 'Error, no llegamos'})
        
-        var esPrincipal = false
-        if (element = req.files[0])  esPrincipal = true
+     
         
         let a = await Animal.findById({_id: aniCod})
         const F = a.Foto

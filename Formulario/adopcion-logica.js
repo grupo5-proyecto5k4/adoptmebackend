@@ -15,6 +15,7 @@ const Provisorio = require('../Formulario/provisorio.js')
 const User = require('../modelos/usuarios.js')
 const histoEstadoAnimal= require('../modelos/histoEstadoAnimal.js')
 const ahora = require('../fecha.js')
+const Seguimiento = require('../modelos/seguimiento.js')
 
 /* estados Animal*/
 const estadoAdoptado    = "Adoptado"
@@ -31,6 +32,8 @@ const estadoBloqueado = "Bloqueado"
 const estadoAprobado = "Aprobado"
 const estadoFinalizado = "Finalizado"
 
+const estadoIniciadoSeg = "Iniciado" 
+const estadoCerradoSeg = "Cerrado"
 
 
  /*  Funcion de Adopcion   */
@@ -262,21 +265,20 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   
   var result2 
   let estadoNuevo = undefined
-
-  
   
   if (solicitud.responsableId == usuario._id && esAprobado) estadoNuevo = estadoAproResponsable, bloqueado = true
 
   if (solicitud.responsableId == usuario._id && !esAprobado) estadoNuevo = estadoSuspendido
-  
-  
+    
   if (solicitud.solicitanteId == usuario._id && esAprobado && solicitud.estadoId == estadoAproResponsable) estadoNuevo = estadoAprobado
               
   if (solicitud.solicitanteId == usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
   
   if(estadoNuevo) {
+      console.log("estado nuevo", estadoNuevo)
+      if ( modelo == Adopcion){
       esAdoptado = true 
-      result2 = await modelo.findByIdAndUpdate(solicitud._id, 
+      result2 = await Adopcion.findByIdAndUpdate(solicitud._id, 
       {estadoId: estadoNuevo,
        observacionCancelacion : observacion,
        cadaCuanto: cadaCuanto,  
@@ -284,6 +286,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       {new : true}
       
       )
+  }
       if(modelo == Provisorio){
         esAdoptado = false
         result2 = await modelo.findByIdAndUpdate(solicitud._id, 
@@ -297,9 +300,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
          
       }
     modificarAnimal(solicitud, esAdoptado, estadoNuevo)
-   
-    
-  
+     
      
   // si es aprobado por el responsables las demas solicitudes deben estar bloqueadas 
     if (result2.estadoId == estadoAproResponsable) 
@@ -312,12 +313,30 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
      { 
        let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
        modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
-     }
+       agregarSeguimiento(solicitud._id, cadaCuanto)
+      }
 
     }
 
    return (result2) 
+
+   
   
+}
+
+// agregar seguimiento
+async function agregarSeguimiento(solicitud_Id, paramCadaCuanto){
+
+  let seguimiento = await Seguimiento.find({SolicitudId:solicitud_Id})
+  let estado = estadoIniciadoSeg
+  if (seguimiento.length != 0) {
+    seguimiento = new Seguimiento({
+        SolicitudId: (solicitud_Id),
+        estadoId: estado,
+        cadaCuanto: paramCadaCuanto,
+    })
+    const result = await seguimiento.save()
+  }
 }
 
 /* Modificacion del Estado del  Animales*/
@@ -415,14 +434,11 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   var fechaFinProvisor =  req.body.fechaFinProvisor
   var observacion = req.body.observacion
   var cadaCuanto = req.body.cadaCuanto
- 
+  
   modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisor, cadaCuanto).then(val => res.send(val))
 
 })
-// agregar un comentario cuando rechaza un solicitud por parte del Solicitante
-// pasa a false el campo esvisible  cuando 
 
-// update 
 
 // historial de Mascota
 router.get('/historialProvisorio/:idMascota', auth, async function(req, res, next){

@@ -59,15 +59,30 @@ router.post('/crearSeguimiento', auth, async function (req, res){
     res.send(result)
 })
 
-router.put('/modificarSeguimiento/:id_Seguimiento', auth, async function (req, res) {
+router.post('/crearVisita/:id_Seguimiento', auth, async function (req, res) {
+    
+
+   // crear un registro nuevo de visitas 
+   let visitasNew = new Visita({
+    SeguimientoId: seg._id,
+    descripcionVisita: req.body.descripcionVisita
+    
+   })
+
+   let NV = await visitasNew.save()   
+   
+  res.status(201).json({ id_Animal: NV._id })
+    
+})
+
+
+router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
     let userAux = req.user.user
     
     var visita = []
     
-    let seg = await Seguimiento.findById({_id : req.params.id_Seguimiento})
+    let aniCod = req.body.id_Animal 
    
-    let result2
-    let numero = 0 
  //  if (req.files.length != undefined) numero = req.files.length
 
    for(let i = 0; i < numero ; i ++ ){
@@ -77,21 +92,22 @@ router.put('/modificarSeguimiento/:id_Seguimiento', auth, async function (req, r
         await fs.unlink(req.files[i].path)
    } 
    
-  var v = seg.Visita 
-   
+  
+   let modVisita = await Visita.findByIdAndUpdate(aniCod, 
+    {
+     Visita : visita,   
+    
+    }, 
+    {new: true}
+   )
 
-   // crear un registro nuevo de visitas 
-   let visitasNew = new Visita({
-    SeguimientoId: seg._id,
-    descripcionVisita: req.body.descripcionVisita ,
-    visitaFotos: visita
-   })
 
-   let NV =await visitasNew.save()   
    
-   // modificamos el seguimiento 
-    v.push(NV)
-   await Seguimiento.findByIdAndUpdate(seg._id, 
+   // modificamos el seguimiento
+   let seg = await Seguimiento.findById(modVisita.SeguimientoId) 
+   v = seg.Visita
+   v.push(modVisita)
+   await Seguimiento.findByIdAndUpdate(modVisita.SeguimientoId, 
     {
      Visita : v,   
      fechaModificacion:new Date(Date.now()).toISOString()
