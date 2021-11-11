@@ -95,13 +95,11 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
   
    let modVisita = await Visita.findByIdAndUpdate(aniCod, 
     {
-     Visita : visita,   
+       visitaFotos : visita,   
     
     }, 
     {new: true}
    )
-
-
    
    // modificamos el seguimiento
    let seg = await Seguimiento.findById(modVisita.SeguimientoId) 

@@ -329,7 +329,7 @@ async function agregarSeguimiento(solicitud_Id, paramCadaCuanto){
 
   let seguimiento = await Seguimiento.find({SolicitudId:solicitud_Id})
   let estado = estadoIniciadoSeg
-  if (seguimiento.length != 0) {
+  if (!seguimiento) {
     seguimiento = new Seguimiento({
         SolicitudId: (solicitud_Id),
         estadoId: estado,
