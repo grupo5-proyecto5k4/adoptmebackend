@@ -85,29 +85,27 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
     let numero = 0
     if (req.files.length != undefined) numero = req.files.length
 
-//    for(let i = 0; i < 5 ; i ++ ){
-//         result2 = await cloudinary.v2.uploader.upload(req.files[i].path)
-//         let reg = { imagenURL : result2.url}
-//         visita.push(reg)
-//         await fs.unlink(req.files[i].path)
-//    } 
+
    
+  if(!req.files) {
+    req.files.forEach( async (element) => {
+        result2 = await cloudinary.v2.uploader.upload(element.path)
+             let reg = { imagenURL : result2.url}
+             visita.push(reg) 
+             modVisita = await Visita.findByIdAndUpdate(aniCod, 
+                {
+                   visitaFotos : visita,   
+                
+                }, 
+                {new: true}
+               )
+               
+    
+        })
 
-   req.files.forEach( async (element) => {
-    result2 = await cloudinary.v2.uploader.upload(element.path)
-         let reg = { imagenURL : result2.url}
-         visita.push(reg) 
-         modVisita = await Visita.findByIdAndUpdate(aniCod, 
-            {
-               visitaFotos : visita,   
-            
-            }, 
-            {new: true}
-           )
-           
 
-    })
-  
+  }
+     
     // buscamos la visita
     modVisita = await Visita.findById({_id: aniCod})   
  
