@@ -345,7 +345,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
   let animal = await Animal.findById({_id : solicitud.mascotaId})
   if (estadoNuevo == estadoAproResponsable) actualizarAnimal(animal, animal.estado, false)
   if (estadoNuevo == estadoSuspSolicitante) actualizarAnimal(animal, animal.estado, true)
-  if (estadoNuevo != estadoAprobado) fin = true
+  if (estadoNuevo == estadoAprobado) fin = true
   
 
   let estadoAntAnimal = animal.estado
