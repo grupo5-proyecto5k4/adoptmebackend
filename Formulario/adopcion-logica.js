@@ -266,7 +266,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   var result2 
   let estadoNuevo = undefined
   
-  if (solicitud.responsableId == usuario._id && esAprobado) estadoNuevo = estadoAproResponsable, bloqueado = true
+  if (solicitud.responsableId == usuario._id && esAprobado) estadoNuevo = estadoAproResponsable
 
   if (solicitud.responsableId == usuario._id && !esAprobado) estadoNuevo = estadoSuspendido
     
@@ -338,7 +338,7 @@ async function agregarSeguimiento(solicitud_Id, paramCadaCuanto){
 
 /* Modificacion del Estado del  Animales*/
 async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
-  console.log(solicitud)
+  
   let estadoNueAnimal = undefined
   var fin = false
 
@@ -365,7 +365,7 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
 
    if (esAdoptado) estadoNueAnimal = estadoAdoptado
    
-   if (estadoNueAnimal || !fin ) 
+   if (estadoNueAnimal && fin ) 
     {  
      actualizarAnimal(animal,estadoNueAnimal,esVisible)
     }
@@ -375,17 +375,26 @@ async function modificarAnimal(solicitud, esAdoptado, estadoNuevo){
 
 async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
   let estadoAntAnimal = animal.estado
-  
-  modificado = await Animal.findByIdAndUpdate(animal._id, 
-    { estado: estadoNueAnimal,
-      visible : esVisible,
-      fechaModificacion : ahora.ahora()
-    }, 
-    { new: true
-    } 
-    )
-   
+  if (estadoNueAnimal == estadoAntAnimal){
+      await Animal.findByIdAndUpdate(animal._id, 
+        { estado: estadoNueAnimal,
+          visible : esVisible,
+          fechaModificacion : ahora.ahora()
+        }, 
+        { new: true
+        } 
+        )
+  }
    if (estadoNueAnimal != estadoAntAnimal ){
+    await Animal.findByIdAndUpdate(animal._id, 
+      { estado: estadoNueAnimal,
+        visible : esVisible,
+        fechaModificacion : ahora.ahora()
+      }, 
+      { new: true
+      } 
+      )   
+
       let historial = new histoEstadoAnimal({
         mascotaId : animal._id,
         estadoId :  estadoAntAnimal})
