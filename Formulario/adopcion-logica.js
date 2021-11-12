@@ -261,7 +261,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
-async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisor, cadaCuanto){
+async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisorio, cadaCuanto){
   
   var result2 
   let estadoNuevo = undefined
@@ -290,7 +290,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
         esAdoptado = false
         result2 = await modelo.findByIdAndUpdate(solicitud._id, 
           {estadoId: estadoNuevo,
-           fechaFinProvisorio: fechaFinProvisor,
+           fechaFinProvisorio: fechaFinProvisorio,
            observacionCancelacion : observacion, 
            fechaModificacion : ahora.ahora()},
           {new : true}
@@ -426,11 +426,11 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
     esAdoptado = true
     modelo = Adopcion
   }
-  var fechaFinProvisor =  req.body.fechaFinProvisor
+  var fechaFinProvisorio =  req.body.fechaFinProvisorio
   var observacion = req.body.observacion
   var cadaCuanto = req.body.cadaCuanto
   
-  modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisor, cadaCuanto).then(val => res.send(val))
+  modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisorio, cadaCuanto).then(val => res.send(val))
 
 })
 

@@ -60,6 +60,10 @@ router.post('/imagen/add', async (req,res) => {
         
         let a = await Animal.findById({_id: aniCod})
         const F = a.Foto
+
+        var esPrincipal = false
+        if (element = req.files[0])  esPrincipal = true
+
         
         F.push({ foto: result2.url, esPrincipal : esPrincipal}) 
   
