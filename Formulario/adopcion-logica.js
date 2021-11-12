@@ -377,7 +377,7 @@ async function actualizarAnimal(animal, estadoNueAnimal, esVisible){
   let estadoAntAnimal = animal.estado
   if (estadoNueAnimal == estadoAntAnimal){
       await Animal.findByIdAndUpdate(animal._id, 
-        { estado: estadoNueAnimal,
+        { 
           visible : esVisible,
           fechaModificacion : ahora.ahora()
         }, 
