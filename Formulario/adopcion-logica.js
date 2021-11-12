@@ -274,9 +274,10 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
               
   if (solicitud.solicitanteId == usuario._id && !esAprobado) estadoNuevo = estadoSuspSolicitante
   
+  
+
   if(estadoNuevo) {
       if ( modelo == Adopcion){
-      esAdoptado = true 
       result2 = await Adopcion.findByIdAndUpdate(solicitud._id, 
       {estadoId: estadoNuevo,
        observacionCancelacion : observacion,
@@ -287,7 +288,6 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       )
   }
       if(modelo == Provisorio){
-        esAdoptado = false
         result2 = await modelo.findByIdAndUpdate(solicitud._id, 
           {estadoId: estadoNuevo,
            fechaFinProvisorio: fechaFinProvisorio,
