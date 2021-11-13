@@ -436,7 +436,9 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
     modelo = Adopcion
   }
   var fechaFinProvisorio =  req.body.fechaFinProvisorio
-  var observacion = req.body.observacion
+  var observacion = " "
+  if(req.body.observacion != undefined) observacion = req.body.observacion
+  
   var cadaCuanto = req.body.cadaCuanto
   
   modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisorio, cadaCuanto).then(val => res.send(val))

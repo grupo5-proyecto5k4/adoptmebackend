@@ -27,7 +27,7 @@ const estAdopcionProvisorio = "Disponible Adopción y Provisorio"
 
 
 
-cron.schedule('* * 8 * * *', async function(){
+cron.schedule('0 8 * * *', async function(){
     var f = new Date(ahora.ahora()).toISOString() 
     console.log (f)
     var f1 = f.split('T')
