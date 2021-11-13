@@ -293,6 +293,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
           result2 = await modelo.findByIdAndUpdate(solicitud._id, 
             {estadoId: estadoNuevo,
              fechaFinProvisorio: fechaFinProvisorio,
+             cadaCuanto: cadaCuanto, 
              observacionCancelacion : observacion, 
              fechaModificacion : ahora.ahora()},
             {new : true})
@@ -301,7 +302,8 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       else{
           result2 = await modelo.findByIdAndUpdate(solicitud._id, 
               {estadoId: estadoNuevo,
-               observacionCancelacion : observacion, 
+               observacionCancelacion : observacion,
+               cadaCuanto: cadaCuanto,  
                fechaModificacion : ahora.ahora()},
               {new : true})
         }
