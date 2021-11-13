@@ -15,6 +15,7 @@ const Seguimiento = require('../modelos/seguimiento.js')
 const Visita = require('../modelos/visita.js')
 const cloudinary = require('cloudinary')
 const fs = require('fs-extra')
+const ahora = require('../fecha.js')
 
 
 cloudinary.config({
