@@ -147,20 +147,17 @@ async function actualizarSeg(visita){
     for(i=0; i < v.length; i ++){
        if(v[i]._id == visita._id){
         v[i].visitaFotos = visita.visitaFotos
-        await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
-            {
-             Visita : v,   
-             fechaModificacion:new Date(Date.now()).toISOString()
-            }, 
-            {new: true}
-        
-         )
-
-
-       }
-
+        break;
+        }
     }
-
+    await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
+        {
+         Visita : v,   
+         fechaModificacion:new Date(Date.now()).toISOString()
+        }, 
+        {new: true}
+    
+     )
 
 }
 
