@@ -106,6 +106,7 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
              let reg = { imagenURL : result2.url}
              visita.push(reg) 
             })
+            console.log("arreglo", visita)
              modVisita = await Visita.findByIdAndUpdate(aniCod, 
                 {
                    visitaFotos : visita,   
