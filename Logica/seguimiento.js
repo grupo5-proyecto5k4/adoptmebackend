@@ -78,7 +78,7 @@ router.post('/crearVisita/:id_Seguimiento', auth, async function (req, res) {
   await Seguimiento.findByIdAndUpdate(NV.SeguimientoId, 
     {
      Visita : v,   
-     fechaModificacion:new Date(Date.now()).toISOString()
+     fechaModificacion:ahora.ahora()
     }, 
     {new: true}
 
@@ -134,7 +134,7 @@ async function actualizarSeg(visita){
     await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
         {
          Visita : v,   
-         fechaModificacion:new Date(Date.now()).toISOString()
+         fechaModificacion:ahora.ahora()
         }, 
         {new: true}
     
@@ -147,20 +147,19 @@ async function actualizarSeg(visita){
 router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res, next){
     let userAux = req.user.user
     if(userAux.tipoUsuario == 0) return res.status(404).json({error:"No tiene permiso para esta acción"})
-    let result = await Seguimiento.find({id_Solicitud : req.params.idSolicitud})
+    let result = await Seguimiento.findOne({id_Solicitud : req.params.idSolicitud})
 
     if(!result) return res.status(404).json({error: "No encontramos los datos de la mascota"})
 
-    result = await Seguimiento.findByIdAndUpdate(result._id, {
+    let result1 = await Seguimiento.findByIdAndUpdate(result._id, {
         estadoId : estadoCerradoSeg,
-        fechaModificacion : new Date(Date.now()).toISOString()
-
+        fechaModificacion : ahora.ahora()
     },
     {
         new: true 
     })
-    
-    res.send(result)
+
+    res.send(result1)
 })   
   
    //consultar proceso de Seguimiento  
