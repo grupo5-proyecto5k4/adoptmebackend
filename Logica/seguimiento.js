@@ -146,7 +146,7 @@ async function actualizarSeg(visita){
     let v = seg.Visita
     for(i=0; i < v.length; i ++){
        if(v[i]._id == visita._id){
-          for(j=0; j < v.length; j ++) { v[i].visitaFotos.push(visita.visitaFotos[j])}
+          for(j=0; j < visita.visitaFotos.length; j ++) { v[i].visitaFotos.push(visita.visitaFotos[j])}
         }
     }
     console.log("funcion visita", visita)
