@@ -159,6 +159,8 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     {
         new: true 
     })
+    
+    res.send(result)
 })   
   
    //consultar proceso de Seguimiento  
