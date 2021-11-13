@@ -146,11 +146,10 @@ async function actualizarSeg(visita){
     let v = seg.Visita
     for(i=0; i < v.length; i ++){
        if(v[i]._id == visita._id){
-        v[i].visitaFotos = visita.visitaFotos
-        
+          for(j=0; j < v.length; j ++) { v[i].visitaFotos.push(visita.visitaFotos[j])}
         }
     }
-    console.log("funcion visita", v)
+    console.log("funcion visita", visita)
     await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
         {
          Visita : v,   
