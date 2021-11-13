@@ -356,8 +356,8 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     let n = await User.findById({_id : userAux._id})
         let p = req.body
     let val_user = User
-    if(n.nombres != (p.nombres).toUpperCase() && p.nombres) n.nombres = (p.nombres).toUpperCase()
-    if(n.apellidos != (p.apellidos).toUpperCase() && p.apellidos) n.apellidos = (p.apellidos).toUpperCase()
+    if(p.nombres && n.nombres != (p.nombres).toUpperCase()) n.nombres = (p.nombres).toUpperCase()
+    if(p.apellidos && n.apellidos != (p.apellidos).toUpperCase()) n.apellidos = (p.apellidos).toUpperCase()
     if(n.dni != p.dni && p.dni) n.dni = p.dni
     if(n.fechaNacimiento != p.fechaNacimiento && p.fechaNacimiento) n.fechaNacimiento=p.fechaNacimiento
     if(n.Direccion != p.Direccion && p.Direccion) n.Direccion = p.Direccion
