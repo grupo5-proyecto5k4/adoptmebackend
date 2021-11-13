@@ -86,7 +86,7 @@ router.get('/animal/:estados', async (req, res) => {
 });
 
 // filtrar mascotas segun su estado y segun el id del responsable
-router.get('/respestados/:responestados', async (req, res) => {
+router.get('/respestados/:responestados', auth,  async (req, res) => {
     let nueva = req.params.responestados.replace(/_/g, " ")
     let userAux = req.user.user
     let animal = await Animal.find({ responsableId: userAux._id, estado: nueva })
