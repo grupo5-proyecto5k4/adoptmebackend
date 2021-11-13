@@ -147,9 +147,10 @@ async function actualizarSeg(visita){
     for(i=0; i < v.length; i ++){
        if(v[i]._id == visita._id){
         v[i].visitaFotos = visita.visitaFotos
-        break;
+        
         }
     }
+    console.log("funcion visita", v)
     await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
         {
          Visita : v,   
