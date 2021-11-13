@@ -265,6 +265,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   
   var result2 
   let estadoNuevo = undefined
+
   
   if (solicitud.responsableId == usuario._id && esAprobado) estadoNuevo = estadoAproResponsable
 
@@ -286,18 +287,28 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       {new : true}
       
       )
-  }
+     }
       if(modelo == Provisorio){
-        result2 = await modelo.findByIdAndUpdate(solicitud._id, 
-          {estadoId: estadoNuevo,
-           fechaFinProvisorio: fechaFinProvisorio,
-           observacionCancelacion : observacion, 
-           fechaModificacion : ahora.ahora()},
-          {new : true}
-          
-          )
+        if (fechaFinProvisorio != (undefined || null)){
+          result2 = await modelo.findByIdAndUpdate(solicitud._id, 
+            {estadoId: estadoNuevo,
+             fechaFinProvisorio: fechaFinProvisorio,
+             observacionCancelacion : observacion, 
+             fechaModificacion : ahora.ahora()},
+            {new : true})
+
+        }
+      else{
+          result2 = await modelo.findByIdAndUpdate(solicitud._id, 
+              {estadoId: estadoNuevo,
+               observacionCancelacion : observacion, 
+               fechaModificacion : ahora.ahora()},
+              {new : true})
+        }
+        
          
       }
+    
     modificarAnimal(solicitud, esAdoptado, estadoNuevo)
      
      
@@ -423,6 +434,7 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   let esAprobado  = false
   let esAdoptado  = false
   let modelo = Provisorio
+ 
   
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   if(req.params.estado.indexOf('Aprobado') !=  0 && req.params.estado.indexOf('Rechazado') !=  0 ) return res.status(404).json({error: 'Estado inexistente'}) 
@@ -436,7 +448,7 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
     modelo = Adopcion
   }
   var fechaFinProvisorio =  req.body.fechaFinProvisorio
-  var observacion = " "
+  var observacion = ""
   if(req.body.observacion != undefined) observacion = req.body.observacion
   
   var cadaCuanto = req.body.cadaCuanto
