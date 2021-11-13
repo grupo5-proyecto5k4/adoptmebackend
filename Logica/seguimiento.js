@@ -120,7 +120,7 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
     for(let i=0; !req.files.length && i < req.files.length; i ++ ){
         result2 = await cloudinary.v2.uploader.upload(f[i].path)
         let reg = { imagenURL : result2.url}
-        console.log(reg)
+        console.log("registro", reg)
         visita.push(reg)
     }
     console.log(visita) 
