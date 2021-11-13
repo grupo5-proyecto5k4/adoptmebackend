@@ -136,7 +136,8 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
   
   let desde = solicitudAdopciones.length
   
-  if (solicitudAdopciones.length == undefined && solicitudAdopciones.estadoId != (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante))
+ // if (solicitudAdopciones.length == undefined && solicitudAdopciones.estadoId != (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante))
+ if (solicitudAdopciones.length == undefined) 
    {
     desde = 0 
     let animal = await Animal.findById ({_id: solicitudAdopciones.mascotaId})
@@ -165,7 +166,7 @@ async function realizarSolicitud(solicitudAdopciones,res,  next){
   }
   
   for (let i = 0 ; i < desde ; i ++ ){
-    if(solicitudAdopciones[i].estadoId == (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante)) continue  
+    //if(solicitudAdopciones[i].estadoId == (estadoBloqueado || estadoSuspendido || estadoSuspSolicitante)) continue  
     let animal = await Animal.findById ({_id: solicitudAdopciones[i].mascotaId})
     if (!animal) continue
     let usuario = await User.findById({_id:mongosee.Types.ObjectId(solicitudAdopciones[i].solicitanteId)})
@@ -476,14 +477,17 @@ router.get('/historialProvisorio/:idMascota', auth, async function(req, res, nex
 })
 
 // fin de Provisorio Manual  por mal seguimiento 
-router.put('/finProvisorio/:idSolicitud', auth, async function(req, res, next){
+router.put('/finProvisorio/:idAnimal', auth, async function(req, res, next){
   let userAux = req.user.user
-   
-  if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   
-  let provi = await Provisorio.findByIdAndUpdate(mongosee.Types.ObjectId(req.params.idSolicitud),
+  if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
+  var observacion = "" 
+  if(req.body.observacion)observacion = req.body.observacion
+
+  let provisorio = await Provisorio.findOne({mascotaId: req.params.idAnimal, estadoId : estadoAprobado})
+  let provi = await Provisorio.findByIdAndUpdate(mongosee.Types.ObjectId(provisorio._id),
   {
-    observacionCancelacion : req.body.observacion,
+    observacionCancelacion : observacion,
     fechaModificacion : ahora.ahora(),
     estadoId : estadoFinalizado
 
@@ -495,7 +499,7 @@ router.put('/finProvisorio/:idSolicitud', auth, async function(req, res, next){
   )
   
 
-  res.send(historial)
+  res.send(provi._id)
 })
 
 

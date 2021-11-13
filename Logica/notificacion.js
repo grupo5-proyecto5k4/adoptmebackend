@@ -36,14 +36,12 @@ res.status(200).json({mensaje: 'notificacion creada correctamente'}) //json({id_
 
 router.get('/notificaciones', auth, async(req, res)=>{
     let userAux = req.user.user 
-    let notificaciones
-    if (userAux.tipoUsuario == 0){
+    let notificaciones =  await Notificacion.find({tipoNotificacion : "usuarioNormal", remitenteId : userAux._id}).sort({fechaCreacion: -1})
+    if (!userAux.tipoUsuario) notficaciones = {}
+    if (userAux.tipoUsuario == 0 && userAux.tipoUsuario){
         notificaciones = await Notificacion.find({tipoNotificacion : "usuarioAdmin"}).sort({fechaCreacion: -1})
     }
-    else{
-        notificaciones = await Notificacion.find({tipoNotificacion : "usuarioNormal", remitenteId : userAux._id}).sort({fechaCreacion: -1})
-    }
-
+    
     res.send(notificaciones)
     
 });
