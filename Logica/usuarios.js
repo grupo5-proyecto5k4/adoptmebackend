@@ -343,6 +343,7 @@ router.put('/centros/:id_centro', auth, async(req, res)=> {
 
 router.get('/user/modificacionPerfil', auth, async function(req, res) {
     let userAux = req.user.user
+   
     let n = await User.findById({_id : userAux._id})
     if (!n) return res.status(401).json({error : "no se encontro ese usuario"})
     res.send(n)  
@@ -355,8 +356,8 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     let n = await User.findById({_id : userAux._id})
         let p = req.body
     let val_user = User
-    if(n.nombres != p.nombres && p.nombres) n.nombres = (p.nombres).toUpperCase()
-    if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = (p.apellidos).toUpperCase()
+    if(n.nombres != (p.nombres).toUpperCase() && p.nombres) n.nombres = (p.nombres).toUpperCase()
+    if(n.apellidos != (p.apellidos).toUpperCase() && p.apellidos) n.apellidos = (p.apellidos).toUpperCase()
     if(n.dni != p.dni && p.dni) n.dni = p.dni
     if(n.fechaNacimiento != p.fechaNacimiento && p.fechaNacimiento) n.fechaNacimiento=p.fechaNacimiento
     if(n.Direccion != p.Direccion && p.Direccion) n.Direccion = p.Direccion
@@ -377,7 +378,9 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     
     if ( !result) return  res.status(400).json({mensaje:'no se pudo realizar la actualizacion'})
 
-    const jwtToken = jwt.sign({result}, process.env.SECRET_KEY_JWT);
+    let user = await User.findById({_id : n._id})
+
+    const jwtToken = jwt.sign({user}, process.env.SECRET_KEY_JWT);
 
     res.header('auth-token', jwtToken ).json({
         token : jwtToken
