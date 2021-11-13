@@ -127,6 +127,10 @@ const FormularioAdopcionSchema  = new mongosee.Schema({
 
     observacionCancelacion: {
       type: String
+    },
+
+    cancelacionMotivoSolicitante: {
+      type: String
     }
 
   });

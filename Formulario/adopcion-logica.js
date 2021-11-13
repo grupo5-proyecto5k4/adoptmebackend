@@ -27,13 +27,13 @@ const estAdopcionProvisorio = "Disponible Adopción y Provisorio"
 const estadoInicial = 'Abierta'
 const estadoAproResponsable = "Aprobado Por Responsable" 
 const estadoSuspendido = "Suspendido"
-const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
 const estadoAprobado = "Aprobado"
 const estadoFinalizado = "Finalizado"
 
 const estadoIniciadoSeg = "Iniciado" 
 const estadoCerradoSeg = "Cerrado"
+const estadoSuspSolicitante="Suspendido por Solicitante"
 
 
  /*  Funcion de Adopcion   */
@@ -450,11 +450,15 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
     modelo = Adopcion
   }
   var fechaFinProvisorio =  req.body.fechaFinProvisorio
+ 
   var observacion = ""
   if(req.body.observacion != undefined) observacion = req.body.observacion
   
   var cadaCuanto = req.body.cadaCuanto
   
+  var motivo = ""
+  if(req.body.motivo != undefined) observacion = req.body.motivo
+
   modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisorio, cadaCuanto).then(val => res.send(val))
 
 })

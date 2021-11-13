@@ -121,6 +121,10 @@ const ahora = require('../fecha.js')
  
   observacionCancelacion: {
     type: String
+  }, 
+
+  cancelacionMotivoSolicitante: {
+    type: String
   }
 
   });

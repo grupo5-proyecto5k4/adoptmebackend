@@ -229,7 +229,7 @@ router.get('/centrosFiltro/filtroBarrioNombres', auth, async(req, res)=>{
 
     var f = JSON.parse(filter)
     
-    if (nombres) f.nombres = { $regex: '.*' + nombres + '.*' }
+    if (nombres) f.nombres = { $regex: '.*' + (nombres).toUpperCase() + '.*' }
     
     let users = await User.find(f)
      
@@ -254,7 +254,8 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
         if (!estados) return res.send([])
         filter.idEstado = estados.id_estado
     }
-    if (nombres) filter.nombres = { $regex: '.*' + nombres + '.*' }
+    var nombreMay= (nombres).toUpperCase()
+    if (nombres) filter.nombres = { $regex: '.*' + nombreMay + '.*' }
     if (apellidos) filter.apellidos = apellidos
    // filter.tipoUsuario = 1
     console.log(filter)
@@ -273,7 +274,7 @@ router.get('/centrosParaDonar/filtroDonar', async(req, res)=>{
     const {nombres, barrio}= req.query;
     
    
-    if (nombres) filter += '"nombres": "' + nombres + '", '
+    if (nombres) filter += '"nombres": "' + (nombres).toUpperCase() + '", '
     if (barrio) filter +=  '"Direccion.barrio": "' + barrio + '", '
     filter += '"tipoUsuario" : 2 '
     filter += "}" 
@@ -354,8 +355,8 @@ router.put('/user/modificacionPerfil', auth, async function(req, res) {
     let n = await User.findById({_id : userAux._id})
         let p = req.body
     let val_user = User
-    if(n.nombres != p.nombres && p.nombres) n.nombres = p.nombres
-    if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = p.apellidos
+    if(n.nombres != p.nombres && p.nombres) n.nombres = (p.nombres).toUpperCase()
+    if(n.apellidos != p.apellidos && p.apellidos) n.apellidos = (p.apellidos).toUpperCase()
     if(n.dni != p.dni && p.dni) n.dni = p.dni
     if(n.fechaNacimiento != p.fechaNacimiento && p.fechaNacimiento) n.fechaNacimiento=p.fechaNacimiento
     if(n.Direccion != p.Direccion && p.Direccion) n.Direccion = p.Direccion
@@ -407,11 +408,11 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
 
 })
 
-router.get('/user/modificacion/centrorescatista/:idCentro', auth, async function(req, res) {
+router.get('/user/modificacion/centrorescatista', auth, async function(req, res) {
     let userAux = req.user.user 
     if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
     
-    let usuario = await User.findById({_id :req.params.idCentro})
+    let usuario = await User.findById({_id : userAux._id})
     if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
     
     
