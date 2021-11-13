@@ -301,8 +301,9 @@ function estaVacio (variable)
 }
 
 //Modificar datos de la mascota(no en adopcion ni en provisorio), castrado y vacunas
-router.put('/user/modificarMascota', auth, async function(req, res) {
+router.put('/mascota/modificarMascota', auth, async function(req, res) {
     let userAux = req.user.user
+    console.log("llega hasta aca")
     let animalNew = await Animal.findById({_id : req.body.id_Animal})
     let castradoNew = req.body.castrado
     let vacunasNew = req.body.nombreVacuna
@@ -324,6 +325,9 @@ router.put('/user/modificarMascota', auth, async function(req, res) {
         const result = await vac.save()
     }
 }
+ animalNew = await Animal.findById({_id : req.body.id_Animal})
+ res.send(animalNew)
+
 })
 
 
