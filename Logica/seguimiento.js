@@ -146,7 +146,7 @@ async function actualizarSeg(visita){
 
 router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res, next){
     let userAux = req.user.user
-    if(userAux.tipoUsuario != 0) return res.status(404).json({error:"No tiene permiso para esta acción"})
+    if(userAux.tipoUsuario == 0) return res.status(404).json({error:"No tiene permiso para esta acción"})
     let result = await Seguimiento.find({id_Solicitud : req.params.idSolicitud})
 
     if(!result) return res.status(404).json({error: "No encontramos los datos de la mascota"})
