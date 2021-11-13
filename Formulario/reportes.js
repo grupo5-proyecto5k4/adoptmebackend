@@ -200,18 +200,18 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
 
    }
 
-  if(totalSolicitudProvisorio != 0) promedioProvisorio =  tiempoTotalProvisorio / totalSolicitudProvisorio
+  if(totalSolicitudProvisorio != 0) promedioProvisorio = tiempoTotalProvisorio / totalSolicitudProvisorio
 
    Arreglo = [{
      MaximoTiempoAdopcion   : maximoTiempoAdopcion ,
-     PromedioTiempoAdopcion : Math.round(promedioAdopcion) ,
+     PromedioTiempoAdopcion : Math.round(ahora.redondear(promedioAdopcion)) ,
      MinimoTiempoAdopcion   : ahora.redondear(minimoTiempoAdopcion),
      cantidadTotalAdopcion  : totalSolicitudAdopcion
 
    },
    {
     maximoTiempoProvisorio   : maximoTiempoProvisorio ,
-    PromedioTiempoProvisorio : Math.round(promedioProvisorio) ,
+    PromedioTiempoProvisorio : Math.round(ahora.redondear(promedioProvisorio)) ,
     MinimoTiempoProvisorio   : ahora.redondear(minimoTiempoProvisorio),
     cantidadTotalProvisorio  : totalSolicitudProvisorio
   }
