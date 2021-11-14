@@ -191,12 +191,18 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
-        var diferencia= Math.abs(ahora.ahora() - animalesAdoptados[i].fechaNacimiento)
-         console.log(diferencia) 
+        var diferenciaAbs= Math.abs(ahora.ahora() - animalesAdoptados[i].fechaNacimiento)
+        var diferencia= ahora.ahora() - animalesAdoptados[i].fechaNacimiento
+        console.log("diferencia ABS",diferenciaAbs)
+        console.log("diferencia solita",diferencia)
+        console.log("ahora.ahora()", ahora.ahora())
+        console.log("fecha animal", animalesAdoptados[i].fechaNacimiento)
         var edadDias = Math.round(diferencia/(1000*3600*24))
+        console.log("edadDias",edadDias)
         var fechaAlta = animalesAdoptados[i].fechaAlta
         var fechaModificacion = animalesAdoptados[i].fechaModificacion
-        var resta = fechaModificacion - fechaAlta
+        var resta = ahora.redondear(fechaModificacion - fechaAlta)
+        console.log("resta",resta)
         if(animalesAdoptados[i].tipoMascota == 0) //perro
         {
             if(edadDias > 365) //adulto
@@ -204,12 +210,14 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
                     acumuladorRestaPerroAdulto += resta
                     countPerroAdulto ++
                     perrosFiltradosAdulto.push(resta)
+                    console.log("restaPA",resta)
                 }
                 else
                 { 
                     acumuladorRestaPerroCachorro += resta 
                     countPerroCachorro ++
                     perrosFiltradosCachorro.push(resta)
+                    console.log("restaPC",resta)
                 }
 
             }
@@ -220,12 +228,14 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
                     acumuladorRestaGatoAdulto += resta
                     countGatoAdulto ++
                     gatosFiltradosAdulto.push(resta)
+                    console.log("GA",resta)
                 }
                 else
                 { 
                     acumuladorRestaGatoCachorro += resta 
                     countGatoCachorro ++
                     gatosFiltradosCachorro.push(resta)
+                    console.log("GC",resta)
                 }
 
             }
@@ -248,6 +258,9 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",
+            // "minimo": ahora.redondear(conversionDias(ValorMinimoPerroCachorro)),
+            // "promedio": ahora.redondear(conversionDias(promedioPerroCachorro)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoPerroCachorro))
             "minimo": conversionDias(ValorMinimoPerroCachorro),
             "promedio": conversionDias(promedioPerroCachorro),
             "maximo": conversionDias(valorMaximoPerroCachorro)
@@ -255,21 +268,31 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
             },
             {
             "categoria":"perroAdulto",
+            // "minimo": ahora.redondear(conversionDias(ValorMinimoPerroAdulto)),
+            // "promedio": ahora.redondear(conversionDias(promedioPerroAdulto)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoPerroAdulto))
             "minimo": conversionDias(ValorMinimoPerroAdulto),
             "promedio": conversionDias(promedioPerroAdulto),
             "maximo": conversionDias(valorMaximoPerroAdulto)
             },
             {
-            "categoria":"gatoCachorro",
+            // "categoria":"gatoCachorro",
+            // "minimo": ahora.redondear(conversionDias(valorMinimoGatoCachorro)),
+            // "promedio": ahora.redondear(conversionDias(promedioGatoCachorro)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoGatoCachorro))
+             "categoria":"gatoCachorro",
             "minimo": conversionDias(valorMinimoGatoCachorro),
             "promedio": conversionDias(promedioGatoCachorro),
             "maximo": conversionDias(valorMaximoGatoCachorro)
             },
             {
             "categoria":"gatoAdulto",
-            "minimo": conversionDias(valorMinimoGatoAdulto),
-            "promedio": conversionDias(promedioGatoAdulto),
-            "maximo": conversionDias(valorMaximoGatoAdulto)
+            // "minimo": ahora.redondear(conversionDias(valorMinimoGatoAdulto)),
+            // "promedio": ahora.redondear(conversionDias(promedioGatoAdulto)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoGatoAdulto))
+             "minimo": conversionDias(valorMinimoGatoAdulto),
+             "promedio": conversionDias(promedioGatoAdulto),
+             "maximo": conversionDias(valorMaximoGatoAdulto)
             }
         ]
         res.send(reporteFinal) 
@@ -346,10 +369,6 @@ router.put('/mascota/modificarMascota', auth, async function(req, res) {
  res.send(animalNew)
 
 })
-
-
-
-
 
 //------------------------------------
 //Modelos: Provisorio, Adopción
