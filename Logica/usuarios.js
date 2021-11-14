@@ -397,7 +397,7 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
     if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
     
 
-    let result = await User.findByIdAndUpdate(usuario.id_Centro,
+    let result = await User.findByIdAndUpdate(usuario._id,
         {banco : (req.body.banco).toUpperCase(),
          cbu   : req.body.cbu,
          alias : (req.body.alias).toUpperCase(),   
@@ -406,7 +406,7 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
         { new : true}
         )
 
-    if (!result) return res.status(400).json({error: ' No se grabo correctamente'})
+    if (!result) return res.status(400).json({error: 'No se grabo correctamente'})
     res.send(result)    
 
 })
