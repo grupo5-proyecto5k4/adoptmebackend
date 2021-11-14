@@ -198,7 +198,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
         console.log("edadDias",edadDias)
         var fechaAlta = new Date(animalesAdoptados[i].fechaAlta)
         var fechaModificacion = new Date(animalesAdoptados[i].fechaModificacion)
-        var resta = ahora.redondear(fechaModificacion - fechaAlta)
+        var resta = (fechaModificacion - fechaAlta)
         console.log("resta",resta)
         if(animalesAdoptados[i].tipoMascota == 0) //perro
         {
