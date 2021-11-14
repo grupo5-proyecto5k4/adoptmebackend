@@ -196,7 +196,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
         console.log("edadDias",edadDias)
         var fechaAlta = animalesAdoptados[i].fechaAlta
         var fechaModificacion = animalesAdoptados[i].fechaModificacion
-        var resta = fechaModificacion - fechaAlta
+        var resta = ahora.redondear(fechaModificacion - fechaAlta)
         console.log("resta",resta)
         if(animalesAdoptados[i].tipoMascota == 0) //perro
         {
@@ -253,28 +253,28 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",
-            "minimo": conversionDias(ValorMinimoPerroCachorro),
-            "promedio": conversionDias(promedioPerroCachorro),
-            "maximo": conversionDias(valorMaximoPerroCachorro)
+            "minimo": ahora.redondear(conversionDias(ValorMinimoPerroCachorro)),
+            "promedio": ahora.redondear(conversionDias(promedioPerroCachorro)),
+            "maximo": ahora.redondear(conversionDias(valorMaximoPerroCachorro))
             
             },
             {
             "categoria":"perroAdulto",
-            "minimo": conversionDias(ValorMinimoPerroAdulto),
-            "promedio": conversionDias(promedioPerroAdulto),
-            "maximo": conversionDias(valorMaximoPerroAdulto)
+            "minimo": ahora.redondear(conversionDias(ValorMinimoPerroAdulto)),
+            "promedio": ahora.redondear(conversionDias(promedioPerroAdulto)),
+            "maximo": ahora.redondear(conversionDias(valorMaximoPerroAdulto))
             },
             {
             "categoria":"gatoCachorro",
-            "minimo": conversionDias(valorMinimoGatoCachorro),
-            "promedio": conversionDias(promedioGatoCachorro),
-            "maximo": conversionDias(valorMaximoGatoCachorro)
+            "minimo": ahora.redondear(conversionDias(valorMinimoGatoCachorro)),
+            "promedio": ahora.redondear(conversionDias(promedioGatoCachorro)),
+            "maximo": ahora.redondear(conversionDias(valorMaximoGatoCachorro))
             },
             {
             "categoria":"gatoAdulto",
-            "minimo": conversionDias(valorMinimoGatoAdulto),
-            "promedio": conversionDias(promedioGatoAdulto),
-            "maximo": conversionDias(valorMaximoGatoAdulto)
+            "minimo": ahora.redondear(conversionDias(valorMinimoGatoAdulto)),
+            "promedio": ahora.redondear(conversionDias(promedioGatoAdulto)),
+            "maximo": ahora.redondear(conversionDias(valorMaximoGatoAdulto))
             }
         ]
         res.send(reporteFinal) 
