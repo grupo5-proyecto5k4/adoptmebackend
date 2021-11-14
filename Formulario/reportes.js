@@ -65,7 +65,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
         var diferencia= Math.abs(Date.now() - new Date(ani.fechaNacimiento))
         var edadDias = Math.round(diferencia/(1000*3600*24))
         let provisorios = await Provisorio.find({mascotaId: Adoptados[i].mascotaId}) 
-        if(provisorios == ( null || undefined)) continue 
+        if(provisorios.length != 0) continue 
 
         console.log("Dias", edadDias)
         
