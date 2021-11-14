@@ -324,10 +324,17 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
  // Si el aprobado por el solicitante las demas Solicitudes debe quedar Suspendidas   
     if (result2.estadoId == estadoAprobado ) 
      {        
-       let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estado: estadoInicial })
+       let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estadoId: estadoBloqueado })
        modificarSolicitudBloqueada(solicitudes, modelo, estadoSuspendido, solicitud)
        agregarSeguimiento(solicitud._id, cadaCuanto)
       }
+
+      if (result2.estadoId == estadoSuspSolicitante) 
+     {        
+       let solicitudes = await modelo.find({responsableId :solicitud.responsableId , mascotaId: solicitud.mascotaId, estadoId: estadoBloqueado })
+       modificarSolicitudBloqueada(solicitudes, modelo, estadoInicial, solicitud)
+       
+      } 
 
     }
 
@@ -431,6 +438,9 @@ async function modificarSolicitudBloqueada(solicitud, modelo, estadoNuevo, Solic
   }
   
 }
+
+
+
 
 router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, res, next){
   let userAux = req.user.user

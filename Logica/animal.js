@@ -166,8 +166,9 @@ router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
 
 router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let userAux = req.user.user
-    var desde = formato(req.query.fechaDesde)
-    var hasta = formato(req.query.fechaHasta)
+    var desde = formato(req.query.fechaDesde, 0, 0, 0)
+    var hasta = formato(req.query.fechaHasta, 23, 59, 59)
+    
     if(userAux.tipoUsuario != 2)return res.status(402).json({Error: "No tiene permisos suficientes para esta acción"})
     let perrosFiltradosAdulto = []
     let perrosFiltradosCachorro = []
@@ -272,7 +273,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
         res.send(reporteFinal) 
 })
 
-function formato(fecha){
+function formato(fecha, h, m, s){
     var fec = "" ,
     fec = fecha
     let anio = "" , mes = "" , dia = "", x = 0, y = fec.length
@@ -282,8 +283,8 @@ function formato(fecha){
       if(x > 5) dia = dia + fec.charAt(x)
       x++
     }
-   
-    return new Date(Date.UTC(anio, mes - 1, dia, 0, 0, 0))
+    
+    return new Date(Date.UTC(anio, mes - 1, dia, h, m, s))
   }
 
 function conversionDias (mili)

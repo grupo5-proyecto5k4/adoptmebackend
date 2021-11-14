@@ -107,12 +107,12 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
         visita.push(reg)
     }
     modVisita = await Visita.findByIdAndUpdate(aniCod, 
-        {
-           visitaFotos : visita,   
+    {
+       visitaFotos : visita,   
         
-        }, 
+    }, 
         {new: true}
-       )
+    )
 
     // buscamos la visita
     modVisita = await Visita.findById({_id: aniCod})   
@@ -126,16 +126,18 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
 async function actualizarSeg(visita){
     let seg = await Seguimiento.findById(visita.SeguimientoId) 
     let v = seg.Visita
+    console.log("seguimiento", seg)
     for(i=0; i < v.length; i ++){
        if(v[i]._id == visita._id){
-          for(j=0; j < visita.visitaFotos.length; j ++) { v[i].visitaFotos.push(visita.visitaFotos[j])}
+          v[i].visitaFotos = visita.visitaFotos
+          console.log("funcion visita v", v)
         }
     }
     console.log("funcion visita", visita)
     await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
         {
          Visita : v,   
-         fechaModificacion:ahora.ahora()
+         fechaModificacion: ahora.ahora()
         }, 
         {new: true}
     
@@ -172,7 +174,7 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     let solAdo = await Adopcion.find({mascotaId: req.params.id_Animal, estadoId: estadoAprobado}) 
     if (solAdo.length != undefined){
        for(let i = 0; i < solAdo.length; i ++){
-         var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id, estadoId: estadoIniciadoSeg})
+         var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id})
          if(seg != undefined ||seg != null  ) seguimiento.push(seg)
 
 

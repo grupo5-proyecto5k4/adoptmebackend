@@ -34,8 +34,8 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
     let userAux = req.user.user
    
       
-    var desde = formato(req.query.fechaDesde)
-    var hasta = formato(req.query.fechaHasta)
+    var desde = formato(req.query.fechaDesde, 0, 0, 0)
+    var hasta = formato(req.query.fechaHasta, 23, 59, 59)
    
     // contador de Perros 
       var perrosCaAdopPorSuProvisorio = 0,  perrosAdAdopPorSuProvisorio = 0
@@ -143,7 +143,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
 })
 
 
-function formato(fecha){
+function formato(fecha, h, m, s){
   var fec = "" ,
   fec = fecha
   let anio = "" , mes = "" , dia = "", x = 0, y = fec.length
@@ -153,8 +153,8 @@ function formato(fecha){
     if(x > 5) dia = dia + fec.charAt(x)
     x++
   }
- 
-  return new Date(Date.UTC(anio, mes - 1, dia, 0, 0, 0))
+  
+  return new Date(Date.UTC(anio, mes - 1, dia, h, m, s))
 }
 
 
@@ -163,8 +163,10 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
   let userAux = req.user.user
   if(userAux.tipoUsuario != 0 ) return res.status(401).json({error : "no tiene permiso para esta accion" })
   
-  var desde = formato(req.query.fechaDesde)
-  var hasta = formato(req.query.fechaHasta)
+  var desde = formato(req.query.fechaDesde, 0 , 0 , 0 )
+  var hasta = formato(req.query.fechaHasta, 23, 59, 59)
+  
+
 
   var promedioAdopcion = 0.0, promedioProvisorio = 0.0
   var tiempoTotalAdopcion = 0 ,  maximoTiempoAdopcion = 0 , minimoTiempoAdopcion = 0
