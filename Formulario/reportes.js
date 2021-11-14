@@ -50,7 +50,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
     var totalPerrosAdoptados = 0 , totalGatosAdoptados = 0    
     
    
-  var Adoptados = await Adopcion.find({estadoId: estadoAprobado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
+  var Adoptados = await Adopcion.find({estadoId: estadoAdoptado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
 //  var Adoptados = await Adopcion.find({estadoId: estadoAprobado,  fechaCreacion: {$gte: desde, $lte: hasta}})
     
     var ciclos = 0 
