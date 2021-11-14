@@ -28,7 +28,7 @@ const estadoAproResponsable = "Aprobado Por Responsable"
 const estadoSuspendido = "Suspendido"
 const estadoSuspSolicitante="Suspendido por Solicitante"
 const estadoBloqueado = "Bloqueado"
-
+const estadoFinalizado = "Finalizado"
 
 router.get('/animales/provisorio', auth,  async function(req, res, next ){
     let userAux = req.user.user
@@ -49,7 +49,8 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
     var totalPerrosAdoptados = 0 , totalGatosAdoptados = 0    
     
    
-    var Adoptados = await Adopcion.find({estadoId: estadoAprobado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
+  //  var Adoptados = await Adopcion.find({estadoId: estadoAprobado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
+  var Adoptados = await Adopcion.find({estadoId: estadoAprobado,  fechaCreacion: {$gte: desde, $lte: hasta}})
     
     var ciclos = 0 
     if (Adoptados.length != undefined) ciclos = Adoptados.length
@@ -59,21 +60,25 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
       let esPerro = false , esCachorro = false
                  
 
-        let ani = await Animal.findOne({_id: Adoptados[i].mascotaId})  
-        var diferencia= Math.abs(ahora.ahora() - ani.fechaNacimiento)
+        let ani = await Animal.findById({_id: Adoptados[i].mascotaId})  
+        var diferencia= Math.abs(Date.now() - new Date(ani.fechaNacimiento))
         var edadDias = Math.round(diferencia/(1000*3600*24))
+
+        console.log("Dias", edadDias)
         
         if (edadDias < 366) esCachorro = true 
 
         if (ani.tipoMascota == 0) esPerro = true
 
-        let provisorios = await Provisorio.find({
+        let provisorios = await Provisorio.findOne({
             mascotaId: Adoptados[i].mascotaId,
             responsableId: Adoptados[i].responsableId,
             solicitanteId: Adoptados[i].solicitanteId,
-            estadoId: estadoAprobado
+            estadoId: estadoFinalizado 
           })
-        if(provisorios != undefined && esPerro) {
+          console.log(provisorios)
+
+        if(provisorios !=(undefined || null) && esPerro) {
            if(esCachorro){
               perrosCaAdopPorSuProvisorio ++    
            }
@@ -83,7 +88,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
           continue
         }
 
-        if(provisorios.length != undefined) {
+        if(provisorios != (undefined || null) ) {
           if(esCachorro){
             gatosCaAdopPorSuProvisorio ++    
           }
@@ -100,7 +105,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
             estadoId: estadoAprobado
           })
        
-       if(provisorios != undefined && esPerro) {
+       if(provisorios != (undefined || null) && esPerro) {
           if(esCachorro){
             perrosCaAdopPorOtro ++    
           }
@@ -110,7 +115,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
           continue
        }
 
-       if(provisorios.length != undefined) {
+       if(provisorios != (undefined || null)) {
         if(esCachorro){
           gatosCaAdopPorOtro ++    
         }

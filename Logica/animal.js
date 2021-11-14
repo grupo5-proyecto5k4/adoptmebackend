@@ -168,7 +168,8 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let userAux = req.user.user
     var desde = formato(req.query.fechaDesde, 0, 0, 0)
     var hasta = formato(req.query.fechaHasta, 23, 59, 59)
-    
+
+    console.log(userAux)
     if(userAux.tipoUsuario != 2)return res.status(402).json({Error: "No tiene permisos suficientes para esta acción"})
     let perrosFiltradosAdulto = []
     let perrosFiltradosCachorro = []
@@ -191,6 +192,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
         var diferencia= Math.abs(ahora.ahora() - animalesAdoptados[i].fechaNacimiento)
+         console.log(diferencia) 
         var edadDias = Math.round(diferencia/(1000*3600*24))
         var fechaAlta = animalesAdoptados[i].fechaAlta
         var fechaModificacion = animalesAdoptados[i].fechaModificacion
