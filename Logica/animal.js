@@ -206,14 +206,14 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
                 {
                     acumuladorRestaPerroAdulto += resta
                     countPerroAdulto ++
-                    perrosFiltradosAdulto.push(resta)
+                    perrosFiltradosAdulto.push(ahora.redondear(conversionDias(resta)))
                     console.log("restaPA",resta)
                 }
                 else
                 { 
                     acumuladorRestaPerroCachorro += resta 
                     countPerroCachorro ++
-                    perrosFiltradosCachorro.push(resta)
+                    perrosFiltradosCachorro.push(ahora.redondear(conversionDias(resta)))
                     console.log("restaPC",resta)
                 }
 
@@ -222,16 +222,16 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 
                 if(edadDias > 365) //adulto
                 {
-                    acumuladorRestaGatoAdulto += resta
+                    acumuladorRestaGatoAdulto += ahora.redondear(conversionDias(resta))
                     countGatoAdulto ++
-                    gatosFiltradosAdulto.push(resta)
+                    gatosFiltradosAdulto.push(ahora.redondear(conversionDias(resta)))
                     console.log("GA",resta)
                 }
                 else
                 { 
-                    acumuladorRestaGatoCachorro += resta 
+                    acumuladorRestaGatoCachorro += ahora.redondear(conversionDias(resta))
                     countGatoCachorro ++
-                    gatosFiltradosCachorro.push(resta)
+                    gatosFiltradosCachorro.push(ahora.redondear(conversionDias(resta)))
                     console.log("GC",resta)
                 }
 
