@@ -308,11 +308,25 @@ router.put('/mascota/modificarMascota', auth, async function(req, res) {
     let castradoNew = req.body.castrado
     let vacunasNew = req.body.nombreVacuna
     let fechaAplicacionNew = req.body.fechaAplicacion
+    let conductaNiñosNew = req.body.conductaNiños
+    let conductaPerrosNew = req.body.conductaPerros
+    let conductaGatosNew = req.body.conductaGatos
+    let descripcionNew = req.body.descripcion
 
-    if(animalNew.estado == (estadoAdoptado || estadoEnProvisorio)) return res.status(400).json({error: "Estado incorrecto"})
-    
     if(animalNew.castrado != castradoNew && castradoNew) {
         let resultado = await Animal.findByIdAndUpdate(animalNew._id,{castrado: castradoNew, fechaModificacion: ahora.ahora()}, {new: true})
+    }
+    if(animalNew.conductaNiños != conductaNiñosNew && conductaNiñosNew) {
+        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{conductaNiños: conductaNiñosNew, fechaModificacion: ahora.ahora()}, {new: true})
+    }
+    if(animalNew.conductaPerros != conductaPerrosNew && conductaPerrosNew) {
+        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{conductaPerros: conductaPerrosNew, fechaModificacion: ahora.ahora()}, {new: true})
+    }
+    if(animalNew.conductaGatos != conductaGatosNew && conductaGatosNew) {
+        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{conductaGatos: conductaGatosNew, fechaModificacion: ahora.ahora()}, {new: true})
+    }
+    if(animalNew.descripcion != descripcionNew && descripcionNew) {
+        let resultado = await Animal.findByIdAndUpdate(animalNew._id,{descripcion: descripcionNew, fechaModificacion: ahora.ahora()}, {new: true})
     }
     if(vacunasNew && fechaAplicacionNew){
         let vacunaExistente = await Vacuna.find({nombreVacuna: vacunasNew, fechaAplicacion: fechaAplicacionNew})
