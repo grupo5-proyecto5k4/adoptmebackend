@@ -393,11 +393,11 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
     let userAux = req.user.user 
     if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
     
-    let usuario = await User.findById({_id :req.body._id })
+    let usuario = await User.findById({_id :req.body.id_Centro })
     if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
     
 
-    let result = await User.findByIdAndUpdate(usuario._id,
+    let result = await User.findByIdAndUpdate(usuario.id_Centro,
         {banco : (req.body.banco).toUpperCase(),
          cbu   : req.body.cbu,
          alias : (req.body.alias).toUpperCase(),   

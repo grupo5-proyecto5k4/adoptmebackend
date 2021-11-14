@@ -181,13 +181,13 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     let solPro = await Provisorio.find({mascotaId: req.params.id_Animal})
     if (solPro.length != undefined){
         for(let i = 0; i < solPro.length; i ++){
-            var seg = await Seguimiento.findOne({SolicitudId : solPro[i]._id, estadoId : estadoIniciadoSeg})
+            var seg = await Seguimiento.findOne({SolicitudId : solPro[i]._id})
             if(seg != undefined ||seg != null  ) seguimiento.push(seg)
         }
      
      }
      if (solPro) {
-        var seg = await Seguimiento.findOne({SolicitudId : solPro._id, estadoIniciadoSeg})
+        var seg = await Seguimiento.findOne({SolicitudId : solPro._id})
         if(seg != undefined ||seg != null  ) seguimiento.push(seg)
      }
      
