@@ -412,16 +412,18 @@ router.put('/user/modificacion/centrorescatista', auth, async function(req, res)
 })
 
 router.get('/user/modificacion/centrorescatista/:id_Centro', auth, async function(req, res) {
+    
     let userAux = req.user.user 
     if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
     
-    let usuario = await User.findById({_id : res.params.id_Centro})
-    if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
+    let usuario = await User.findById({_id : req.params.id_Centro})
+    
+    if (usuario.tipoUsuario != 2) return res.status(404).json({error: 'no corresponde a este usuario'})
     
     
     if(!usuario) return res.status(401).json({error : "no se encontro ese usuario"})
     
-    res.send(usuario)  
+     res.send(usuario)  
 
 })
 
