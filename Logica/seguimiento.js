@@ -126,15 +126,7 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
 async function actualizarSeg(visita){
     let seg = await Seguimiento.findById(visita.SeguimientoId) 
     let v   = await Visita.find({ SeguimientoId: seg.SeguimientoId})
-     
-    // console.log("seguimiento", seg)
-    // for(i=0; i < v.length; i ++){
-    //    if(v[i]._id == visita._id){
-    //       v[i].visitaFotos = visita.visitaFotos
-    //       console.log("funcion visita v", v)
-    //     }
-    // }
-    // console.log("funcion visita", visita)
+        
     await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
         {
          Visita : v,   
