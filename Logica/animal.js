@@ -190,8 +190,12 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
 
     
     for (let i = 0; i < animalesAdoptados.length; i++) {
+        var diferenciaAbs= Math.abs(ahora.ahora() - animalesAdoptados[i].fechaNacimiento)
         var diferencia= Math.abs(ahora.ahora() - animalesAdoptados[i].fechaNacimiento)
-        console.log("diferencia",diferencia)
+        console.log("diferencia ABS",diferenciaAbs)
+        console.log("diferencia solita",diferencia)
+        console.log("ahora.ahora()", ahora.ahora())
+        console.log("fecha animal", animalesAdoptados[i].fechaNacimiento)
         var edadDias = Math.round(diferencia/(1000*3600*24))
         console.log("edadDias",edadDias)
         var fechaAlta = animalesAdoptados[i].fechaAlta
