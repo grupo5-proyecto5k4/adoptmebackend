@@ -253,28 +253,41 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",
-            "minimo": ahora.redondear(conversionDias(ValorMinimoPerroCachorro)),
-            "promedio": ahora.redondear(conversionDias(promedioPerroCachorro)),
-            "maximo": ahora.redondear(conversionDias(valorMaximoPerroCachorro))
+            // "minimo": ahora.redondear(conversionDias(ValorMinimoPerroCachorro)),
+            // "promedio": ahora.redondear(conversionDias(promedioPerroCachorro)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoPerroCachorro))
+            "minimo": conversionDias(ValorMinimoPerroCachorro),
+            "promedio": conversionDias(promedioPerroCachorro),
+            "maximo": conversionDias(valorMaximoPerroCachorro)
             
             },
             {
             "categoria":"perroAdulto",
-            "minimo": ahora.redondear(conversionDias(ValorMinimoPerroAdulto)),
-            "promedio": ahora.redondear(conversionDias(promedioPerroAdulto)),
-            "maximo": ahora.redondear(conversionDias(valorMaximoPerroAdulto))
+            // "minimo": ahora.redondear(conversionDias(ValorMinimoPerroAdulto)),
+            // "promedio": ahora.redondear(conversionDias(promedioPerroAdulto)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoPerroAdulto))
+            "minimo": conversionDias(ValorMinimoPerroAdulto),
+            "promedio": conversionDias(promedioPerroAdulto),
+            "maximo": conversionDias(valorMaximoPerroAdulto)
             },
             {
-            "categoria":"gatoCachorro",
-            "minimo": ahora.redondear(conversionDias(valorMinimoGatoCachorro)),
-            "promedio": ahora.redondear(conversionDias(promedioGatoCachorro)),
-            "maximo": ahora.redondear(conversionDias(valorMaximoGatoCachorro))
+            // "categoria":"gatoCachorro",
+            // "minimo": ahora.redondear(conversionDias(valorMinimoGatoCachorro)),
+            // "promedio": ahora.redondear(conversionDias(promedioGatoCachorro)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoGatoCachorro))
+             "categoria":"gatoCachorro",
+            "minimo": conversionDias(valorMinimoGatoCachorro),
+            "promedio": conversionDias(promedioGatoCachorro),
+            "maximo": conversionDias(valorMaximoGatoCachorro)
             },
             {
             "categoria":"gatoAdulto",
-            "minimo": ahora.redondear(conversionDias(valorMinimoGatoAdulto)),
-            "promedio": ahora.redondear(conversionDias(promedioGatoAdulto)),
-            "maximo": ahora.redondear(conversionDias(valorMaximoGatoAdulto))
+            // "minimo": ahora.redondear(conversionDias(valorMinimoGatoAdulto)),
+            // "promedio": ahora.redondear(conversionDias(promedioGatoAdulto)),
+            // "maximo": ahora.redondear(conversionDias(valorMaximoGatoAdulto))
+             "minimo": conversionDias(valorMinimoGatoAdulto),
+             "promedio": conversionDias(promedioGatoAdulto),
+             "maximo": conversionDias(valorMaximoGatoAdulto)
             }
         ]
         res.send(reporteFinal) 
