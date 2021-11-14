@@ -22,6 +22,7 @@ const estadoEnProvisorio= "En Provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
 const estadoDispAdopcion= "Disponible Adopción" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
+
 /*Estados de Solicitud */
 const estadoInicial = 'Abierta'
 const estadoAproResponsable = "Aprobado Por Responsable" 
