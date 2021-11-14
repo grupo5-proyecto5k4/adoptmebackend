@@ -107,12 +107,12 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
         visita.push(reg)
     }
     modVisita = await Visita.findByIdAndUpdate(aniCod, 
-        {
-           visitaFotos : visita,   
+    {
+       visitaFotos : visita,   
         
-        }, 
+    }, 
         {new: true}
-       )
+    )
 
     // buscamos la visita
     modVisita = await Visita.findById({_id: aniCod})   
@@ -125,17 +125,12 @@ router.put('/modificarSeguimiento/visita', auth, async function (req, res) {
 
 async function actualizarSeg(visita){
     let seg = await Seguimiento.findById(visita.SeguimientoId) 
-    let v = seg.Visita
-    for(i=0; i < v.length; i ++){
-       if(v[i]._id == visita._id){
-          for(j=0; j < visita.visitaFotos.length; j ++) { v[i].visitaFotos.push(visita.visitaFotos[j])}
-        }
-    }
-    console.log("funcion visita", visita)
+    let v   = await Visita.find({ SeguimientoId: seg.SeguimientoId})
+        
     await Seguimiento.findByIdAndUpdate(visita.SeguimientoId, 
         {
          Visita : v,   
-         fechaModificacion:ahora.ahora()
+         fechaModificacion: ahora.ahora()
         }, 
         {new: true}
     
@@ -172,7 +167,7 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     let solAdo = await Adopcion.find({mascotaId: req.params.id_Animal, estadoId: estadoAprobado}) 
     if (solAdo.length != undefined){
        for(let i = 0; i < solAdo.length; i ++){
-         var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id, estadoId: estadoIniciadoSeg})
+         var seg = await Seguimiento.findOne({SolicitudId : solAdo[i]._id})
          if(seg != undefined ||seg != null  ) seguimiento.push(seg)
 
 
@@ -180,7 +175,7 @@ router.put('/finalizar/seguimiento/:idSolicitud', auth, async function(req, res,
     
     }
     if (solAdo) {
-        var seg = await Seguimiento.findOne({SolicitudId : solAdo._id, estadoIniciadoSeg})
+        var seg = await Seguimiento.findOne({SolicitudId : solAdo._id})
          if(seg != undefined ||seg != null  ) seguimiento.push(seg)
     }   
     let solPro = await Provisorio.find({mascotaId: req.params.id_Animal})
