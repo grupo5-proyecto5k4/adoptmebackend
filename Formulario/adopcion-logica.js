@@ -262,7 +262,7 @@ router.get('/buscar/solicitudrealizada/:tipoSolicitud', auth,  async function (r
   realizarSolicitud(solicitudAdopciones).then(val => res.send(val))
 })
 
-async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisorio, cadaCuanto){
+async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdoptado, observacion, fechaFinProvisorio, cadaCuanto, motivo){
   
   var result2 
   let estadoNuevo = undefined
@@ -284,6 +284,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       result2 = await Adopcion.findByIdAndUpdate(solicitud._id, 
       {estadoId: estadoNuevo,
        observacionCancelacion : observacion,
+       cancelacionMotivoSolicitante: motivo,
        cadaCuanto: this.cadaCuanto,  
        fechaModificacion : ahora.ahora()},
       {new : true}
@@ -297,6 +298,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
              fechaFinProvisorio: fechaFinProvisorio,
              cadaCuanto: cadaCuanto, 
              observacionCancelacion : observacion, 
+             cancelacionMotivoSolicitante: motivo,
              fechaModificacion : ahora.ahora()},
             {new : true})
 
@@ -305,6 +307,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
           result2 = await modelo.findByIdAndUpdate(solicitud._id, 
               {estadoId: estadoNuevo,
                observacionCancelacion : observacion,
+               cancelacionMotivoSolicitante: motivo,
                cadaCuanto: cadaCuanto,  
                fechaModificacion : ahora.ahora()},
               {new : true})
@@ -474,7 +477,7 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
 
 
 
-  modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisorio, cadaCuanto).then(val => res.send(val))
+  modificarSolicitud(modelo, userAux, esAprobado, Solicitud , esAdoptado, observacion, fechaFinProvisorio, cadaCuanto, motivo).then(val => res.send(val))
 
 })
 
