@@ -69,7 +69,8 @@ async function notificar(titulo, texto, objetoAMostrar, objetoId, remitente){
         descripcion: texto,
         remitenteId: remitente,
         objetoAMostrar: objetoAMostrar,
-        objetoAMostrarId: objetoId
+        objetoAMostrarId: objetoId,
+        fechaCreacion: ahora.ahora(),
  })
     
  await notificacion.save()
