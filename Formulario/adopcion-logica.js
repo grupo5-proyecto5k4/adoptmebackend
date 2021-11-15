@@ -285,7 +285,7 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
       {estadoId: estadoNuevo,
        observacionCancelacion : observacion,
        cancelacionMotivoSolicitante: motivo,
-       cadaCuanto: this.cadaCuanto,  
+       cadaCuanto: cadaCuanto,  
        fechaModificacion : ahora.ahora()},
       {new : true}
       
