@@ -19,7 +19,9 @@ router.post('/notificacion', auth,  async function(req, res) {
         leida: req.body.leida,
         objetoAMostrar: req.body.objetoAMostrar,
         objetoAMostrarId: req.body.objetoAMostrarId
- })
+ });
+
+
    
 const result = await notificacion.save()
 const jwtToken = result.generateJWT()
@@ -33,6 +35,35 @@ router.options('/notificacion/:id_notificacion', async function(req, res)  {
 
 res.status(200).json({mensaje: 'notificacion creada correctamente'}) //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
 });
+
+
+router.post('/notificacionAdmin',  async function(req, res) { 
+    let notificacion = new Notificacion({
+        tipoNotificacion: req.body.tipoNotificacion,
+        nombreNotificacion: req.body.nombreNotificacion,
+        descripcion: req.body.descripcion,
+        remitenteId: req.body.remitenteId,
+        fechaCreacion: ahora.ahora(),
+        leida: req.body.leida,
+        objetoAMostrar: req.body.objetoAMostrar,
+        objetoAMostrarId: req.body.objetoAMostrarId
+ });
+
+
+   
+const result = await notificacion.save()
+const jwtToken = result.generateJWT()
+ 
+console.log (result)
+
+router.options('/notificacion/:id_notificacion', async function(req, res)  {
+    res.status(200).send('Ok - Options')
+   
+})
+
+res.status(200).json({mensaje: 'notificacion creada correctamente'}) //json({id_Animal: result._id}) ver si se necesita que pase algo de la recomendacion
+});
+
 
 router.get('/notificaciones', auth, async(req, res)=>{
     let userAux = req.user.user 
