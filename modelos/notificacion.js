@@ -26,7 +26,7 @@ const notificacionSchema = new mongosee.Schema({
         required: true,
     },
     remitenteId: { type: String },
-    fechaCreacion: { type: Date, default: ahora.ahora() },
+    fechaCreacion: { type: Date },
     leida: { type: Number, default: 0 }, //0 - no leida, 1 - leida
     objetoAMostrar: { type: String }, //indica el nombre de la coleccion en la que tengo que buscar después
     objetoAMostrarId: { type: String }, //indica el id del objeto a mostrar de la coleccion indicada arriba

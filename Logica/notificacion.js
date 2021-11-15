@@ -15,7 +15,7 @@ router.post('/notificacion', auth,  async function(req, res) {
         nombreNotificacion: req.body.nombreNotificacion,
         descripcion: req.body.descripcion,
         remitenteId: req.body.remitenteId,
-        fechaCreacion: req.body.fechaCreacion,
+        fechaCreacion: ahora.ahora(),
         leida: req.body.leida,
         objetoAMostrar: req.body.objetoAMostrar,
         objetoAMostrarId: req.body.objetoAMostrarId
