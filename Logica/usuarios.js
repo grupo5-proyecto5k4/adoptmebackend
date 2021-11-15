@@ -345,7 +345,7 @@ router.put('/centros/:id_centro', auth, async (req, res) => {
         if (mascotas.length != undefined) {
             for (let i = 0; i < mascotas.length; i++) {
                 //si su mascota esta disponible (los 3 estados) pasar el campo visible a False
-                if (mascotas[i].estado == "Disponible adopción" || mascotas[i].estado == "Disponible Adopción y provisorio" || mascotas[i].estado == "Disponible provisorio") {
+                if (mascotas[i].estado == "Disponible Adopción" || mascotas[i].estado == "Disponible Adopción y Provisorio" || mascotas[i].estado == "Disponible Provisorio") {
                     await Animal.findByIdAndUpdate(mascotas[i]._id,
                         {
                             visible: false,
@@ -409,7 +409,7 @@ router.put('/centros/:id_centro', auth, async (req, res) => {
         if (mascotas.length != undefined) {
             for (let i = 0; i < mascotas.length; i++) {
                 //si su mascota esta disponible (los 3 estados) pasar el campo visible a TRUE
-                if (mascotas[i].estado == "Disponible adopción" || mascotas[i].estado == "Disponible Adopción y provisorio" || mascotas[i].estado == "Disponible provisorio") {
+                if (mascotas[i].estado == "Disponible Adopción" || mascotas[i].estado == "Disponible Adopción y Provisorio" || mascotas[i].estado == "Disponible Provisorio") {
                     await Animal.findByIdAndUpdate(mascotas[i]._id,
                         {
                             visible: true,
