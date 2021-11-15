@@ -65,8 +65,12 @@ router.post('/login', [
 
     // if (user.idEstado != estado.id_estado ) return res.status(400).json({error: 'Usuario inactivo, comuníquese con el administrador desde la sección contáctanos'})
     let estado = await Estado.findOne({ nombre: 'Activo' })
-    if (user.idEstado != estado.id_estado) return res.status(400).json(
+
+    if (user.idEstado == 2) return res.status(400).json(
         { error: 'Oops... Tu cuenta todavía está siendo analizada para ser habilitada' }
+    )
+    if (user.idEstado == 3) return res.status(400).json(
+        { error: 'Oops... Tu cuenta ha sido bloqueada. Comunicate con el administrador' }
     )
 
     //create token 
