@@ -263,7 +263,8 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async (req, res) =>
         if (!estados) return res.send([])
         filter.idEstado = estados.id_estado
     }
-    var nombreMay = (nombres).toUpperCase()
+    var nombreMay
+    if (nombres) nombreMay = (nombres).toUpperCase()
     if (nombres) filter.nombres = { $regex: '.*' + nombreMay + '.*' }
     if (apellidos) filter.apellidos = apellidos
     // filter.tipoUsuario = 1
