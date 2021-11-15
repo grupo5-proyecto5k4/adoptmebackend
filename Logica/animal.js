@@ -365,7 +365,7 @@ router.get('/encontrar/solicitudConfirmada', auth,  async function (req , res) {
    let barrioNew = req.query.barrio
    var modelo = req.query.modelo
    let solicitudProvisorio
-   
+    console.log(userAux)
     if(modelo.indexOf('Provisorio') == 0 )solicitudProvisorio = await Provisorio.find({solicitanteId : userAux._id, estadoId : estadoAprobado})
     if(modelo.indexOf('Adopcion') == 0 ) solicitudProvisorio = await Adopcion.find({solicitanteId :userAux._id, estadoId : estadoAprobado})
     
@@ -375,7 +375,7 @@ router.get('/encontrar/solicitudConfirmada', auth,  async function (req , res) {
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
     if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
-   console.log("llego aca 1")
+   console.log("llego aca 1", solicitudProvisorio)
    
    filtrarProvisorio(solicitudProvisorio, filter, barrioNew, userAux).then(val => res.send(val))
 
@@ -387,28 +387,34 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew, usuario
     
     let animales = []  
     let desde = solicitudAdopciones.length
-    if (solicitudAdopciones.length == undefined )
-     {
-      let filterProv = filter
-      console.log(filterProv)
-      filterProv._id = mongosee.Types.ObjectId(solicitudAdopciones.mascotaId)
-      console.log(filterProv)
-      desde = 0 
-      let animal = await Animal.find(filterProv)
-      if (!animal) return animales
-      if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) return animales
-      animales.push(animal)
-    }
+    // if (solicitudAdopciones.length == undefined )
+    //  {
+    //   let filterProv = filter
+    //   console.log(filterProv)
+    //   filterProv._id = mongosee.Types.ObjectId(solicitudAdopciones.mascotaId)
+    //   console.log(filterProv)
+    //   desde = 0 
+    //   let animal = await Animal.find(filterProv)
+    //   if (!animal) return animales
+    //   if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) return animales
+    //   animales.push(animal)
+    // }
     
     for (let i = 0 ; i < desde ; i ++ ){
        
         let filterProv = filter
-        filterProv._id = solicitudAdopciones[i].mascotaId
-        let animal = await Animal.findById(filterProv)
-        console.log("entro al for", animal)
-        if (!animal) continue
-        console.log("animales")
-        if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) continue
+        filterProv._id =  mongosee.Types.ObjectId(solicitudAdopciones[i].mascotaId)
+        let animal = await Animal.findById(solicitudAdopciones[i].mascotaId)
+        if(filter.sexo && filter.sexo != animal.sexo) continue
+        if(filter.tamañoFinal && filter.tamañoFinal != animal.tamañoFinal) continue
+        if(filter.tipoMascota && filter.tipoMascota != animal.tipoMascota) continue
+       // if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) continue
+        
+        
+      //  console.log("entro al for", filterProv)
+      //  if (!animal) continue
+      //  console.log("animales")
+      //  if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) continue
         animales.push(animal)
         
     }

@@ -244,7 +244,7 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
    
     const filter = {}
     const {nombres, apellidos, estado}= req.query;
-    
+    console.log(req.query)
 
    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
   
@@ -254,9 +254,10 @@ router.get('/particularFiltro/filtroNombresApellidos', auth, async(req, res)=>{
         if (!estados) return res.send([])
         filter.idEstado = estados.id_estado
     }
-    var nombreMay= (nombres).toUpperCase()
+    if (nombres) var nombreMay= (nombres).toUpperCase()
+    if (apellidos) var apellidoMay = (apellidos).toUpperCase()
     if (nombres) filter.nombres = { $regex: '.*' + nombreMay + '.*' }
-    if (apellidos) filter.apellidos = apellidos
+    if (apellidos) filter.apellidos = { $regex: '.*' + apellidoMay + '.*' } 
    // filter.tipoUsuario = 1
     console.log(filter)
 
