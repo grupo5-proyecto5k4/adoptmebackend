@@ -467,13 +467,13 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   var fechaFinProvisorio =  req.body.fechaFinProvisorio
  
   var observacion = ""
-  if(req.body.observacion != undefined) observacion = req.body.observacion
+  if(req.body.observacion != (undefined|| null)) observacion = req.body.observacion
   
   var cadaCuanto = req.body.cadaCuanto
-
+  if(req.body.cadaCuanto != (undefined|| null)) observacion = req.body.cadaCuanto
   
   var motivo = ""
-  if(req.body.motivo != undefined) motivo = req.body.motivo
+  if(req.body.motivo != (undefined|| null )) motivo = req.body.motivo
 
 
 
@@ -496,12 +496,14 @@ router.get('/historialProvisorio/:idMascota', auth, async function(req, res, nex
 // fin de Provisorio Manual  por mal seguimiento 
 router.put('/finProvisorio/:idAnimal', auth, async function(req, res, next){
   let userAux = req.user.user
-  
+ 
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   var observacion = "" 
   if(req.body.observacion)observacion = req.body.observacion
 
-  let provisorio = await Provisorio.findOne({mascotaId: req.params.idAnimal, estadoId : estadoAprobado})
+  let provisorio = await Provisorio.findOne({mascotaId: req.params.idAnimal,  estadoId : estadoAprobado})
+  if(!provisorio) return res.send({})
+
   let provi = await Provisorio.findByIdAndUpdate(mongosee.Types.ObjectId(provisorio._id),
   {
     observacionCancelacion : observacion,
@@ -514,7 +516,23 @@ router.put('/finProvisorio/:idAnimal', auth, async function(req, res, next){
   }
     
   )
+
+  provi = await Provisorio.findById({_id : provi._id})
   
+  let historial = await histoEstadoAnimal.find({mascotaId : provi.mascotaId}).sort({fechaCreacion: -1})
+    
+  var estado = historial[0].estadoId
+  
+   
+   let resultado = await Animal.findByIdAndUpdate(historial[0].mascotaId, {
+   estadoId : estado,
+   fechaModificacion : ahora.ahora(), 
+   visible: true
+  },
+  {
+    new: true
+  } )
+
 
   res.send(provi._id)
 })

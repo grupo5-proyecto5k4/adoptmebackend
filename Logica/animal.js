@@ -143,6 +143,41 @@ router.get('/filtrosMascota/filtroAnimalCentroResc', async (req, res) => {
     res.send(filtroDevuelto)
 });
 
+// duplicamos el filtro anterior para el Admin
+router.get('/filtrosMascota/filtroAnimalCentroRescAdmin', async (req, res) => {
+    const filter2 = {}
+    let filtroDevuelto = []
+    const { estado, sexo, tamañoFinal, tipoMascota } = req.query;
+     
+    
+    if (estado) filter2.estado = estado;
+    if (sexo) filter2.sexo = sexo;
+    if (tamañoFinal) filter2.tamañoFinal = tamañoFinal;
+    if (tipoMascota) filter2.tipoMascota = Number(tipoMascota);
+    //agregamos los visibles 
+    //filter2.visible = true
+
+    console.log(filter2);
+    let animalDevuelto = await Animal.find(filter2)
+    console.log(animalDevuelto)
+    for (let i = 0; i < animalDevuelto.length; i++) {
+        const filter4 = {}
+
+        filter4._id = animalDevuelto[i].responsableId
+        let usuarioDevueltoNew = await Usuario.findById(filter4)
+
+        if (!usuarioDevueltoNew) continue
+        if (usuarioDevueltoNew.nombres != req.query.nombres && req.query.nombres) continue
+        if (usuarioDevueltoNew.Direccion.barrio != req.query.barrio && req.query.barrio) continue
+        var nuevoArreglo = {
+            Animal: animalDevuelto[i],
+        }
+        filtroDevuelto.push(nuevoArreglo.Animal)
+    };
+    res.send(filtroDevuelto)
+});
+
+
 //Filtros de mascota segun el id de un determinado usuario
 
 router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
