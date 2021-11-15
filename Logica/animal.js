@@ -365,7 +365,7 @@ router.get('/encontrar/solicitudConfirmada', auth,  async function (req , res) {
    let barrioNew = req.query.barrio
    var modelo = req.query.modelo
    let solicitudProvisorio
-    console.log(userAux)
+    
     if(modelo.indexOf('Provisorio') == 0 )solicitudProvisorio = await Provisorio.find({solicitanteId : userAux._id, estadoId : estadoAprobado})
     if(modelo.indexOf('Adopcion') == 0 ) solicitudProvisorio = await Adopcion.find({solicitanteId :userAux._id, estadoId : estadoAprobado})
     
@@ -375,7 +375,7 @@ router.get('/encontrar/solicitudConfirmada', auth,  async function (req , res) {
     if (sexo) filter.sexo = sexo;
     if (tamañoFinal) filter.tamañoFinal = tamañoFinal;
     if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
-   console.log("llego aca 1", solicitudProvisorio)
+   console.log("llego aca 1" )
    
    filtrarProvisorio(solicitudProvisorio, sexo, tamañoFinal, tipoMascota, userAux).then(val => res.send(val))
 
@@ -402,8 +402,7 @@ async function filtrarProvisorio(solicitudAdopciones, sexo, tamañoFinal, tipoMa
     
     for (let i = 0 ; i < desde ; i ++ ){
        
-        
-        filterProv._id =  mongosee.Types.ObjectId(solicitudAdopciones[i].mascotaId)
+   
         let animal = await Animal.findById(solicitudAdopciones[i].mascotaId)
         if(sexo && sexo != animal.sexo) continue
         if(tamañoFinal && tamañoFinal != animal.tamañoFinal) continue
