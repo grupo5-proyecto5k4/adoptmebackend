@@ -377,13 +377,13 @@ router.get('/encontrar/solicitudConfirmada', auth,  async function (req , res) {
     if (tipoMascota) filter.tipoMascota = Number(tipoMascota);
    console.log("llego aca 1", solicitudProvisorio)
    
-   filtrarProvisorio(solicitudProvisorio, filter, barrioNew, userAux).then(val => res.send(val))
+   filtrarProvisorio(solicitudProvisorio, sexo, tamañoFinal, tipoMascota, userAux).then(val => res.send(val))
 
 })
 
 /* Funcion para traer solicitudes*/ 
 
-async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew, usuario) {
+async function filtrarProvisorio(solicitudAdopciones, sexo, tamañoFinal, tipoMascota, usuario) {
     
     let animales = []  
     let desde = solicitudAdopciones.length
@@ -402,12 +402,12 @@ async function filtrarProvisorio(solicitudAdopciones, filter, barrioNew, usuario
     
     for (let i = 0 ; i < desde ; i ++ ){
        
-        let filterProv = filter
+        
         filterProv._id =  mongosee.Types.ObjectId(solicitudAdopciones[i].mascotaId)
         let animal = await Animal.findById(solicitudAdopciones[i].mascotaId)
-        if(filter.sexo && filter.sexo != animal.sexo) continue
-        if(filter.tamañoFinal && filter.tamañoFinal != animal.tamañoFinal) continue
-        if(filter.tipoMascota && filter.tipoMascota != animal.tipoMascota) continue
+        if(sexo && sexo != animal.sexo) continue
+        if(tamañoFinal && tamañoFinal != animal.tamañoFinal) continue
+        if(tipoMascota && tipoMascota != animal.tipoMascota) continue
        // if (usuario.tipoUsuario != 1 && usuario.Direccion.barrio != barrioNew && barrioNew) continue
         
         
