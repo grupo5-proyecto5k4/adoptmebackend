@@ -22,6 +22,7 @@ const estadoEnProvisorio= "En Provisorio"
 const estadoDisProvisorio= "Disponible Provisorio"
 const estadoDispAdopcion= "Disponible Adopción" 
 const estAdopcionProvisorio = "Disponible Adopción y Provisorio" 
+
 /*Estados de Solicitud */
 const estadoInicial = 'Abierta'
 const estadoAproResponsable = "Aprobado Por Responsable" 
@@ -49,8 +50,8 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
     var totalPerrosAdoptados = 0 , totalGatosAdoptados = 0    
     
    
-  //  var Adoptados = await Adopcion.find({estadoId: estadoAprobado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
-  var Adoptados = await Adopcion.find({estadoId: estadoAprobado,  fechaCreacion: {$gte: desde, $lte: hasta}})
+  var Adoptados = await Adopcion.find({estadoId: estadoAdoptado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
+//  var Adoptados = await Adopcion.find({estadoId: estadoAprobado,  fechaCreacion: {$gte: desde, $lte: hasta}})
     
     var ciclos = 0 
     if (Adoptados.length != undefined) ciclos = Adoptados.length
@@ -63,6 +64,8 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
         let ani = await Animal.findById({_id: Adoptados[i].mascotaId})  
         var diferencia= Math.abs(Date.now() - new Date(ani.fechaNacimiento))
         var edadDias = Math.round(diferencia/(1000*3600*24))
+        let provisorios = await Provisorio.find({mascotaId: Adoptados[i].mascotaId}) 
+        if(provisorios.length != 0) continue 
 
         console.log("Dias", edadDias)
         
@@ -70,15 +73,15 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
 
         if (ani.tipoMascota == 0) esPerro = true
 
-        let provisorios = await Provisorio.findOne({
+        provisorios = await Provisorio.findOne({
             mascotaId: Adoptados[i].mascotaId,
             responsableId: Adoptados[i].responsableId,
             solicitanteId: Adoptados[i].solicitanteId,
-            estadoId: estadoFinalizado 
+            
           })
-          console.log(provisorios)
+        console.log(provisorios)
 
-        if(provisorios !=(undefined || null) && esPerro) {
+        if(provisorios != (undefined || null) && esPerro) {
            if(esCachorro){
               perrosCaAdopPorSuProvisorio ++    
            }
@@ -101,10 +104,9 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
        provisorios = await Provisorio.find({
             mascotaId: Adoptados[i].mascotaId,
             responsableId: Adoptados[i].responsableId,
-            solicitanteId: {$ne : Adoptados[i].solicitanteId},
-            estadoId: estadoAprobado
+            solicitanteId: {$ne : Adoptados[i].solicitanteId}         
           })
-       
+       console.log(provisorios)
        if(provisorios != (undefined || null) && esPerro) {
           if(esCachorro){
             perrosCaAdopPorOtro ++    

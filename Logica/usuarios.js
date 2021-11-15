@@ -480,13 +480,15 @@ router.put('/user/modificacionPerfil', auth, async function (req, res) {
 
 })
 
-/* modificar datos centro rescatista*/
-router.put('/user/modificacion/centrorescatista', auth, async function (req, res) {
-    let userAux = req.user.user
-    if (userAux.tipoUsuario != 0) return res.status(404).json({ error: 'No tiene permisos para este accion' })
 
-    let usuario = await User.findById({ _id: req.body._id })
-    if (usuario.tipoUsuario != 2) return res.status(404).json({ error: ' no corresponde a este usuario' })
+/* modificar datos centro rescatista*/ 
+router.put('/user/modificacion/centrorescatista', auth, async function(req, res) {
+    let userAux = req.user.user 
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    
+    let usuario = await User.findById({_id :req.body.id_Centro })
+    if (usuario.tipoUsuario != 2) return res.status(404).json({error: ' no corresponde a este usuario'})
+    
 
 
     let result = await User.findByIdAndUpdate(usuario._id,
@@ -499,24 +501,26 @@ router.put('/user/modificacion/centrorescatista', auth, async function (req, res
         { new: true }
     )
 
-    if (!result) return res.status(400).json({ error: ' No se grabo correctamente' })
-    res.send(result)
+
+    if (!result) return res.status(400).json({error: 'No se grabo correctamente'})
+    res.send(result)    
 
 })
 
-router.get('/user/modificacion/centrorescatista/:id_Centro', auth, async function (req, res) {
+router.get('/buscar/CentroRescatista/:id_Centro', auth, async function(req, res) {
+    
+    let userAux = req.user.user 
+    console.log(userAux)
+    if (userAux.tipoUsuario != 0) return res.status(404).json({error: 'No tiene permisos para este accion'})
+    
+    let usuario = await User.findById({_id : req.params.id_Centro})
+    
+    if (usuario.tipoUsuario != 2) return res.status(404).json({error: 'no corresponde a este usuario'})
+    
+    
+        
+     res.send(usuario)  
 
-    let userAux = req.user.user
-    if (userAux.tipoUsuario != 0) return res.status(404).json({ error: 'No tiene permisos para este accion' })
-
-    let usuario = await User.findById({ _id: req.params.id_Centro })
-
-    if (usuario.tipoUsuario != 2) return res.status(404).json({ error: 'no corresponde a este usuario' })
-
-
-    if (!usuario) return res.status(401).json({ error: "no se encontro ese usuario" })
-
-    res.send(usuario)
 
 })
 
