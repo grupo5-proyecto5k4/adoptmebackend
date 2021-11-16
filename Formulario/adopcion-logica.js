@@ -71,8 +71,8 @@ async function adopcionFuncion(req, res, user, next){
     solicitanteId : user._id,
     mascotaId : animal._id,
     estadoId: estadoInicial,
-    responsableId : animal.responsableId
-
+    responsableId : animal.responsableId,
+    fechaCreacion : ahora.ahora()
     })
 
 const result = await adopcion.save() 
@@ -116,8 +116,8 @@ async function provisorioFuncion(req, res, user, next){
     cuantosMascotas:req.body.cuantosMascotas,
     solicitanteId : user._id,
     estadoId: estadoInicial,
-    responsableId: animal.responsableId
-
+    responsableId: animal.responsableId,
+    fechaCreacion : ahora.ahora()
     })
 
 const result = await provisorio.save() 
@@ -278,6 +278,8 @@ async function modificarSolicitud(modelo, usuario, esAprobado, solicitud, esAdop
   
   if(cadaCuanto == (undefined || null )) cadaCuanto = solicitud.cadaCuanto
   if(fechaFinProvisorio == (undefined || null ))fechaFinProvisorio = solicitud.fechaFinProvisorio
+  if(motivo == (undefined || null )) motivo = solicitud.cancelacionMotivoSolicitante
+  if(observacion == (undefined || null)) observacion = solicitud.observacionCancelacion
 
   if(estadoNuevo) {
       if ( modelo == Adopcion){
@@ -470,7 +472,7 @@ router.put('/actualizarEstado/:estado/:idSolicitud', auth, async function(req, r
   if(req.body.observacion != (undefined|| null)) observacion = req.body.observacion
   
   var cadaCuanto = req.body.cadaCuanto
-  if(req.body.cadaCuanto != (undefined|| null)) observacion = req.body.cadaCuanto
+  if(req.body.cadaCuanto != (undefined|| null)) cadaCuanto = req.body.cadaCuanto
   
   var motivo = ""
   if(req.body.motivo != (undefined|| null )) motivo = req.body.motivo

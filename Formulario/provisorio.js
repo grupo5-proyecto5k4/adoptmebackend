@@ -102,7 +102,7 @@ const ahora = require('../fecha.js')
  responsableId: ObjectId,
  fechaCreacion:{
      type: Date, 
-     default: ahora.ahora()
+     
  },
     
  mascotaId : ObjectId,

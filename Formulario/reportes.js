@@ -185,7 +185,7 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
   totalSolicitudAdopcion = solicitudAdopcion.length
    
    for (let i = 0 ; i < solicitudAdopcion.length ; i ++ ){ 
-    var diferencia= Math.abs(solicitudAdopcion[i].fechaModificacion - solicitudAdopcion[i].fechaCreacion)
+    var diferencia= ahora.redMin(Math.abs(solicitudAdopcion[i].fechaModificacion - solicitudAdopcion[i].fechaCreacion))
     var edadDias = Math.round(diferencia/(1000*3600*24))
     tiempoTotalAdopcion += edadDias
     if (maximoTiempoAdopcion < edadDias) maximoTiempoAdopcion = edadDias
@@ -213,15 +213,15 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
 
    Arreglo = [{
      MaximoTiempoAdopcion   : maximoTiempoAdopcion ,
-     PromedioTiempoAdopcion : Math.round(ahora.redondear(promedioAdopcion)) ,
-     MinimoTiempoAdopcion   : ahora.redondear(minimoTiempoAdopcion),
+     PromedioTiempoAdopcion : Math.round(promedioAdopcion) ,
+     MinimoTiempoAdopcion   : minimoTiempoAdopcion,
      cantidadTotalAdopcion  : totalSolicitudAdopcion
 
    },
    {
     maximoTiempoProvisorio   : maximoTiempoProvisorio ,
-    PromedioTiempoProvisorio : Math.round(ahora.redondear(promedioProvisorio)) ,
-    MinimoTiempoProvisorio   : ahora.redondear(minimoTiempoProvisorio),
+    PromedioTiempoProvisorio : Math.round(promedioProvisorio) ,
+    MinimoTiempoProvisorio   : minimoTiempoProvisorio,
     cantidadTotalProvisorio  : totalSolicitudProvisorio
   }
 
