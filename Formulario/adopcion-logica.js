@@ -502,11 +502,15 @@ router.put('/finProvisorio/:idAnimal', auth, async function(req, res, next){
   if(userAux.tipoUsuario == 0) return res.status(400).json({error: 'No tiene autorizacion para hacer esta accion'})
   var observacion = "" 
   if(req.body.observacion)observacion = req.body.observacion
+  let animal = await Animal.findById({_id: req.params.idAnimal})
 
-  let provisorio = await Provisorio.findOne({mascotaId: req.params.idAnimal,  estadoId : estadoAprobado})
+  let provisorio = await Provisorio.find({mascotaId: animal._id,  estadoId : estadoAprobado})
+  console.log(provisorio)
   if(!provisorio) return res.send({})
 
-  let provi = await Provisorio.findByIdAndUpdate(mongosee.Types.ObjectId(provisorio._id),
+
+
+  let provi = await Provisorio.findByIdAndUpdate(provisorio[0]._id,
   {
     observacionCancelacion : observacion,
     fechaModificacion : ahora.ahora(),
@@ -519,22 +523,25 @@ router.put('/finProvisorio/:idAnimal', auth, async function(req, res, next){
     
   )
 
+  
   provi = await Provisorio.findById({_id : provi._id})
   
-  let historial = await histoEstadoAnimal.find({mascotaId : provi.mascotaId}).sort({fechaCreacion: -1})
+  let historial = await histoEstadoAnimal.find({mascotaId : animal._id}).sort({fechaCreacion: -1})
     
-  var estado = historial[0].estadoId
+  let estado = (historial[0].estadoId).toString() 
   
+  
+   let resultado = await Animal.findByIdAndUpdate(req.params.idAnimal, {
+   visible: true,
+   estado : estado,
+   fechaModificacion : ahora.ahora()
    
-   let resultado = await Animal.findByIdAndUpdate(historial[0].mascotaId, {
-   estadoId : estado,
-   fechaModificacion : ahora.ahora(), 
-   visible: true
   },
   {
     new: true
   } )
 
+  
 
   res.send(provi._id)
 })

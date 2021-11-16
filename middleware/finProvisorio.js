@@ -43,6 +43,7 @@ cron.schedule('0 8 * * *', async function(){
 
         let animal = await Animal.findByIdAndUpdate(solicitudes.mascotaId,{
            estado: estAnt, 
+           visible: true, 
            fechaModificacion : fecha 
         },
          {
