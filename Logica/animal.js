@@ -288,6 +288,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     if(countGatoAdulto != 0) promedioGatoAdulto = acumuladorRestaGatoAdulto/countGatoAdulto
     if(countGatoCachorro != 0) promedioGatoCachorro = acumuladorRestaGatoCachorro/countGatoCachorro
     
+    
     var reporteFinal =  [
             {
             "categoria":"perroCachorro",

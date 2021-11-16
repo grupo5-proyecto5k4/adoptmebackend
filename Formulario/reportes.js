@@ -51,7 +51,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
     
    
   var Adoptados = await Adopcion.find({estadoId: estadoAdoptado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
-//  var Adoptados = await Adopcion.find({estadoId: estadoAprobado,  fechaCreacion: {$gte: desde, $lte: hasta}})
+
     
     var ciclos = 0 
     if (Adoptados.length != undefined) ciclos = Adoptados.length
