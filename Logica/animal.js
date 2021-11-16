@@ -178,6 +178,7 @@ router.get('/filtrosMascota/filtroAnimalCentroRescAdmin', async (req, res) => {
 });
 
 
+
 //Filtros de mascota segun el id de un determinado usuario
 
 router.get('/filtrosMascota/filtroAnimal', auth, async (req, res) => {
