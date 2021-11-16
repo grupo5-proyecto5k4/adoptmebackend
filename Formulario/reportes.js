@@ -82,7 +82,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
           })
         console.log(provisorios)
 
-        if(provisorios.length != (undefined || null) && esPerro) {
+        if(provisorios.length != (undefined || null || 0) && esPerro) {
            if(esCachorro){
               perrosCaAdopPorSuProvisorio ++    
            }
@@ -92,7 +92,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
           continue
         }
 
-        if(provisorios != (undefined || null) ) {
+        if(provisorios.length != (undefined || null || 0) ) {
           if(esCachorro){
             gatosCaAdopPorSuProvisorio ++    
           }
@@ -108,7 +108,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
             solicitanteId: {$ne : Adoptados[i].solicitanteId}         
           })
        console.log(provisorios)
-       if(provisorios != (undefined || null) && esPerro) {
+       if(provisorios.length != (undefined || null || 0) && esPerro) {
           if(esCachorro){
             perrosCaAdopPorOtro ++    
           }
@@ -118,7 +118,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
           continue
        }
 
-       if(provisorios != (undefined || null)) {
+       if(provisorios.length != (undefined || null || 0)) {
         if(esCachorro){
           gatosCaAdopPorOtro ++    
         }
