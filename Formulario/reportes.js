@@ -200,7 +200,7 @@ router.get('/tiempoTotalMaxPromedio', auth,  async function(req, res, next ){
    totalSolicitudProvisorio = solicitudProvisorio.length
    
    for (let i = 0 ; i < solicitudProvisorio.length ; i ++ ){ 
-    var diferencia= Math.abs(solicitudProvisorio[i].fechaModificacion - solicitudProvisorio[i].fechaCreacion)
+    var diferencia= ahora.redMin(Math.abs(solicitudProvisorio[i].fechaModificacion - solicitudProvisorio[i].fechaCreacion))
     var edadDias = Math.round(diferencia/(1000*3600*24))
     
     tiempoTotalProvisorio += edadDias
