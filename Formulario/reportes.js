@@ -50,7 +50,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
     var totalPerrosAdoptados = 0 , totalGatosAdoptados = 0    
     
    
-  var Adoptados = await Adopcion.find({estadoId: estadoAdoptado, responsableId: userAux._id ,  fechaCreacion: {$gte: desde, $lte: hasta}})
+  var Adoptados = await Adopcion.find({estadoId: estadoAprobado, responsableId: userAux._id ,  fechaModificacion: {$gte: desde, $lte: hasta}})
 
     
     var ciclos = 0 
@@ -65,6 +65,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
         var diferencia= Math.abs(Date.now() - new Date(ani.fechaNacimiento))
         var edadDias = Math.round(diferencia/(1000*3600*24))
         let provisorios = await Provisorio.find({mascotaId: Adoptados[i].mascotaId}) 
+        console.log(provisorios.length)
         if(provisorios.length != 0) continue 
 
         console.log("Dias", edadDias)
@@ -73,7 +74,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
 
         if (ani.tipoMascota == 0) esPerro = true
 
-        provisorios = await Provisorio.findOne({
+        provisorios = await Provisorio.find({
             mascotaId: Adoptados[i].mascotaId,
             responsableId: Adoptados[i].responsableId,
             solicitanteId: Adoptados[i].solicitanteId,
@@ -81,7 +82,7 @@ router.get('/animales/provisorio', auth,  async function(req, res, next ){
           })
         console.log(provisorios)
 
-        if(provisorios != (undefined || null) && esPerro) {
+        if(provisorios.length != (undefined || null) && esPerro) {
            if(esCachorro){
               perrosCaAdopPorSuProvisorio ++    
            }
