@@ -506,7 +506,7 @@ router.put('/finProvisorio/:idAnimal', auth, async function(req, res, next){
 
   let provisorio = await Provisorio.find({mascotaId: animal._id,  estadoId : estadoAprobado})
   console.log(provisorio)
-  if(!provisorio) return res.send({})
+  if(!provisorio) return res.send()
 
 
 
@@ -543,7 +543,8 @@ router.put('/finProvisorio/:idAnimal', auth, async function(req, res, next){
 
   
 
-  res.send(provi._id)
+  res.send(provi.solicitanteId)
+  
 })
 
 
