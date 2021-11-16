@@ -284,7 +284,7 @@ router.get('/reportes/reporteTiempoAdopcion', auth, async (req, res) => {
     let valorMinimoGatoCachorro = Math.min.apply(0, estaVacio(gatosFiltradosCachorro))
     
     if(countPerroAdulto != 0) promedioPerroAdulto = acumuladorRestaPerroAdulto/countPerroAdulto
-    if(countPerroCachorro != 0) promedioPerroCachorro = acumuladorRestaPerroAdulto/countPerroCachorro
+    if(countPerroCachorro != 0) promedioPerroCachorro = acumuladorRestaPerroCachorro/countPerroCachorro
     if(countGatoAdulto != 0) promedioGatoAdulto = acumuladorRestaGatoAdulto/countGatoAdulto
     if(countGatoCachorro != 0) promedioGatoCachorro = acumuladorRestaGatoCachorro/countGatoCachorro
     
